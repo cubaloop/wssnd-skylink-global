@@ -237,12 +237,18 @@
   <!-- HERO SECTION (CLEAN, ZERO CODES)                                    -->
   <!-- =================================================================== -->
   <section id="inicio" class="relative bg-black text-white overflow-hidden border-b border-gold-500/30 min-h-[520px] lg:min-h-[640px] flex items-center">
-    <!-- FULL-BLEED HERO BACKGROUND VIDEO ONLY (NO AUDIO, NO BOX, NO BLUE OVERLAY) -->
+    <!-- FULL-BLEED HERO BACKGROUND VIDEO (AUDIO ON BY DEFAULT + TOGGLE BUTTON) -->
     <div class="absolute inset-0 z-0">
-      <video id="hero-bg-video" src="assets/hero-skylink.mp4?v=3" autoplay loop muted playsinline preload="auto" class="w-full h-full object-cover object-center"></video>
+      <video id="hero-bg-video" src="assets/hero-skylink.mp4?v=3" autoplay loop playsinline preload="auto" class="w-full h-full object-cover object-center"></video>
       <!-- Ultra-light 20% neutral veil (no blue cover) so the video is 100% vivid and clear on mobile and desktop -->
       <div class="absolute inset-0 bg-black/20"></div>
     </div>
+
+    <!-- Sound Control Button for Background Video (Default: Sound ON -> "Silenciar") -->
+    <button type="button" id="hero-sound-btn" onclick="toggleHeroVideoSound()" aria-label="Alternar sonido del video" class="absolute bottom-4 right-4 z-20 px-3.5 py-2 rounded-xl bg-black/65 hover:bg-black/85 text-gold-400 border border-gold-500/50 text-xs font-display font-bold flex items-center gap-2 backdrop-blur-md shadow-xl transition">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+      <span id="hero-sound-label">Silenciar</span>
+    </button>
 
     <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-24">
       <div class="max-w-2xl space-y-5">
@@ -271,20 +277,56 @@
       </div>
     </div>
     <script>
+      var _userManuallyMutedHero = false;
+      function updateHeroSoundUI() {
+        var hv = document.getElementById('hero-bg-video');
+        var lbl = document.getElementById('hero-sound-label');
+        if (!hv || !lbl) return;
+        lbl.textContent = hv.muted ? 'Activar Sonido' : 'Silenciar';
+      }
+      function toggleHeroVideoSound() {
+        var hv = document.getElementById('hero-bg-video');
+        if (!hv) return;
+        hv.muted = !hv.muted;
+        if (!hv.muted) {
+          hv.volume = 1.0;
+          _userManuallyMutedHero = false;
+          hv.play().catch(function(){});
+        } else {
+          _userManuallyMutedHero = true;
+        }
+        updateHeroSoundUI();
+      }
       (function() {
         var hv = document.getElementById('hero-bg-video');
-        if (hv) {
-          hv.muted = true;
-          hv.defaultMuted = true;
-          hv.volume = 0;
-          hv.addEventListener('volumechange', function() {
-            if (!hv.muted || hv.volume !== 0) {
-              hv.muted = true;
-              hv.volume = 0;
-            }
+        if (!hv) return;
+        hv.volume = 1.0;
+        hv.muted = false;
+        var playPromise = hv.play();
+        if (playPromise && typeof playPromise.then === 'function') {
+          playPromise.then(function() {
+            updateHeroSoundUI();
+          }).catch(function() {
+            // If browser blocks unmuted autoplay before gesture, start playing muted and auto-unmute on first touch/click/scroll
+            hv.muted = true;
+            hv.play().catch(function(){});
+            updateHeroSoundUI();
+            var unlockAudio = function(e) {
+              if (e && e.target && e.target.closest && e.target.closest('#hero-sound-btn')) return;
+              if (!_userManuallyMutedHero) {
+                hv.muted = false;
+                hv.volume = 1.0;
+                hv.play().catch(function(){});
+                updateHeroSoundUI();
+              }
+              ['click', 'touchstart', 'pointerdown', 'keydown'].forEach(function(evt) {
+                document.removeEventListener(evt, unlockAudio, true);
+              });
+            };
+            ['click', 'touchstart', 'pointerdown', 'keydown'].forEach(function(evt) {
+              document.addEventListener(evt, unlockAudio, true);
+            });
           });
-          var p = hv.play();
-          if (p && typeof p.catch === 'function') p.catch(function(){});
         }
       })();
     </script>
