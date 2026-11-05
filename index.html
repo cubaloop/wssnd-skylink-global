@@ -439,10 +439,10 @@
                 <svg class="w-3.5 h-3.5 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
               </summary>
               <ul class="mt-2.5 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5 text-[11px]">
-                <li>&bull; <strong>Vehículos Nuevos 0 km:</strong> SUVs, pick-ups 4x4 y flotas para exportación.</li>
-                <li>&bull; <strong>Automóviles de Ocasión:</strong> Turismos certificados y alta gama.</li>
-                <li>&bull; <strong>Maquinaria Agrícola:</strong> Tractores, cosechadoras y aperos.</li>
-                <li>&bull; <strong>Vehículos Industriales:</strong> Camiones, excavadoras y recambios.</li>
+                <li>&bull; <strong>Muscle &amp; Deportivos:</strong> Ford Mustang, Dodge Challenger, Chevrolet Camaro y Ferrari.</li>
+                <li>&bull; <strong>4x4 &amp; Pick-Ups:</strong> Ford Raptor, Jeep (todos los modelos) y gama completa Toyota.</li>
+                <li>&bull; <strong>Coches por Encargo:</strong> Deportivos y vehículos de alta gama a la carta (a cotizar).</li>
+                <li>&bull; <strong>Maquinaria Pesada:</strong> Tractores agrícolas, cosechadoras y excavadoras.</li>
               </ul>
             </details>
 
@@ -778,7 +778,7 @@
   <!-- JAVASCRIPT ENGINE                                                   -->
   <!-- =================================================================== -->
   <script>
-    const STORAGE_KEY_CATALOG = 'wssnd_skylink_catalog_v2_clean';
+    const STORAGE_KEY_CATALOG = 'wssnd_skylink_catalog_v3_benjamin_cars';
     const STORAGE_KEY_LEADS = 'wssnd_skylink_leads_v1';
 
     let currentCurrency = 'EUR';
@@ -788,8 +788,8 @@
       {
         code: 'VEHICLES',
         badge: 'CATEGORÍA 01',
-        title: 'Vehículos y Flotas (Nuevos 0 km y Ocasión)',
-        subtitle: 'Suministro de SUVs, pick-ups 4x4, berlinas ejecutivas y cabezas tractoras desde Dubái y Madrid.'
+        title: 'Coches Deportivos, 4x4 y Alta Gama (Por Encargo y Stock)',
+        subtitle: 'Ford Mustang, Dodge Challenger, Ford Raptor, Chevrolet Camaro, Jeep (todos los modelos), Toyota, Ferrari y deportivos de alta gama por encargo.'
       },
       {
         code: 'MACHINERY',
@@ -811,68 +811,136 @@
       }
     ];
 
-    // All 16 Products (Clean Commercial Labels — Zero Internal Tax/License Codes)
+    // Catálogo Completo (Con los 8 Coches Solicitados por Benjamin Assi — Todos "A cotizar con el cliente")
     const DEFAULT_CATALOG = [
-      // 1. VEHÍCULOS Y FLOTAS
+      // 1. COCHES DEPORTIVOS, 4X4 Y ALTA GAMA
       {
         id: 'veh-1',
         tab: 'VEHICLES',
         hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Stock Dubái Export',
+        hub_label: 'Sede Dubái & Madrid',
         condition: 'NEW',
-        condition_label: 'Nuevo 0 km',
-        title: 'Toyota Land Cruiser 300 V6 Twin-Turbo GXR',
+        condition_label: 'Deportivo V8 • Bajo Pedido / Stock',
+        title: 'Ford Mustang (GT V8 / Dark Horse / Ediciones Especiales)',
         year: 2026,
-        price_eur: 74500,
-        price_on_request: false,
-        image: 'assets/veh-landcruiser-300.png',
-        specs: ['Año 2026 • 0 km', 'Motor 3.5L V6 Twin-Turbo (409 HP)', 'Disponible para exportación internacional'],
-        cta_label: 'Solicitar Cotización'
+        price_eur: 0,
+        price_on_request: true,
+        price_label: 'A cotizar con el cliente',
+        image: 'assets/veh-ford-mustang.jpg',
+        specs: ['Configuración a medida de versión, motorización V8 y acabado', 'Inspección certificada y gestión integral de importación/exportación', 'Entrega en España, Europa, Oriente Medio o destino internacional'],
+        cta_label: 'Cotizar este Vehículo'
       },
       {
         id: 'veh-2',
         tab: 'VEHICLES',
         hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Stock Dubái Export',
-        condition: 'CONTRACT',
-        condition_label: 'Nuevo 0 km • Lote Flota',
-        title: 'Flota Toyota Hilux Adventure 2.8D 4x4 Doble Cabina',
+        hub_label: 'Sede Dubái & Madrid',
+        condition: 'NEW',
+        condition_label: 'Muscle Car • Bajo Pedido / Stock',
+        title: 'Dodge Challenger (SRT / Hellcat / R/T Scat Pack Widebody)',
         year: 2026,
-        price_eur: 36900,
-        price_on_request: false,
-        image: 'assets/veh-hilux-fleet.png',
-        specs: ['Año 2026 • 0 km (Unidades o lotes)', 'Motor 2.8L Turbo Diésel 4x4', 'Envío marítimo Ro-Ro / Contenedor'],
-        cta_label: 'Solicitar Cotización'
+        price_eur: 0,
+        price_on_request: true,
+        price_label: 'A cotizar con el cliente',
+        image: 'assets/veh-dodge-challenger.jpg',
+        specs: ['Versiones V8 HEMI, SRT Hellcat y ediciones Widebody por encargo', 'Verificación técnica completa e historial certificado', 'Logística puerta a puerta y despacho aduanero incluido'],
+        cta_label: 'Cotizar este Vehículo'
       },
       {
         id: 'veh-3',
         tab: 'VEHICLES',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Stock Madrid',
-        condition: 'USED',
-        condition_label: 'Ocasión Certificada',
-        title: 'Mercedes-Benz S 580 4MATIC L Executive',
-        year: 2024,
-        price_eur: 108000,
-        price_on_request: false,
-        image: 'assets/veh-mercedes-s580.png',
-        specs: ['Año 2024 • 18.400 km Certificados', 'Motor V8 Biturbo Mild-Hybrid (503 CV)', 'Entrega inmediata en Madrid o exportación'],
-        cta_label: 'Solicitar Cotización'
+        hub_origin: 'DUBAI_IFZA',
+        hub_label: 'Sede Dubái & Madrid',
+        condition: 'NEW',
+        condition_label: 'Pick-Up 4x4 High-Performance',
+        title: 'Ford Raptor (F-150 Raptor / Raptor R / Ranger Raptor 4x4)',
+        year: 2026,
+        price_eur: 0,
+        price_on_request: true,
+        price_label: 'A cotizar con el cliente',
+        image: 'assets/veh-ford-raptor.jpg',
+        specs: ['Suspensión FOX Racing Off-Road y tracción 4WD de alto rendimiento', 'Disponible por unidad o por lotes para flotas ejecutivas', 'Exportación directa desde Dubái o entrega en Madrid'],
+        cta_label: 'Cotizar este Vehículo'
       },
       {
         id: 'veh-4',
         tab: 'VEHICLES',
+        hub_origin: 'DUBAI_IFZA',
+        hub_label: 'Sede Dubái & Madrid',
+        condition: 'NEW',
+        condition_label: 'Deportivo V8 • Bajo Pedido / Stock',
+        title: 'Chevrolet Camaro (SS V8 / ZL1 / Coupé & Cabrio)',
+        year: 2026,
+        price_eur: 0,
+        price_on_request: true,
+        price_label: 'A cotizar con el cliente',
+        image: 'assets/veh-chevrolet-camaro.jpg',
+        specs: ['Versiones deportivas SS y ZL1 Supercharged seleccionadas a la carta', 'Revisión mecánica y documental de 150 puntos', 'Cotización personalizada según año, kilometraje y equipamiento'],
+        cta_label: 'Cotizar este Vehículo'
+      },
+      {
+        id: 'veh-5',
+        tab: 'VEHICLES',
+        hub_origin: 'DUBAI_IFZA',
+        hub_label: 'Sede Dubái & Madrid',
+        condition: 'NEW',
+        condition_label: 'Gama Completa 4x4 • Todos los Modelos',
+        title: 'Jeep — Todos los Modelos (Wrangler Rubicon, Grand Cherokee, Gladiator)',
+        year: 2026,
+        price_eur: 0,
+        price_on_request: true,
+        price_label: 'A cotizar con el cliente',
+        image: 'assets/veh-jeep-models.jpg',
+        specs: ['Disponibilidad de toda la gama Jeep (Nuevos 0 km y ocasión seleccionada)', 'Wrangler Rubicon 392, Grand Cherokee, Gladiator y versiones 4x4', 'Suministro individual o para flotas con envío internacional'],
+        cta_label: 'Cotizar Modelo Jeep'
+      },
+      {
+        id: 'veh-6',
+        tab: 'VEHICLES',
+        hub_origin: 'DUBAI_IFZA',
+        hub_label: 'Sede Dubái & Madrid',
+        condition: 'NEW',
+        condition_label: 'SUVs, 4x4 y Pick-Ups • Gama Completa',
+        title: 'Toyota — Gama Completa (Land Cruiser 300, Prado, Hilux, Tundra)',
+        year: 2026,
+        price_eur: 0,
+        price_on_request: true,
+        price_label: 'A cotizar con el cliente',
+        image: 'assets/veh-toyota-lineup.jpg',
+        specs: ['Stock y pedido directo de toda la gama Toyota 4x4 y comercial', 'Unidades 0 km para exportación internacional y lotes corporativos', 'Trato directo y embarque marítimo Ro-Ro o contenedor cerrado'],
+        cta_label: 'Cotizar Modelo Toyota'
+      },
+      {
+        id: 'veh-7',
+        tab: 'VEHICLES',
         hub_origin: 'MADRID_ES',
-        hub_label: 'Stock Madrid',
-        condition: 'USED',
-        condition_label: 'Seminuevo Industrial',
-        title: 'Cabeza Tractora Mercedes-Benz Actros 1848 LS Euro 6',
-        year: 2023,
-        price_eur: 68500,
-        price_on_request: false,
-        image: 'assets/veh-actros-tractor.png',
-        specs: ['Año 2023 • 142.000 km', 'Potencia 480 CV Euro 6d • Retarder', 'Inspección mecánica certificada'],
-        cta_label: 'Solicitar Cotización'
+        hub_label: 'Sede Madrid & Dubái',
+        condition: 'NEW',
+        condition_label: 'Superdeportivos de Élite',
+        title: 'Ferrari — Superdeportivos y Modelos de Alta Gama',
+        year: 2026,
+        price_eur: 0,
+        price_on_request: true,
+        price_label: 'A cotizar con el cliente',
+        image: 'assets/veh-ferrari-supercar.jpg',
+        specs: ['Localización y suministro exclusivo de modelos Ferrari en Dubái y Europa', 'Trazabilidad oficial, inspección en concesionario e historial certificado', 'Transporte cerrado VIP y gestión confidencial para coleccionistas'],
+        cta_label: 'Cotizar Ferrari'
+      },
+      {
+        id: 'veh-8',
+        tab: 'VEHICLES',
+        hub_origin: 'MADRID_ES',
+        hub_label: 'Sede Madrid & Dubái',
+        condition: 'CONTRACT',
+        condition_label: 'Sourcing VIP a la Carta',
+        title: 'Coches por Encargo: Deportivos y Alta Gama a Medida',
+        year: 2026,
+        price_eur: 0,
+        price_on_request: true,
+        price_label: 'A cotizar con el cliente',
+        image: 'assets/veh-bespoke-luxury.jpg',
+        specs: ['Búsqueda por encargo de cualquier deportivo, SUV de lujo o edición limitada', 'Acceso directo al mercado de Dubái (EAU) y red oficial europea (Madrid)', 'Presupuesto cerrado llave en mano según las especificaciones del cliente'],
+        cta_label: 'Encargar Vehículo a Medida'
       },
 
       // 2. TRACTORES Y MAQUINARIA
@@ -1074,9 +1142,9 @@
       return DEFAULT_CATALOG;
     }
 
-    function formatPrice(priceEur, priceOnRequest) {
+    function formatPrice(priceEur, priceOnRequest, priceLabel) {
       if (priceOnRequest || !priceEur || Number(priceEur) <= 0) {
-        return 'Cotizar por lote';
+        return priceLabel || 'Cotizar por lote';
       }
       const converted = Math.round(Number(priceEur) * CURRENCY_RATES[currentCurrency]);
       const formatted = converted.toLocaleString('es-ES');
@@ -1109,7 +1177,7 @@
       renderAllCategoriesCatalog();
     }
 
-    // Render all 4 Categories and all 16 Products separated by Category on the page
+    // Render all 4 Categories and all Products separated by Category on the page
     function renderAllCategoriesCatalog() {
       const items = getCatalogData();
       const hubFilter = document.getElementById('filter-hub')?.value || 'ALL';
@@ -1140,7 +1208,7 @@
         if (catItems.length === 0) return '';
 
         const cardsHtml = catItems.map(item => {
-          const priceStr = formatPrice(item.price_eur, item.price_on_request);
+          const priceStr = formatPrice(item.price_eur, item.price_on_request, item.price_label || (item.tab === 'VEHICLES' ? 'A cotizar con el cliente' : 'Cotizar por lote'));
           const quoteUrl = `cotizar.html?cat=${encodeURIComponent(item.tab)}&hub=${encodeURIComponent(item.hub_origin)}&item=${encodeURIComponent(item.title)}&price=${encodeURIComponent(priceStr)}`;
           return `
             <article class="rounded-3xl bg-platinum dark:bg-navy-900 border border-slate-200 dark:border-slate-800 overflow-hidden shadow hover:shadow-xl transition flex flex-col justify-between group">
