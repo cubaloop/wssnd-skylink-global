@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>WSSND SKYLINK | Global Trade, Motors, Machinery & Strategic Assets (Madrid & Dubái)</title>
   <meta name="description" content="Grupo binacional WSSND SKYLINK liderado por su fundador Benjamin Assi con sedes en Madrid (España) y Dubái (Emiratos Árabes Unidos). Vehículos nuevos y usados, tractores agrícolas, maquinaria pesada, materias primas, logística e inmobiliaria." />
 
@@ -233,35 +236,32 @@
   <!-- =================================================================== -->
   <!-- HERO SECTION (CLEAN, ZERO CODES)                                    -->
   <!-- =================================================================== -->
-  <section id="inicio" class="relative bg-navy-950 text-white overflow-hidden border-b border-gold-500/30 min-h-[540px] lg:min-h-[640px] flex items-center">
-    <!-- FULL-BLEED HERO BACKGROUND VIDEO -->
+  <section id="inicio" class="relative bg-black text-white overflow-hidden border-b border-gold-500/30 min-h-[520px] lg:min-h-[640px] flex items-center">
+    <!-- FULL-BLEED HERO BACKGROUND VIDEO ONLY (NO BOX, NO HEAVY BLUE OVERLAY) -->
     <div class="absolute inset-0 z-0">
-      <video id="hero-bg-video" autoplay loop muted playsinline preload="auto" class="w-full h-full object-cover object-center">
-        <source src="assets/hero-skylink.mp4?v=2" type="video/mp4" />
-      </video>
-      <!-- Subtle directional vignette so text is readable while the background video stays vivid and clear -->
-      <div class="absolute inset-0 bg-gradient-to-r from-navy-950/85 via-navy-950/45 to-transparent"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-transparent to-navy-950/30"></div>
+      <video id="hero-bg-video" src="assets/hero-skylink.mp4?v=3" autoplay loop muted playsinline preload="auto" class="w-full h-full object-cover object-center"></video>
+      <!-- Ultra-light 20% neutral veil (no blue cover) so the video is 100% vivid and clear on mobile and desktop -->
+      <div class="absolute inset-0 bg-black/20"></div>
     </div>
 
     <!-- Sound Control Button for Background Video -->
-    <button type="button" onclick="const v=document.getElementById('hero-bg-video'); v.muted=!v.muted; this.querySelector('span').textContent=v.muted?'Activar Sonido':'Silenciar';" aria-label="Alternar sonido del video" class="absolute bottom-5 right-5 z-20 px-3.5 py-2 rounded-xl bg-navy-950/80 hover:bg-navy-900 text-gold-400 border border-gold-500/50 text-xs font-display font-bold flex items-center gap-2 backdrop-blur-md shadow-xl transition">
+    <button type="button" onclick="const v=document.getElementById('hero-bg-video'); v.muted=!v.muted; this.querySelector('span').textContent=v.muted?'Activar Sonido':'Silenciar';" aria-label="Alternar sonido del video" class="absolute bottom-4 right-4 z-20 px-3.5 py-2 rounded-xl bg-black/65 hover:bg-black/85 text-gold-400 border border-gold-500/50 text-xs font-display font-bold flex items-center gap-2 backdrop-blur-md shadow-xl transition">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
       <span>Activar Sonido</span>
     </button>
 
     <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-24">
       <div class="max-w-2xl space-y-5">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-navy-950/75 backdrop-blur-md border border-gold-500/50 text-gold-400 text-[11px] font-display font-bold tracking-wider uppercase shadow-lg">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-gold-500/60 text-gold-400 text-[11px] font-display font-bold tracking-wider uppercase shadow-lg">
           <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
           <span data-i18n="hero_badge">SEDE MADRID (ESPAÑA) • SEDE DUBÁI (EMIRATOS ÁRABES UNIDOS)</span>
         </div>
 
-        <h1 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-[44px] leading-[1.12] tracking-tight text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.85)]" data-i18n="hero_h1">
+        <h1 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-[44px] leading-[1.12] tracking-tight text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]" data-i18n="hero_h1">
           Puente Global en Comercio de Vehículos, Maquinaria Agrícola, Materias Primas y Activos Estratégicos.
         </h1>
 
-        <p class="text-sm sm:text-base text-slate-100 leading-relaxed max-w-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]" data-i18n="hero_subtitle">
+        <p class="text-sm sm:text-base text-white font-medium leading-relaxed max-w-xl drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]" data-i18n="hero_subtitle">
           Conectamos desde nuestras sedes en <strong>Madrid</strong> y <strong>Dubái</strong> a compradores institucionales, distribuidores e inversores con flotas de automoción, maquinaria pesada, suministros industriales y activos inmobiliarios.
         </p>
 
@@ -270,7 +270,7 @@
             <span data-i18n="hero_cta_catalog">Ver Catálogo de Productos</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
           </a>
-          <a href="cotizar.html" class="px-6 py-3.5 rounded-xl bg-navy-950/80 hover:bg-navy-900 text-white border border-gold-500/60 backdrop-blur-md font-display font-bold text-xs sm:text-sm shadow-xl transition" data-i18n="hero_cta_rfq">
+          <a href="cotizar.html" class="px-6 py-3.5 rounded-xl bg-black/65 hover:bg-black/85 text-white border border-gold-500/60 backdrop-blur-md font-display font-bold text-xs sm:text-sm shadow-xl transition" data-i18n="hero_cta_rfq">
             Solicitar Cotización o Pedido a Medida
           </a>
         </div>
