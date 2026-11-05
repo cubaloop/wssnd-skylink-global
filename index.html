@@ -237,18 +237,12 @@
   <!-- HERO SECTION (CLEAN, ZERO CODES)                                    -->
   <!-- =================================================================== -->
   <section id="inicio" class="relative bg-black text-white overflow-hidden border-b border-gold-500/30 min-h-[520px] lg:min-h-[640px] flex items-center">
-    <!-- FULL-BLEED HERO BACKGROUND VIDEO ONLY (NO BOX, NO HEAVY BLUE OVERLAY) -->
+    <!-- FULL-BLEED HERO BACKGROUND VIDEO ONLY (NO AUDIO, NO BOX, NO BLUE OVERLAY) -->
     <div class="absolute inset-0 z-0">
       <video id="hero-bg-video" src="assets/hero-skylink.mp4?v=3" autoplay loop muted playsinline preload="auto" class="w-full h-full object-cover object-center"></video>
       <!-- Ultra-light 20% neutral veil (no blue cover) so the video is 100% vivid and clear on mobile and desktop -->
       <div class="absolute inset-0 bg-black/20"></div>
     </div>
-
-    <!-- Sound Control Button for Background Video -->
-    <button type="button" onclick="const v=document.getElementById('hero-bg-video'); v.muted=!v.muted; this.querySelector('span').textContent=v.muted?'Activar Sonido':'Silenciar';" aria-label="Alternar sonido del video" class="absolute bottom-4 right-4 z-20 px-3.5 py-2 rounded-xl bg-black/65 hover:bg-black/85 text-gold-400 border border-gold-500/50 text-xs font-display font-bold flex items-center gap-2 backdrop-blur-md shadow-xl transition">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
-      <span>Activar Sonido</span>
-    </button>
 
     <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-24">
       <div class="max-w-2xl space-y-5">
@@ -281,6 +275,14 @@
         var hv = document.getElementById('hero-bg-video');
         if (hv) {
           hv.muted = true;
+          hv.defaultMuted = true;
+          hv.volume = 0;
+          hv.addEventListener('volumechange', function() {
+            if (!hv.muted || hv.volume !== 0) {
+              hv.muted = true;
+              hv.volume = 0;
+            }
+          });
           var p = hv.play();
           if (p && typeof p.catch === 'function') p.catch(function(){});
         }
@@ -519,8 +521,8 @@
           </select>
 
           <div class="relative min-w-[200px]">
-            <input type="text" id="catalog-search" oninput="renderAllCategoriesCatalog()" placeholder="Buscar vehículo, tractor, materia..." class="w-full rounded-xl bg-platinum dark:bg-navy-900 border border-slate-300 dark:border-slate-700 pl-8 pr-3 py-2 text-xs text-navy-900 dark:text-white focus:outline-none focus:border-gold-500" />
-            <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+            <input type="search" id="catalog-search" name="wssnd_catalog_search_filter_only" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other" readonly onpointerdown="this.removeAttribute('readonly');" onkeydown="window._userTypedCatalogSearch=true; this.removeAttribute('readonly');" oninput="if(!window._userTypedCatalogSearch){this.value='';} renderAllCategoriesCatalog();" placeholder="Buscar vehículo, tractor, materia..." class="w-full rounded-xl bg-platinum dark:bg-navy-900 border border-slate-300 dark:border-slate-700 pl-8 pr-3 py-2 text-xs text-navy-900 dark:text-white focus:outline-none focus:border-gold-500" />
+            <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
           </div>
 
           <div class="px-3 py-2 rounded-xl bg-platinum dark:bg-navy-900 border border-slate-200 dark:border-slate-800 text-xs">
@@ -645,9 +647,9 @@
         <h3 class="font-display font-bold text-base text-gold-400">Acceso Panel Administrador</h3>
         <button type="button" onclick="closeAdminLoginModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
       </div>
-      <form onsubmit="handleAdminLogin(event)" class="mt-4 space-y-3.5 text-xs">
-        <input type="email" id="admin-email" value="admin@wssndskylink.com" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-white" />
-        <input type="password" id="admin-pass" placeholder="Clave (admin / wssnd2026)" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-white" />
+      <form onsubmit="handleAdminLogin(event)" autocomplete="off" class="mt-4 space-y-3.5 text-xs">
+        <input type="email" id="admin-email" value="admin@wssndskylink.com" autocomplete="off" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-white" />
+        <input type="password" id="admin-pass" placeholder="Clave (admin / wssnd2026)" autocomplete="new-password" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-white" />
         <button type="submit" class="w-full py-3 rounded-xl gold-gradient text-navy-950 font-display font-bold">
           Desbloquear Consola B2B
         </button>
@@ -674,7 +676,7 @@
       </div>
 
       <div id="adm-tab-1" class="mt-5 space-y-5">
-        <form onsubmit="adminSaveCatalogItem(event)" class="p-5 rounded-2xl bg-navy-900 border border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+        <form onsubmit="adminSaveCatalogItem(event)" autocomplete="off" class="p-5 rounded-2xl bg-navy-900 border border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
           <select id="adm-item-tab" required class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
             <option value="VEHICLES">1. Vehículos y Flotas</option>
             <option value="MACHINERY">2. Tractores y Maquinaria</option>
@@ -718,8 +720,8 @@
 
       <div id="adm-tab-5" class="hidden mt-5 p-5 rounded-2xl bg-navy-900 border border-slate-800 space-y-4 text-xs">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <input type="text" id="supa-url-input" placeholder="Supabase Project URL" class="rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-white" />
-          <input type="password" id="supa-key-input" placeholder="Supabase Anon/Service Key" class="rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-white" />
+          <input type="text" id="supa-url-input" autocomplete="off" placeholder="Supabase Project URL" class="rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-white" />
+          <input type="text" id="supa-key-input" autocomplete="off" placeholder="Supabase Anon/Service Key" class="rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-white" />
         </div>
         <div class="flex flex-wrap gap-2.5">
           <button type="button" onclick="saveSupabaseConfig()" class="px-4 py-2 rounded-xl gold-gradient text-navy-950 font-bold">Conectar Supabase</button>
@@ -1069,7 +1071,15 @@
     function renderAllCategoriesCatalog() {
       const items = getCatalogData();
       const hubFilter = document.getElementById('filter-hub')?.value || 'ALL';
-      const query = (document.getElementById('catalog-search')?.value || '').trim().toLowerCase();
+      const searchEl = document.getElementById('catalog-search');
+      if (searchEl) {
+        const rawVal = (searchEl.value || '').trim().toLowerCase();
+        // Prevent browser password-manager autofill ('admin' / 'admin@wssndskylink.com') from ever filtering the catalog
+        if (!window._userTypedCatalogSearch || rawVal === 'admin' || rawVal.includes('wssndskylink')) {
+          searchEl.value = '';
+        }
+      }
+      const query = (searchEl?.value || '').trim().toLowerCase();
 
       const container = document.getElementById('catalog-all-sections');
       if (!container) return;
