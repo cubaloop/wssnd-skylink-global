@@ -1,0 +1,12 @@
+{
+  "name": "wssnd-skylink-global",
+  "version": "1.0.0",
+  "description": "WSSND SKYLINK — Global Trade, Motors, Machinery & Strategic Assets Portal (Madrid UE & Dubai IFZA)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
