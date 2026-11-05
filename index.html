@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>WSSND SKYLINK | Global Trade, Motors, Machinery & Strategic Assets (Madrid & Dubái)</title>
-  <meta name="description" content="Grupo binacional WSSND SKYLINK liderado por su fundador Benjamin Assi: WSSND SKYLINK CARGO GLOBAL, S.L. (Madrid, España - NIF B05861943) y WSSND Skylink General Trading FZCO (Dubái, EAU - IFZA)." />
+  <meta name="description" content="Grupo binacional WSSND SKYLINK liderado por su fundador Benjamin Assi con sedes en Madrid (España) y Dubái (Emiratos Árabes Unidos). Vehículos nuevos y usados, tractores agrícolas, maquinaria pesada, materias primas, logística e inmobiliaria." />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,7 +80,6 @@
     .navy-gradient {
       background: linear-gradient(135deg, #0A192F 0%, #112240 60%, #050D1A 100%);
     }
-    /* Smooth Accordion Styling */
     details > summary {
       list-style: none;
     }
@@ -93,17 +92,6 @@
     .chevron-icon {
       transition: transform 0.25s ease;
     }
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0A192F;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #C5A059;
-      border-radius: 4px;
-    }
   </style>
 </head>
 <body class="antialiased selection:bg-gold-500 selection:text-navy-900">
@@ -112,14 +100,13 @@
   <!-- UNIFIED SINGLE STICKY HEADER (CLEAN + UNIVERSAL HAMBURGER DRAWER)   -->
   <!-- =================================================================== -->
   <header class="sticky top-0 z-40 bg-navy-900/95 backdrop-blur-md border-b border-gold-500/25 shadow-lg">
-    <!-- Hidden Live Banner State for Admin Compatibility -->
-    <span id="live-banner-text" class="hidden">Operativa Directa Binacional: Hub Europa (Madrid - NIF B05861943) &amp; Hub Oriente Medio (Dubái IFZA)</span>
+    <span id="live-banner-text" class="hidden">WSSND SKYLINK Madrid &amp; Dubái</span>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between gap-3">
-      <!-- Left: Official Logo & Clean Single-Line Brand -->
+      <!-- Left: Official Logo & Brand -->
       <a href="#inicio" class="flex items-center gap-3 group shrink-0">
         <div class="w-11 h-11 rounded-xl bg-white p-0.5 border-2 border-gold-500/70 flex items-center justify-center shadow-md overflow-hidden group-hover:scale-105 transition">
-          <img src="assets/logo-wssnd-skylink.jpg?v=2" alt="WSSND SKYLINK Logo Oficial" class="w-full h-full object-contain rounded-lg" />
+          <img src="assets/logo-wssnd-skylink.jpg?v=3" alt="WSSND SKYLINK Logo Oficial" class="w-full h-full object-contain rounded-lg" />
         </div>
         <div>
           <div class="flex items-center gap-2">
@@ -138,35 +125,33 @@
           Global
         </button>
         <button type="button" onclick="setGlobalHub('MADRID_ES')" id="hub-btn-MADRID_ES" class="px-3 py-1 rounded-full font-medium text-slate-300 hover:text-white transition whitespace-nowrap">
-          🇪🇸 Madrid
+          🇪🇸 Sede Madrid
         </button>
         <button type="button" onclick="setGlobalHub('DUBAI_IFZA')" id="hub-btn-DUBAI_IFZA" class="px-3 py-1 rounded-full font-medium text-slate-300 hover:text-white transition whitespace-nowrap">
-          🇦🇪 Dubái
+          🇦🇪 Sede Dubái
         </button>
       </div>
 
-      <!-- Right: Quick Currency + Admin Pill + Single-Line CTA + Universal Hamburger Menu -->
+      <!-- Right: Currency + Separate Quotation Page Button + Hamburger Menu -->
       <div class="flex items-center gap-2.5 shrink-0">
-        <!-- Compact Currency Selector -->
         <select id="currency-selector" onchange="changeCurrency(this.value)" aria-label="Divisa" class="bg-navy-950 text-gold-400 border border-gold-500/40 rounded-xl px-2.5 py-2 text-xs font-bold focus:outline-none cursor-pointer">
           <option value="EUR">EUR €</option>
           <option value="USD">USD $</option>
           <option value="AED">AED د.إ</option>
         </select>
 
-        <!-- Golden Admin Pill (Only when logged in) -->
         <button type="button" id="header-admin-pill" onclick="openAdminDashboard()" class="hidden items-center gap-1.5 px-3 py-2 rounded-xl gold-gradient text-navy-950 font-bold text-xs shadow-md whitespace-nowrap">
           <span>Admin</span>
         </button>
 
-        <!-- Clean 1-Line RFQ CTA -->
-        <a href="#rfq-section" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs shadow-md hover:brightness-110 transition whitespace-nowrap">
-          <span data-i18n="btn_rfq_header">Cotizar / RFQ</span>
+        <!-- Opens Dedicated Separate Quotation Page (cotizar.html) -->
+        <a href="cotizar.html" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs shadow-md hover:brightness-110 transition whitespace-nowrap">
+          <span data-i18n="btn_rfq_header">Solicitar Cotización</span>
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
 
-        <!-- UNIVERSAL HAMBURGER MENU BUTTON (Visible on ALL devices to avoid header clutter) -->
-        <button type="button" onclick="toggleMobileDrawer()" aria-label="Abrir Menú Principal y Ajustes" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-navy-800 hover:bg-navy-700 text-gold-400 border border-gold-500/40 transition">
+        <!-- UNIVERSAL HAMBURGER MENU BUTTON -->
+        <button type="button" onclick="toggleMobileDrawer()" aria-label="Abrir Menú Principal" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-navy-800 hover:bg-navy-700 text-gold-400 border border-gold-500/40 transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
           <span class="text-xs font-display font-bold text-white hidden sm:inline">Menú</span>
         </button>
@@ -175,19 +160,18 @@
   </header>
 
   <!-- =================================================================== -->
-  <!-- UNIVERSAL SLIDE-OVER HAMBURGER MENU (NAVIGATION, DIVISIONS & CONFIG)-->
+  <!-- UNIVERSAL SLIDE-OVER HAMBURGER MENU                                 -->
   <!-- =================================================================== -->
   <div id="mobile-drawer" class="fixed inset-0 z-50 hidden">
     <div class="fixed inset-0 bg-navy-950/80 backdrop-blur-sm" onclick="toggleMobileDrawer()"></div>
-    <div class="fixed top-0 right-0 bottom-0 w-88 max-w-[90vw] bg-navy-900 border-l border-gold-500/30 p-6 flex flex-col justify-between overflow-y-auto z-10 shadow-2xl">
+    <div class="fixed top-0 right-0 bottom-0 w-80 max-w-[90vw] bg-navy-900 border-l border-gold-500/30 p-6 flex flex-col justify-between overflow-y-auto z-10 shadow-2xl">
       <div class="space-y-5">
-        <!-- Drawer Header -->
         <div class="flex items-center justify-between pb-4 border-b border-slate-800">
           <div class="flex items-center gap-3">
-            <img src="assets/logo-wssnd-skylink.jpg?v=2" alt="WSSND SKYLINK Logo" class="w-10 h-10 rounded-xl bg-white p-0.5 object-contain border border-gold-500/50" />
+            <img src="assets/logo-wssnd-skylink.jpg?v=3" alt="WSSND SKYLINK Logo" class="w-10 h-10 rounded-xl bg-white p-0.5 object-contain border border-gold-500/50" />
             <div>
               <span class="font-display font-extrabold text-white text-base block">WSSND SKYLINK</span>
-              <span class="text-[11px] text-gold-400">Madrid (UE) &bull; Dubái (IFZA)</span>
+              <span class="text-[11px] text-gold-400">Madrid &bull; Dubái</span>
             </div>
           </div>
           <button type="button" onclick="toggleMobileDrawer()" class="p-2 rounded-lg text-slate-400 hover:text-white">
@@ -195,9 +179,9 @@
           </button>
         </div>
 
-        <!-- Mobile Hub Switcher + Language + Theme inside Hamburger Drawer -->
-        <div class="p-3.5 rounded-2xl bg-navy-950 border border-slate-800 space-y-3">
-          <span class="text-[10px] font-bold uppercase tracking-widest text-gold-400 block">Configuración Global</span>
+        <!-- Language & Theme -->
+        <div class="p-3.5 rounded-2xl bg-navy-950 border border-slate-800 space-y-2.5">
+          <span class="text-[10px] font-bold uppercase tracking-widest text-gold-400 block">Idioma y Apariencia</span>
           <div class="grid grid-cols-2 gap-2">
             <select id="lang-selector" onchange="changeLanguage(this.value)" aria-label="Selector de Idioma" class="bg-navy-900 text-slate-200 border border-slate-700 rounded-xl px-2.5 py-2 text-xs font-semibold">
               <option value="es">ES • Español</option>
@@ -213,51 +197,41 @@
           </div>
         </div>
 
-        <!-- Clean Navigation Links with Collapsible Divisions -->
+        <!-- Navigation Links -->
         <nav class="flex flex-col gap-1.5 text-sm font-semibold text-slate-200">
           <a href="#inicio" onclick="toggleMobileDrawer()" class="py-2.5 px-3.5 rounded-xl hover:bg-navy-800 transition">Inicio</a>
-          <a href="#grupo" onclick="toggleMobileDrawer()" class="py-2.5 px-3.5 rounded-xl hover:bg-navy-800 transition">El Grupo &amp; Fundador (Benjamin Assi)</a>
+          <a href="#grupo" onclick="toggleMobileDrawer()" class="py-2.5 px-3.5 rounded-xl hover:bg-navy-800 transition">El Grupo y Fundador</a>
+          <a href="#divisiones" onclick="toggleMobileDrawer()" class="py-2.5 px-3.5 rounded-xl hover:bg-navy-800 transition">Divisiones de Negocio</a>
 
-          <!-- Collapsible Business Divisions Submenu -->
-          <details class="group rounded-xl bg-navy-950/60 border border-slate-800/80 px-3.5 py-2.5">
-            <summary class="flex items-center justify-between cursor-pointer text-gold-400 font-bold">
-              <span>Divisiones de Negocio (4)</span>
-              <svg class="w-4 h-4 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-            </summary>
-            <div class="mt-2.5 pl-2 border-l border-gold-500/30 flex flex-col gap-2 text-xs text-slate-300">
-              <a href="#div-automocion" onclick="toggleMobileDrawer()" class="py-1 hover:text-gold-400">01. Automoción, Tractores y Maquinaria</a>
-              <a href="#div-materias" onclick="toggleMobileDrawer()" class="py-1 hover:text-gold-400">02. Materias Primas y General Trading</a>
-              <a href="#div-logistica" onclick="toggleMobileDrawer()" class="py-1 hover:text-gold-400">03. Logística Internacional y Sourcing</a>
-              <a href="#div-inmobiliaria" onclick="toggleMobileDrawer()" class="py-1 hover:text-gold-400">04. Inmobiliaria y Activos (Real Estate)</a>
-            </div>
-          </details>
+          <div class="pt-2 pb-1 px-3.5 text-[10px] font-bold uppercase tracking-wider text-gold-400">Catálogo por Categorías</div>
+          <a href="#cat-VEHICLES" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">1. Vehículos y Flotas</a>
+          <a href="#cat-MACHINERY" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">2. Tractores y Maquinaria</a>
+          <a href="#cat-COMMODITIES" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">3. Materias Primas</a>
+          <a href="#cat-REAL_ESTATE" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">4. Activos Inmobiliarios</a>
 
-          <a href="#catalogo" onclick="toggleMobileDrawer()" class="py-2.5 px-3.5 rounded-xl hover:bg-navy-800 transition">Catálogo Activo (Stock &amp; Suministros)</a>
-          <a href="#rfq-section" onclick="toggleMobileDrawer(); prefillSourcingMode();" class="py-2.5 px-3.5 rounded-xl hover:bg-navy-800 transition">Búsqueda por Encargo (Custom Sourcing)</a>
-          <a href="#rfq-section" onclick="toggleMobileDrawer()" class="mt-3 py-3 px-4 rounded-xl gold-gradient text-navy-950 font-display font-bold text-center shadow-lg">
-            Solicitar Cotización / RFQ
+          <a href="cotizar.html" class="mt-3 py-3 px-4 rounded-xl gold-gradient text-navy-950 font-display font-bold text-center shadow-lg">
+            Solicitar Cotización / Pedido
           </a>
         </nav>
       </div>
 
-      <!-- Drawer Footer: Founder Mini Card -->
       <div class="pt-5 border-t border-slate-800 text-xs text-slate-400 space-y-3">
         <div class="flex items-center gap-3">
-          <img src="assets/founder-benjamin-assi.jpg?v=2" alt="Benjamin Assi" class="w-11 h-11 rounded-xl object-cover object-top border border-gold-500/60" />
+          <img src="assets/founder-benjamin-assi.jpg?v=3" alt="Benjamin Assi" class="w-11 h-11 rounded-xl object-cover object-top border border-gold-500/60" />
           <div>
             <p class="font-bold text-white">Benjamin Assi</p>
-            <p class="text-[11px] text-gold-400">Fundador &amp; CEO (Madrid UE &bull; Dubái IFZA)</p>
+            <p class="text-[11px] text-gold-400">Fundador &amp; CEO (Madrid &bull; Dubái)</p>
           </div>
         </div>
         <button type="button" onclick="toggleMobileDrawer(); openAdminLoginModal();" class="w-full py-2 rounded-xl bg-navy-800 border border-gold-500/30 text-gold-400 font-semibold hover:bg-navy-700 transition">
-          Acceso Consola Admin B2B
+          Acceso Consola Admin
         </button>
       </div>
     </div>
   </div>
 
   <!-- =================================================================== -->
-  <!-- 4.1 HERO SECTION (CLEAN, BREATHABLE & COLLAPSIBLE LICENSES)         -->
+  <!-- HERO SECTION (CLEAN, ZERO CODES)                                    -->
   <!-- =================================================================== -->
   <section id="inicio" class="relative navy-gradient text-white overflow-hidden border-b border-gold-500/30">
     <div class="absolute inset-0 opacity-20">
@@ -267,11 +241,10 @@
 
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-        <!-- Left Copy (Decluttered) -->
         <div class="lg:col-span-7 space-y-5">
           <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gold-500/15 border border-gold-500/40 text-gold-400 text-[11px] font-display font-bold tracking-wider uppercase">
             <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
-            <span data-i18n="hero_badge">MADRID (UNIÓN EUROPEA) • DUBÁI (IFZA - EAU)</span>
+            <span data-i18n="hero_badge">SEDE MADRID (ESPAÑA) • SEDE DUBÁI (EMIRATOS ÁRABES UNIDOS)</span>
           </div>
 
           <h1 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-[42px] leading-[1.15] tracking-tight text-white" data-i18n="hero_h1">
@@ -282,45 +255,29 @@
             Conectamos desde nuestras sedes en <strong>Madrid</strong> y <strong>Dubái</strong> a compradores institucionales, distribuidores e inversores con flotas de automoción, maquinaria pesada, suministros industriales y activos inmobiliarios.
           </p>
 
-          <!-- Clean Side-by-Side CTA Buttons -->
           <div class="flex flex-wrap items-center gap-3 pt-1">
             <a href="#catalogo" class="px-6 py-3.5 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs sm:text-sm shadow-xl hover:brightness-110 transition inline-flex items-center gap-2">
-              <span data-i18n="hero_cta_catalog">Explorar Catálogo Activo</span>
+              <span data-i18n="hero_cta_catalog">Ver Catálogo de Productos</span>
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </a>
-            <a href="#rfq-section" class="px-6 py-3.5 rounded-xl bg-navy-800/90 hover:bg-navy-800 text-white border border-gold-500/50 font-display font-bold text-xs sm:text-sm transition" data-i18n="hero_cta_rfq">
-              Solicitar Cotización B2B / Sourcing
+            <a href="cotizar.html" class="px-6 py-3.5 rounded-xl bg-navy-800/90 hover:bg-navy-800 text-white border border-gold-500/50 font-display font-bold text-xs sm:text-sm transition" data-i18n="hero_cta_rfq">
+              Solicitar Cotización o Pedido a Medida
             </a>
           </div>
-
-          <!-- Collapsible Official Licenses & Coverage Pill (Replaces the 8 noisy boxes) -->
-          <details class="mt-4 rounded-2xl bg-navy-900/80 border border-slate-700/80 p-3.5 max-w-2xl">
-            <summary class="flex items-center justify-between cursor-pointer text-xs font-semibold text-gold-400">
-              <span>🇪🇸 🇦🇪 Ver 5 Licencias Oficiales (CNAE 46.71 &amp; IFZA) y Cobertura Incoterms 2020</span>
-              <svg class="w-4 h-4 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-            </summary>
-            <div class="mt-3 pt-3 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-300">
-              <div><strong class="text-white">🇪🇸 Matriz Madrid (NIF B05861943):</strong> CNAE 46.71 Vehículos a motor + objeto multisectorial.</div>
-              <div><strong class="text-white">🇦🇪 IFZA 4690099 (Dubái):</strong> General Trading (Importación / Exportación).</div>
-              <div><strong class="text-white">🇦🇪 IFZA 4510084 &amp; 4510085:</strong> Vehículos nuevos (export fuera de EAU) y automóviles usados.</div>
-              <div><strong class="text-white">🇦🇪 IFZA 4773072:</strong> Tractores y maquinaria agrícola + Envíos EXW, FOB, CIF, DDP.</div>
-            </div>
-          </details>
         </div>
 
-        <!-- Right Visual Card (Clean & Streamlined) -->
         <div class="lg:col-span-5">
           <div class="rounded-3xl overflow-hidden border-2 border-gold-500/40 shadow-2xl bg-navy-900">
             <img src="assets/hero-skylink.png" alt="Terminal Internacional WSSND SKYLINK Madrid y Dubái" class="w-full aspect-[16/10] object-cover" />
             <div class="p-4 bg-navy-900/95 flex items-center justify-between gap-3 border-t border-gold-500/30">
               <div class="flex items-center gap-3">
-                <img src="assets/logo-wssnd-skylink.jpg?v=2" alt="Logo WSSND SKYLINK" class="w-10 h-10 rounded-xl bg-white p-0.5 object-contain shrink-0" />
+                <img src="assets/logo-wssnd-skylink.jpg?v=3" alt="Logo WSSND SKYLINK" class="w-10 h-10 rounded-xl bg-white p-0.5 object-contain shrink-0" />
                 <div class="text-xs">
-                  <p class="font-display font-bold text-white">Doble Sede Operativa Verificada</p>
-                  <p class="text-slate-400">🇪🇸 Madrid (NIF B05861943) &bull; 🇦🇪 Dubái (IFZA)</p>
+                  <p class="font-display font-bold text-white">Presencia Operativa Directa</p>
+                  <p class="text-slate-400">🇪🇸 Hub Madrid (Europa) &bull; 🇦🇪 Hub Dubái (Oriente Medio)</p>
                 </div>
               </div>
-              <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[10px] shrink-0">B2B Activo</span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[10px] shrink-0">Exportación Global</span>
             </div>
           </div>
         </div>
@@ -329,27 +286,24 @@
   </section>
 
   <!-- =================================================================== -->
-  <!-- 2. EL GRUPO & FUNDADOR BENJAMIN ASSI (WITH COLLAPSIBLE LEGAL DATA)  -->
+  <!-- EL GRUPO & FUNDADOR BENJAMIN ASSI (EXCLUSIVE ACCORDION, NO STRETCH) -->
   <!-- =================================================================== -->
-  <section id="grupo" class="py-14 lg:py-20 bg-white dark:bg-navy-950 border-b border-slate-200 dark:border-slate-800">
+  <section id="grupo" class="py-12 lg:py-16 bg-white dark:bg-navy-950 border-b border-slate-200 dark:border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Founder Executive Card -->
       <div class="rounded-3xl navy-gradient text-white border border-gold-500/40 p-6 sm:p-8 shadow-xl">
         <div class="flex flex-col md:flex-row items-center justify-between gap-6">
           <div class="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
-            <img src="assets/founder-benjamin-assi.jpg?v=2" alt="Benjamin Assi — Fundador de WSSND SKYLINK" class="w-24 h-28 sm:w-28 sm:h-32 rounded-2xl object-cover object-top border-2 border-gold-500 shadow-lg bg-white shrink-0" />
+            <img src="assets/founder-benjamin-assi.jpg?v=3" alt="Benjamin Assi — Fundador de WSSND SKYLINK" class="w-24 h-28 sm:w-28 sm:h-32 rounded-2xl object-cover object-top border-2 border-gold-500 shadow-lg bg-white shrink-0" />
             <div>
-              <div class="inline-flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-gold-500/20 text-gold-400 border border-gold-500/40">
-                  Fundador &amp; Dirección Ejecutiva
-                </span>
-              </div>
-              <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-white mt-1">Benjamin Assi</h2>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-gold-500/20 text-gold-400 border border-gold-500/40">
+                Fundador &amp; Dirección Ejecutiva
+              </span>
+              <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-white mt-1.5">Benjamin Assi</h2>
               <p class="text-xs sm:text-sm text-gold-300 font-medium">
-                Socio y Administrador Único (España) &bull; Founder, Shareholder &amp; General Manager (Dubái IFZA)
+                Director General &bull; Grupo WSSND SKYLINK (Madrid &amp; Dubái)
               </p>
               <p class="text-xs text-slate-300 mt-2 max-w-2xl leading-relaxed">
-                Liderando la operativa binacional entre la Unión Europea (<strong>WSSND SKYLINK CARGO GLOBAL, S.L.</strong>) y Oriente Medio (<strong>WSSND Skylink General Trading FZCO</strong>) con supervisión directa en cada contrato de exportación.
+                Al frente de nuestras sedes operativas en España (<strong>WSSND SKYLINK CARGO GLOBAL, S.L.</strong>) y Emiratos Árabes Unidos (<strong>WSSND Skylink General Trading FZCO</strong>), garantizando trato directo, inspección rigurosa y logística segura en cada operación.
               </p>
             </div>
           </div>
@@ -361,41 +315,41 @@
                 <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.124.554 4.119 1.525 5.853l-1.525 5.567 5.702-1.496c1.691.899 3.619 1.412 5.668 1.412 6.627 0 12-5.373 12-12s-5.373-11.336-11.37-11.336z"/>
               </svg>
             </a>
+            <a href="cotizar.html" class="px-5 py-3 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs shadow-lg hover:brightness-110 transition">
+              Contactar / Cotizar
+            </a>
           </div>
         </div>
 
-        <!-- Collapsible Dual Legal Entities (Eliminates Wall of Text) -->
-        <div class="mt-6 pt-5 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Collapsible Spain Entity -->
-          <details class="rounded-2xl bg-navy-950/90 border border-slate-800 p-4">
+        <!-- Exclusive Accordions with items-start so opening one NEVER stretches the other -->
+        <div class="mt-6 pt-5 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          <details data-exclusive-group="sedes" class="rounded-2xl bg-navy-950/90 border border-slate-800 p-4 self-start">
             <summary class="flex items-center justify-between cursor-pointer">
               <div>
-                <span class="text-[10px] font-bold text-gold-400 uppercase block">🇪🇸 Sede Unión Europea (Madrid)</span>
-                <span class="font-display font-bold text-sm text-white">WSSND SKYLINK CARGO GLOBAL, S.L. (NIF: B05861943)</span>
+                <span class="text-[10px] font-bold text-gold-400 uppercase block">🇪🇸 Sede Unión Europea (Madrid, España)</span>
+                <span class="font-display font-bold text-sm text-white">WSSND SKYLINK CARGO GLOBAL, S.L.</span>
               </div>
               <svg class="w-4 h-4 text-gold-400 chevron-icon shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </summary>
             <div class="mt-3 pt-3 border-t border-slate-800/80 text-xs text-slate-300 space-y-1.5">
-              <p><strong>Registro Notarial:</strong> Notario de Torrejón de Ardoz D. Santiago Rafael Jiménez Candela, Protocolo Nº 2.295 (04/11/2026).</p>
-              <p><strong>Dirección:</strong> Calle Garabay, 7, local 5 (Pta. 5), 28850 Torrejón de Ardoz, Madrid, España.</p>
-              <p><strong>Fundador / Administrador:</strong> Benjamin Assi &bull; <strong>CNAE 46.71</strong> y objeto multisectorial.</p>
-              <p class="pt-1 text-gold-300 font-mono">IBAN Proformas B2B (Caja Rural de Jaén): ES91 3067 0175 67 3990569323</p>
+              <p><strong>Dirección Oficial:</strong> Calle Garabay, número 7, local 5 (Pta. 5), 28850 Torrejón de Ardoz, Madrid, España.</p>
+              <p><strong>Fundador y Administrador:</strong> Benjamin Assi.</p>
+              <p><strong>Operativa:</strong> Automoción, maquinaria, logística internacional, materias primas e inmobiliaria.</p>
             </div>
           </details>
 
-          <!-- Collapsible Dubai Entity -->
-          <details class="rounded-2xl bg-navy-950/90 border border-slate-800 p-4">
+          <details data-exclusive-group="sedes" class="rounded-2xl bg-navy-950/90 border border-slate-800 p-4 self-start">
             <summary class="flex items-center justify-between cursor-pointer">
               <div>
-                <span class="text-[10px] font-bold text-gold-400 uppercase block">🇦🇪 Sede Oriente Medio (Dubái IFZA)</span>
+                <span class="text-[10px] font-bold text-gold-400 uppercase block">🇦🇪 Sede Oriente Medio (Dubái, EAU)</span>
                 <span class="font-display font-bold text-sm text-white">WSSND Skylink General Trading FZCO</span>
               </div>
               <svg class="w-4 h-4 text-gold-400 chevron-icon shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </summary>
             <div class="mt-3 pt-3 border-t border-slate-800/80 text-xs text-slate-300 space-y-1.5">
-              <p><strong>Sede Oficial:</strong> IFZA Headquarters, Dubai Digital Park, Dubai Silicon Oasis, Dubái, EAU.</p>
-              <p><strong>Alternativas IFZA:</strong> Skylink Automac Trading FZCO / WSSND Vektor General Trading FZCO.</p>
-              <p><strong>Licencias IFZA:</strong> <span class="text-gold-400 font-mono">4690099</span> (General Trading), <span class="text-gold-400 font-mono">4510084</span> (Vehículos Nuevos Export), <span class="text-gold-400 font-mono">4510085</span> (Usados), <span class="text-gold-400 font-mono">4773072</span> (Tractores y Maquinaria Agrícola).</p>
+              <p><strong>Dirección Oficial:</strong> IFZA Headquarters, Dubai Digital Park, Dubai Silicon Oasis, Dubái, Emiratos Árabes Unidos.</p>
+              <p><strong>Fundador y Director General:</strong> Benjamin Assi.</p>
+              <p><strong>Operativa:</strong> Exportación global de vehículos nuevos y usados, tractores agrícolas y comercio general de materias primas.</p>
             </div>
           </details>
         </div>
@@ -404,153 +358,135 @@
   </section>
 
   <!-- =================================================================== -->
-  <!-- 4. LAS 4 DIVISIONES DE NEGOCIO (CLEAN CARDS + COLLAPSIBLE DETAILS)  -->
+  <!-- LAS 4 DIVISIONES DE NEGOCIO (ITEMS-START + EXCLUSIVE COLLAPSIBLE)   -->
   <!-- =================================================================== -->
-  <section id="divisiones" class="py-14 lg:py-20 bg-platinum dark:bg-navy-900">
+  <section id="divisiones" class="py-12 lg:py-16 bg-platinum dark:bg-navy-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <span class="text-xs font-display font-bold uppercase tracking-widest text-gold-600 dark:text-gold-400">4 Líneas Estratégicas</span>
+          <span class="text-xs font-display font-bold uppercase tracking-widest text-gold-600 dark:text-gold-400">Áreas de Especialización</span>
           <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-navy-900 dark:text-white mt-1">
-            Divisiones de Negocio
+            Nuestras 4 Divisiones de Negocio
           </h2>
         </div>
-        <!-- Collapsible 4-Step Workflow Trigger -->
-        <details id="sourcing" class="rounded-2xl bg-white dark:bg-navy-950 border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-xs shadow-sm">
-          <summary class="flex items-center gap-2 cursor-pointer font-bold text-navy-900 dark:text-gold-400">
-            <span>¿Cómo trabajamos en 4 pasos? (RFQ &rarr; Hub &rarr; Proforma &rarr; Embarque)</span>
-            <svg class="w-4 h-4 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </summary>
-          <div class="mt-3 pt-3 border-t border-slate-200 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-4 gap-3 text-[11px] text-slate-600 dark:text-slate-300">
-            <div><strong class="text-navy-900 dark:text-white">1. Solicitud (RFQ/LOI):</strong> Selección en catálogo o búsqueda por encargo.</div>
-            <div><strong class="text-navy-900 dark:text-white">2. Asignación de Hub:</strong> Gestión por Madrid (UE) o Dubái (IFZA).</div>
-            <div><strong class="text-navy-900 dark:text-white">3. Proforma y Verificación:</strong> Certificación técnica y contrato mercantil.</div>
-            <div><strong class="text-navy-900 dark:text-white">4. Embarque Global:</strong> Despacho aduanero Ro-Ro, Contenedor o Aéreo.</div>
-          </div>
-        </details>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+          Haz clic en el desplegable de cualquier división para ver su información sin desalinear las demás tarjetas.
+        </p>
       </div>
 
-      <!-- 4 Compact Division Cards with Collapsible Sub-lines -->
-      <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- items-start ensures ONLY the clicked card expands while the other 3 keep their compact height -->
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
         <!-- DIV 01 -->
-        <article id="div-automocion" class="rounded-3xl bg-white dark:bg-navy-950 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-md flex flex-col justify-between">
-          <div>
-            <div class="relative aspect-[16/10] bg-navy-900">
-              <img src="assets/div-automotive-machinery.png" alt="División 01 Automoción y Maquinaria" class="w-full h-full object-cover" />
-              <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">DIVISIÓN 01</span>
-            </div>
-            <div class="p-5">
-              <h3 class="font-display font-bold text-base text-navy-900 dark:text-white">Automoción, Tractores y Maquinaria</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">CNAE 46.71 &bull; IFZA 4510084 / 4510085 / 4773072</p>
-              <details class="mt-3 text-xs text-slate-600 dark:text-slate-300 bg-platinum dark:bg-navy-900 rounded-xl p-3">
-                <summary class="font-bold text-navy-900 dark:text-gold-400 cursor-pointer flex items-center justify-between">
-                  <span>Ver 4 líneas y licencias</span>
-                  <svg class="w-3.5 h-3.5 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                </summary>
-                <ul class="mt-2 space-y-1.5 text-[11px]">
-                  <li>&bull; <strong>Nuevos Export (4510084):</strong> Flotas y SUVs 0 km fuera de EAU.</li>
-                  <li>&bull; <strong>Usados (4510085):</strong> Ocasión certificada y alta gama.</li>
-                  <li>&bull; <strong>Agrícola (4773072):</strong> Tractores, cosechadoras y aperos.</li>
-                  <li>&bull; <strong>Obra Pública:</strong> Camiones, excavadoras y recambios.</li>
-                </ul>
-              </details>
-            </div>
+        <article id="div-automocion" class="rounded-3xl bg-white dark:bg-navy-950 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-md self-start">
+          <div class="relative aspect-[16/10] bg-navy-900">
+            <img src="assets/div-automotive-machinery.png" alt="Automoción, Tractores y Maquinaria" class="w-full h-full object-cover" />
+            <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">DIVISIÓN 01</span>
           </div>
-          <div class="px-5 pb-5">
-            <button type="button" onclick="openRfqWithDivision('AUTOMOTIVE_MACHINERY', 'División 01 — Automoción y Maquinaria')" class="w-full py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs">
-              Cotizar Automoción / Agro
-            </button>
+          <div class="p-5">
+            <h3 class="font-display font-bold text-base text-navy-900 dark:text-white">Automoción, Tractores y Maquinaria</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Flotas 0 km, Ocasión, Agrícola y Obra Pública</p>
+
+            <details data-exclusive-group="divisiones" class="mt-3 text-xs text-slate-600 dark:text-slate-300 bg-platinum dark:bg-navy-900 rounded-xl p-3">
+              <summary class="font-bold text-navy-900 dark:text-gold-400 cursor-pointer flex items-center justify-between">
+                <span>Ver líneas disponibles</span>
+                <svg class="w-3.5 h-3.5 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </summary>
+              <ul class="mt-2.5 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5 text-[11px]">
+                <li>&bull; <strong>Vehículos Nuevos 0 km:</strong> SUVs, pick-ups 4x4 y flotas para exportación.</li>
+                <li>&bull; <strong>Automóviles de Ocasión:</strong> Turismos certificados y alta gama.</li>
+                <li>&bull; <strong>Maquinaria Agrícola:</strong> Tractores, cosechadoras y aperos.</li>
+                <li>&bull; <strong>Vehículos Industriales:</strong> Camiones, excavadoras y recambios.</li>
+              </ul>
+            </details>
+
+            <a href="#cat-VEHICLES" class="mt-4 w-full py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs flex items-center justify-center">
+              Ver Vehículos y Maquinaria &darr;
+            </a>
           </div>
         </article>
 
         <!-- DIV 02 -->
-        <article id="div-materias" class="rounded-3xl bg-white dark:bg-navy-950 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-md flex flex-col justify-between">
-          <div>
-            <div class="relative aspect-[16/10] bg-navy-900">
-              <img src="assets/div-commodities-trading.png" alt="División 02 Materias Primas" class="w-full h-full object-cover" />
-              <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">DIVISIÓN 02</span>
-            </div>
-            <div class="p-5">
-              <h3 class="font-display font-bold text-base text-navy-900 dark:text-white">Materias Primas y General Trading</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Licencia Principal IFZA 4690099 &bull; Hub España</p>
-              <details class="mt-3 text-xs text-slate-600 dark:text-slate-300 bg-platinum dark:bg-navy-900 rounded-xl p-3">
-                <summary class="font-bold text-navy-900 dark:text-gold-400 cursor-pointer flex items-center justify-between">
-                  <span>Ver rubros y protocolos</span>
-                  <svg class="w-3.5 h-3.5 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                </summary>
-                <ul class="mt-2 space-y-1.5 text-[11px]">
-                  <li>&bull; <strong>Hidrocarburos:</strong> EN590, lubricantes y derivados (LOI/ICPO).</li>
-                  <li>&bull; <strong>Metales:</strong> Oro 999.9 y cátodos de cobre electrolítico.</li>
-                  <li>&bull; <strong>Construcción:</strong> Cemento Portland y acero corrugado.</li>
-                  <li>&bull; <strong>Agroalimentación:</strong> Aceite de oliva y cereales HORECA.</li>
-                </ul>
-              </details>
-            </div>
+        <article id="div-materias" class="rounded-3xl bg-white dark:bg-navy-950 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-md self-start">
+          <div class="relative aspect-[16/10] bg-navy-900">
+            <img src="assets/div-commodities-trading.png" alt="Materias Primas y Comercio General" class="w-full h-full object-cover" />
+            <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">DIVISIÓN 02</span>
           </div>
-          <div class="px-5 pb-5">
-            <button type="button" onclick="openRfqWithDivision('COMMODITIES_TRADING', 'División 02 — Materias Primas / LOI')" class="w-full py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs">
-              Enviar LOI / Oferta B2B
-            </button>
+          <div class="p-5">
+            <h3 class="font-display font-bold text-base text-navy-900 dark:text-white">Materias Primas y General Trading</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Energía, Metales, Construcción y Alimentación</p>
+
+            <details data-exclusive-group="divisiones" class="mt-3 text-xs text-slate-600 dark:text-slate-300 bg-platinum dark:bg-navy-900 rounded-xl p-3">
+              <summary class="font-bold text-navy-900 dark:text-gold-400 cursor-pointer flex items-center justify-between">
+                <span>Ver suministros mayoristas</span>
+                <svg class="w-3.5 h-3.5 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </summary>
+              <ul class="mt-2.5 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5 text-[11px]">
+                <li>&bull; <strong>Hidrocarburos:</strong> Combustibles, gasóleo EN590 y lubricantes.</li>
+                <li>&bull; <strong>Metales y Minerales:</strong> Oro de inversión y cobre electrolítico.</li>
+                <li>&bull; <strong>Construcción:</strong> Cemento Portland y acero corrugado.</li>
+                <li>&bull; <strong>Agroalimentación:</strong> Aceite de oliva y cereales al por mayor.</li>
+              </ul>
+            </details>
+
+            <a href="#cat-COMMODITIES" class="mt-4 w-full py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs flex items-center justify-center">
+              Ver Materias Primas &darr;
+            </a>
           </div>
         </article>
 
         <!-- DIV 03 -->
-        <article id="div-logistica" class="rounded-3xl bg-white dark:bg-navy-950 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-md flex flex-col justify-between">
-          <div>
-            <div class="relative aspect-[16/10] bg-navy-900">
-              <img src="assets/div-logistics-sourcing.png" alt="División 03 Logística y Sourcing" class="w-full h-full object-cover" />
-              <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">DIVISIÓN 03</span>
-            </div>
-            <div class="p-5">
-              <h3 class="font-display font-bold text-base text-navy-900 dark:text-white">Logística Internacional y Sourcing</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Ro-Ro &bull; FCL/LCL &bull; Compras por Encargo</p>
-              <details class="mt-3 text-xs text-slate-600 dark:text-slate-300 bg-platinum dark:bg-navy-900 rounded-xl p-3">
-                <summary class="font-bold text-navy-900 dark:text-gold-400 cursor-pointer flex items-center justify-between">
-                  <span>Ver servicios logísticos</span>
-                  <svg class="w-3.5 h-3.5 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                </summary>
-                <ul class="mt-2 space-y-1.5 text-[11px]">
-                  <li>&bull; <strong>Tránsito Zonas Francas:</strong> Jebel Ali / IFZA y puertos UE.</li>
-                  <li>&bull; <strong>Custom Sourcing:</strong> Búsqueda de fábricas e inspección SGS.</li>
-                  <li>&bull; <strong>Multimodal:</strong> Buques Ro-Ro, contenedores y flete aéreo.</li>
-                </ul>
-              </details>
-            </div>
+        <article id="div-logistica" class="rounded-3xl bg-white dark:bg-navy-950 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-md self-start">
+          <div class="relative aspect-[16/10] bg-navy-900">
+            <img src="assets/div-logistics-sourcing.png" alt="Logística Internacional y Sourcing" class="w-full h-full object-cover" />
+            <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">DIVISIÓN 03</span>
           </div>
-          <div class="px-5 pb-5">
-            <button type="button" onclick="openRfqWithDivision('LOGISTICS_SOURCING', 'División 03 — Logística y Sourcing')" class="w-full py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs">
-              Solicitar Sourcing / Flete
-            </button>
+          <div class="p-5">
+            <h3 class="font-display font-bold text-base text-navy-900 dark:text-white">Logística Internacional y Sourcing</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Transporte Marítimo, Aéreo y Compras a Medida</p>
+
+            <details data-exclusive-group="divisiones" class="mt-3 text-xs text-slate-600 dark:text-slate-300 bg-platinum dark:bg-navy-900 rounded-xl p-3">
+              <summary class="font-bold text-navy-900 dark:text-gold-400 cursor-pointer flex items-center justify-between">
+                <span>Ver servicios logísticos</span>
+                <svg class="w-3.5 h-3.5 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </summary>
+              <ul class="mt-2.5 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5 text-[11px]">
+                <li>&bull; <strong>Coordinación Aduanera:</strong> Embarques desde Dubái y puertos españoles.</li>
+                <li>&bull; <strong>Búsqueda de Proveedores:</strong> Localización de lotes y auditoría de carga.</li>
+                <li>&bull; <strong>Flete Multimodal:</strong> Buques Ro-Ro, contenedores y carga aérea.</li>
+              </ul>
+            </details>
+
+            <a href="cotizar.html?cat=LOGISTICS&item=Servicio%20de%20Log%C3%ADstica%20y%20Sourcing%20B2B" class="mt-4 w-full py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs flex items-center justify-center">
+              Solicitar Sourcing / Flete &rarr;
+            </a>
           </div>
         </article>
 
         <!-- DIV 04 -->
-        <article id="div-inmobiliaria" class="rounded-3xl bg-white dark:bg-navy-950 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-md flex flex-col justify-between">
-          <div>
-            <div class="relative aspect-[16/10] bg-navy-900">
-              <img src="assets/div-real-estate.png" alt="División 04 Inmobiliaria" class="w-full h-full object-cover" />
-              <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">DIVISIÓN 04</span>
-            </div>
-            <div class="p-5">
-              <h3 class="font-display font-bold text-base text-navy-900 dark:text-white">Sector Inmobiliario y Activos</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Naves Logísticas, Locales y Residencial</p>
-              <details class="mt-3 text-xs text-slate-600 dark:text-slate-300 bg-platinum dark:bg-navy-900 rounded-xl p-3">
-                <summary class="font-bold text-navy-900 dark:text-gold-400 cursor-pointer flex items-center justify-between">
-                  <span>Ver tipos de activos</span>
-                  <svg class="w-3.5 h-3.5 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                </summary>
-                <ul class="mt-2 space-y-1.5 text-[11px]">
-                  <li>&bull; <strong>Logístico e Industrial:</strong> Naves y campas en Madrid.</li>
-                  <li>&bull; <strong>Comercial y Residencial:</strong> Edificios y locales en rentabilidad.</li>
-                  <li>&bull; <strong>Puente Inversor:</strong> Capital Oriente Medio ⇄ España.</li>
-                </ul>
-              </details>
-            </div>
+        <article id="div-inmobiliaria" class="rounded-3xl bg-white dark:bg-navy-950 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-md self-start">
+          <div class="relative aspect-[16/10] bg-navy-900">
+            <img src="assets/div-real-estate.png" alt="Sector Inmobiliario y Activos" class="w-full h-full object-cover" />
+            <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">DIVISIÓN 04</span>
           </div>
-          <div class="px-5 pb-5">
-            <button type="button" onclick="openRfqWithDivision('REAL_ESTATE', 'División 04 — Inversión Inmobiliaria')" class="w-full py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs">
-              Solicitar Dossier / Visita
-            </button>
+          <div class="p-5">
+            <h3 class="font-display font-bold text-base text-navy-900 dark:text-white">Sector Inmobiliario y Activos</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Naves Logísticas, Locales y Residencial</p>
+
+            <details data-exclusive-group="divisiones" class="mt-3 text-xs text-slate-600 dark:text-slate-300 bg-platinum dark:bg-navy-900 rounded-xl p-3">
+              <summary class="font-bold text-navy-900 dark:text-gold-400 cursor-pointer flex items-center justify-between">
+                <span>Ver tipos de activos</span>
+                <svg class="w-3.5 h-3.5 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </summary>
+              <ul class="mt-2.5 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5 text-[11px]">
+                <li>&bull; <strong>Logístico e Industrial:</strong> Naves y plataformas en Madrid.</li>
+                <li>&bull; <strong>Comercial y Residencial:</strong> Locales y edificios en rentabilidad.</li>
+                <li>&bull; <strong>Asesoramiento Inversor:</strong> Capital entre Oriente Medio y España.</li>
+              </ul>
+            </details>
+
+            <a href="#cat-REAL_ESTATE" class="mt-4 w-full py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs flex items-center justify-center">
+              Ver Activos Inmobiliarios &darr;
+            </a>
           </div>
         </article>
       </div>
@@ -558,384 +494,102 @@
   </section>
 
   <!-- =================================================================== -->
-  <!-- 5. CATÁLOGO INTERACTIVO DE PRODUCTOS (4 TABS + FILTROS COMPACTOS)   -->
+  <!-- CATÁLOGO COMPLETO: LOS 16 PRODUCTOS SEPARADOS POR SUS 4 CATEGORÍAS  -->
   <!-- =================================================================== -->
   <section id="catalogo" class="py-14 lg:py-20 bg-white dark:bg-navy-950 border-t border-slate-200 dark:border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <!-- Top Header & Filter Bar -->
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
         <div>
-          <span class="text-xs font-display font-bold uppercase tracking-widest text-gold-600 dark:text-gold-400">Stock &amp; Suministros B2B</span>
-          <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-navy-900 dark:text-white mt-1">
-            Catálogo Activo por División y Hub
+          <span class="text-xs font-display font-bold uppercase tracking-widest text-gold-600 dark:text-gold-400">Stock &amp; Suministros Disponibles</span>
+          <h2 class="font-display font-extrabold text-2xl sm:text-4xl text-navy-900 dark:text-white mt-1">
+            Catálogo General por Categorías
           </h2>
         </div>
 
-        <div class="flex items-center gap-2 bg-platinum dark:bg-navy-900 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
-          <span class="text-slate-500 dark:text-slate-400">Divisa:</span>
-          <strong id="catalog-currency-indicator" class="text-navy-900 dark:text-gold-400 font-mono">EUR (€)</strong>
-        </div>
-      </div>
-
-      <!-- 4 Main Catalog Tabs -->
-      <div class="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-2.5" role="tablist">
-        <button type="button" onclick="switchCatalogTab('VEHICLES')" id="tab-btn-VEHICLES" class="p-3.5 rounded-2xl border-2 text-left transition flex items-center justify-between bg-navy-900 text-white border-gold-500 shadow">
-          <span class="font-display font-bold text-xs sm:text-sm">1. Vehículos y Flotas</span>
-          <span id="count-VEHICLES" class="px-2 py-0.5 rounded-full text-xs font-bold bg-gold-500 text-navy-950">4</span>
-        </button>
-
-        <button type="button" onclick="switchCatalogTab('MACHINERY')" id="tab-btn-MACHINERY" class="p-3.5 rounded-2xl border-2 text-left transition flex items-center justify-between bg-platinum dark:bg-navy-900 text-navy-900 dark:text-slate-200 border-slate-200 dark:border-slate-800">
-          <span class="font-display font-bold text-xs sm:text-sm">2. Tractores y Maquinaria</span>
-          <span id="count-MACHINERY" class="px-2 py-0.5 rounded-full text-xs font-bold bg-slate-200 dark:bg-navy-800 text-navy-900 dark:text-gold-400">4</span>
-        </button>
-
-        <button type="button" onclick="switchCatalogTab('COMMODITIES')" id="tab-btn-COMMODITIES" class="p-3.5 rounded-2xl border-2 text-left transition flex items-center justify-between bg-platinum dark:bg-navy-900 text-navy-900 dark:text-slate-200 border-slate-200 dark:border-slate-800">
-          <span class="font-display font-bold text-xs sm:text-sm">3. Materias Primas</span>
-          <span id="count-COMMODITIES" class="px-2 py-0.5 rounded-full text-xs font-bold bg-slate-200 dark:bg-navy-800 text-navy-900 dark:text-gold-400">4</span>
-        </button>
-
-        <button type="button" onclick="switchCatalogTab('REAL_ESTATE')" id="tab-btn-REAL_ESTATE" class="p-3.5 rounded-2xl border-2 text-left transition flex items-center justify-between bg-platinum dark:bg-navy-900 text-navy-900 dark:text-slate-200 border-slate-200 dark:border-slate-800">
-          <span class="font-display font-bold text-xs sm:text-sm">4. Inmobiliaria</span>
-          <span id="count-REAL_ESTATE" class="px-2 py-0.5 rounded-full text-xs font-bold bg-slate-200 dark:bg-navy-800 text-navy-900 dark:text-gold-400">4</span>
-        </button>
-      </div>
-
-      <!-- Compact Filter Bar -->
-      <div class="mt-4 p-3 rounded-2xl bg-platinum dark:bg-navy-900 border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <!-- Filter by Hub + Search + Currency Indicator -->
         <div class="flex flex-wrap items-center gap-2.5">
-          <select id="filter-hub" onchange="renderCatalog()" aria-label="Filtro Hub" class="rounded-xl bg-white dark:bg-navy-950 border border-slate-300 dark:border-slate-700 px-3 py-2 text-xs font-semibold text-navy-900 dark:text-white">
-            <option value="ALL">Todos los Hubs (Madrid + Dubái)</option>
-            <option value="DUBAI_IFZA">🇦🇪 Stock Dubái Export (IFZA)</option>
-            <option value="MADRID_ES">🇪🇸 Stock Madrid (UE)</option>
+          <select id="filter-hub" onchange="renderAllCategoriesCatalog()" aria-label="Filtro Hub" class="rounded-xl bg-platinum dark:bg-navy-900 border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-xs font-semibold text-navy-900 dark:text-white">
+            <option value="ALL">Todas las Sedes (Madrid + Dubái)</option>
+            <option value="DUBAI_IFZA">🇦🇪 Stock Dubái Export</option>
+            <option value="MADRID_ES">🇪🇸 Stock Madrid</option>
           </select>
 
-          <select id="filter-condition" onchange="renderCatalog()" aria-label="Filtro Estado" class="rounded-xl bg-white dark:bg-navy-950 border border-slate-300 dark:border-slate-700 px-3 py-2 text-xs font-semibold text-navy-900 dark:text-white">
-            <option value="ALL">Todos los Estados</option>
-            <option value="NEW">Nuevo 0 km / Spot</option>
-            <option value="USED">Ocasión / Reacondicionado</option>
-            <option value="CONTRACT">Por Lote / Contrato</option>
-          </select>
-        </div>
+          <div class="relative min-w-[200px]">
+            <input type="text" id="catalog-search" oninput="renderAllCategoriesCatalog()" placeholder="Buscar vehículo, tractor, materia..." class="w-full rounded-xl bg-platinum dark:bg-navy-900 border border-slate-300 dark:border-slate-700 pl-8 pr-3 py-2 text-xs text-navy-900 dark:text-white focus:outline-none focus:border-gold-500" />
+            <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+          </div>
 
-        <div class="relative flex-1 min-w-[200px] max-w-xs">
-          <input type="text" id="catalog-search" oninput="renderCatalog()" placeholder="Buscar activo o referencia..." class="w-full rounded-xl bg-white dark:bg-navy-950 border border-slate-300 dark:border-slate-700 pl-8 pr-3 py-2 text-xs text-navy-900 dark:text-white focus:outline-none focus:border-gold-500" />
-          <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+          <div class="px-3 py-2 rounded-xl bg-platinum dark:bg-navy-900 border border-slate-200 dark:border-slate-800 text-xs">
+            <strong id="catalog-currency-indicator" class="text-navy-900 dark:text-gold-400 font-mono">EUR (€)</strong>
+          </div>
         </div>
       </div>
 
-      <!-- Dynamic Catalog Grid -->
-      <div id="catalog-grid" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+      <!-- Container where all 4 Categories and their 16 Products are rendered -->
+      <div id="catalog-all-sections" class="mt-10 space-y-14"></div>
+
+      <!-- Clean Call-To-Action Strip (Replaces the Giant Blue Form Rectangle) -->
+      <div class="mt-16 rounded-3xl navy-gradient text-white p-6 sm:p-10 border border-gold-500/40 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="space-y-1.5 text-center md:text-left">
+          <span class="text-[11px] font-display font-bold uppercase tracking-widest text-gold-400">Atención Comercial Directa • Madrid &amp; Dubái</span>
+          <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white">
+            ¿Deseas cotizar un lote o encargar una búsqueda a medida?
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-300 max-w-xl">
+            Abre nuestra página dedicada de solicitud para enviarnos los detalles de tu operación o adjuntar tu carta de intención.
+          </p>
+        </div>
+
+        <a href="cotizar.html" class="px-7 py-4 rounded-xl gold-gradient text-navy-950 font-display font-extrabold text-xs sm:text-sm shadow-xl hover:brightness-110 transition whitespace-nowrap inline-flex items-center gap-2 shrink-0">
+          <span>Solicitar Cotización / Pedido</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
     </div>
   </section>
 
   <!-- =================================================================== -->
-  <!-- 6. FORMULARIO INTELIGENTE RFQ EN ACORDEONES PLEGABLES (PASO A PASO) -->
-  <!-- =================================================================== -->
-  <section id="rfq-section" class="py-14 lg:py-20 navy-gradient text-white border-t border-gold-500/30">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto">
-        <span class="inline-flex items-center px-3 py-0.5 rounded-full bg-gold-500/20 text-gold-400 border border-gold-500/40 text-[11px] font-display font-bold uppercase tracking-wider">
-          COTIZACIÓN OFICIAL B2B &bull; SOURCING &bull; LOI
-        </span>
-        <h2 class="font-display font-extrabold text-2xl sm:text-3xl mt-2">
-          Solicitar Cotización o Búsqueda por Encargo
-        </h2>
-        <p class="text-xs sm:text-sm text-slate-300 mt-1">
-          Completa tu solicitud en 3 pasos plegables rápidos.
-        </p>
-      </div>
-
-      <!-- Pre-filled Catalog Item Alert Banner -->
-      <div id="rfq-prefill-banner" class="hidden mt-6 p-3.5 rounded-2xl bg-gold-500/15 border border-gold-500 text-gold-300 flex items-center justify-between gap-4">
-        <div>
-          <p id="rfq-prefill-title" class="font-display font-bold text-white text-xs sm:text-sm"></p>
-          <p id="rfq-prefill-hub" class="text-[11px] text-gold-300"></p>
-        </div>
-        <button type="button" onclick="clearRfqPrefill()" class="text-xs text-slate-300 hover:text-white underline shrink-0">
-          Cambiar
-        </button>
-      </div>
-
-      <!-- Progressive Accordion RFQ Form -->
-      <form id="rfq-master-form" onsubmit="submitRfqForm(event)" class="mt-6 space-y-3">
-        <input type="hidden" id="rfq-related-item-id" value="" />
-
-        <!-- ACCORDION STEP 1 (Open by default) -->
-        <details id="rfq-step-1" open class="rounded-2xl bg-navy-900/95 border border-gold-500/40 p-5 shadow-lg">
-          <summary class="flex items-center justify-between cursor-pointer">
-            <div class="flex items-center gap-3">
-              <span class="w-7 h-7 rounded-lg gold-gradient text-navy-950 font-display font-extrabold text-xs flex items-center justify-center">1</span>
-              <span class="font-display font-bold text-sm sm:text-base text-white">Paso 1 — Área de Consulta y Sede (Hub)</span>
-            </div>
-            <svg class="w-5 h-5 text-gold-400 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </summary>
-
-          <div class="mt-4 pt-4 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label for="rfq-area" class="block text-xs font-semibold text-slate-300 mb-1.5">1. ¿Qué área desea consultar? *</label>
-              <select id="rfq-area" onchange="updateRfqDynamicFields()" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:border-gold-500">
-                <option value="VEHICLES">Vehículos Nuevos y Usados (Import / Export)</option>
-                <option value="MACHINERY">Tractores Agrícolas, Maquinaria y Recambios</option>
-                <option value="COMMODITIES">Comercio General y Materias Primas (LOI / ICPO)</option>
-                <option value="LOGISTICS">Logística Internacional y Sourcing B2B</option>
-                <option value="REAL_ESTATE">Inversión y Gestión Inmobiliaria</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="rfq-hub" class="block text-xs font-semibold text-slate-300 mb-1.5">2. ¿Con qué oficina prefiere operar? *</label>
-              <select id="rfq-hub" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:border-gold-500">
-                <option value="AUTO">Asignación automática según destino (Recomendado)</option>
-                <option value="DUBAI_IFZA">🇦🇪 Hub Dubái — WSSND Skylink General Trading FZCO</option>
-                <option value="MADRID_ES">🇪🇸 Hub Madrid — WSSND SKYLINK CARGO GLOBAL, S.L.</option>
-              </select>
-            </div>
-
-            <div class="md:col-span-2 flex justify-end pt-1">
-              <button type="button" onclick="openRfqStep(2)" class="px-4 py-2 rounded-xl bg-gold-500/20 border border-gold-500/50 text-gold-300 font-bold text-xs hover:bg-gold-500 hover:text-navy-950 transition">
-                Continuar al Paso 2 (Especificaciones) &rarr;
-              </button>
-            </div>
-          </div>
-        </details>
-
-        <!-- ACCORDION STEP 2 (Collapsed until clicked) -->
-        <details id="rfq-step-2" class="rounded-2xl bg-navy-900/95 border border-slate-800 hover:border-gold-500/40 p-5 shadow-lg transition">
-          <summary class="flex items-center justify-between cursor-pointer">
-            <div class="flex items-center gap-3">
-              <span class="w-7 h-7 rounded-lg bg-navy-800 border border-gold-500/40 text-gold-400 font-display font-extrabold text-xs flex items-center justify-center">2</span>
-              <span class="font-display font-bold text-sm sm:text-base text-white">Paso 2 — Especificaciones del Producto o Lote</span>
-            </div>
-            <svg class="w-5 h-5 text-gold-400 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </summary>
-
-          <div class="mt-4 pt-4 border-t border-slate-800">
-            <!-- Group A: Vehículos y Maquinaria -->
-            <div id="dyn-vehicles-machinery" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Tipo de Solicitud</label>
-                <select id="veh-req-type" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white">
-                  <option value="CATALOG_UNIT">Comprar unidad en catálogo</option>
-                  <option value="FLEET_EXPORT">Cotizar lote/flota para exportación</option>
-                  <option value="CUSTOM_SOURCING">Búsqueda a medida (Custom Sourcing)</option>
-                  <option value="SPARE_PARTS">Piezas y recambios</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Condición y Cantidad</label>
-                <div class="grid grid-cols-2 gap-2">
-                  <select id="veh-condition" class="rounded-xl bg-navy-950 border border-slate-700 px-2.5 py-2 text-xs text-white">
-                    <option value="NEW_EXPORT">Nuevo 0 km</option>
-                    <option value="USED_CERTIFIED">Usado Cert.</option>
-                    <option value="ANY">Indiferente</option>
-                  </select>
-                  <input type="text" id="veh-units" placeholder="Unidades" value="1 unidad" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white" />
-                </div>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Marca, Modelo o Potencia (HP)</label>
-                <input type="text" id="veh-specs" placeholder="Ej. Land Cruiser 300 / Tractor 250 HP" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white" />
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Puerto / País de Destino</label>
-                <input type="text" id="veh-destination" placeholder="Ej. Casablanca / Valencia / Jebel Ali" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white" />
-              </div>
-            </div>
-
-            <!-- Group B: Materias Primas -->
-            <div id="dyn-commodities" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Rubro</label>
-                <select id="comm-sector" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white">
-                  <option value="HYDROCARBONS">Hidrocarburos y Derivados</option>
-                  <option value="PRECIOUS_METALS">Metales Preciosos y Minerales</option>
-                  <option value="CONSTRUCTION_MATERIALS">Materiales de Construcción</option>
-                  <option value="AGRO_FOOD">Agroalimentación Mayorista</option>
-                </select>
-              </div>
-              <div class="grid grid-cols-2 gap-2">
-                <div>
-                  <label class="block text-xs font-semibold text-slate-300 mb-1">Modalidad</label>
-                  <select id="comm-modality" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-2.5 py-2 text-xs text-white">
-                    <option value="SPOT">Spot</option>
-                    <option value="ANNUAL_CONTRACT">Contrato Anual</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-slate-300 mb-1">Incoterm</label>
-                  <select id="comm-incoterm" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-2.5 py-2 text-xs text-white">
-                    <option value="CIF">CIF</option>
-                    <option value="FOB">FOB</option>
-                    <option value="EXW">EXW</option>
-                    <option value="DDP">DDP</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Producto y Volumen Requerido</label>
-                <input type="text" id="comm-product" placeholder="Ej. EN590 10,000 MT / Acero 500 TM" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white" />
-                <input type="hidden" id="comm-volume" value="" />
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Puerto de Destino &amp; Adjunto LOI/ICPO</label>
-                <div class="flex gap-2">
-                  <input type="text" id="comm-port" placeholder="Puerto destino" class="w-1/2 rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white" />
-                  <input type="file" id="comm-file-upload" accept=".pdf,.doc,.docx,.xls,.xlsx" class="w-1/2 text-[10px] text-slate-300 file:py-1.5 file:px-2.5 file:rounded-lg file:border-0 file:bg-gold-500 file:text-navy-950 file:font-bold" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Group C: Logística -->
-            <div id="dyn-logistics" class="hidden grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <select id="log-service" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white">
-                <option value="SOURCING_B2B">Búsqueda de Proveedor (Sourcing)</option>
-                <option value="RORO_FREIGHT">Transporte Marítimo Ro-Ro</option>
-                <option value="CONTAINER_FCL">Contenedores FCL / LCL</option>
-              </select>
-              <input type="text" id="log-origin" placeholder="Origen (Ej. Dubái / Madrid)" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white" />
-              <input type="text" id="log-dest" placeholder="Destino y mercancía" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white" />
-            </div>
-
-            <!-- Group D: Inmobiliaria -->
-            <div id="dyn-realestate" class="hidden grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <select id="re-operation" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white">
-                <option value="BUY_INVESTMENT">Comprar para inversión</option>
-                <option value="RENT_WAREHOUSE">Alquilar nave / local</option>
-                <option value="LIST_PROPERTY">Vender mi propiedad</option>
-              </select>
-              <input type="text" id="re-location" placeholder="Ubicación y m²" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white" />
-              <input type="text" id="re-budget" placeholder="Presupuesto estimado" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white" />
-            </div>
-
-            <div class="mt-4 flex justify-end">
-              <button type="button" onclick="openRfqStep(3)" class="px-4 py-2 rounded-xl bg-gold-500/20 border border-gold-500/50 text-gold-300 font-bold text-xs hover:bg-gold-500 hover:text-navy-950 transition">
-                Continuar al Paso 3 (Datos de Contacto) &rarr;
-              </button>
-            </div>
-          </div>
-        </details>
-
-        <!-- ACCORDION STEP 3 (Applicant Contact & Submit) -->
-        <details id="rfq-step-3" class="rounded-2xl bg-navy-900/95 border border-slate-800 hover:border-gold-500/40 p-5 shadow-lg transition">
-          <summary class="flex items-center justify-between cursor-pointer">
-            <div class="flex items-center gap-3">
-              <span class="w-7 h-7 rounded-lg bg-navy-800 border border-gold-500/40 text-gold-400 font-display font-extrabold text-xs flex items-center justify-center">3</span>
-              <span class="font-display font-bold text-sm sm:text-base text-white">Paso 3 — Datos de Contacto Corporativo y Envío</span>
-            </div>
-            <svg class="w-5 h-5 text-gold-400 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </summary>
-
-          <div class="mt-4 pt-4 border-t border-slate-800 space-y-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Nombre Completo y Cargo *</label>
-                <input type="text" id="client-name" required placeholder="Nombre y Cargo" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2 text-xs text-white" />
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Empresa y NIF / VAT (Opcional)</label>
-                <div class="grid grid-cols-2 gap-2">
-                  <input type="text" id="client-company" placeholder="Empresa S.L." class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white" />
-                  <input type="text" id="client-tax-id" placeholder="NIF / VAT" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-white" />
-                </div>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Correo Electrónico *</label>
-                <input type="email" id="client-email" required placeholder="compras@empresa.com" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2 text-xs text-white" />
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Teléfono Internacional (E.164) *</label>
-                <div class="flex gap-1.5">
-                  <select id="client-phone-prefix" class="rounded-xl bg-navy-950 border border-slate-700 px-2 py-2 text-xs font-mono text-gold-400">
-                    <option value="+34">🇪🇸 +34</option>
-                    <option value="+971">🇦🇪 +971</option>
-                    <option value="+33">🇫🇷 +33</option>
-                    <option value="+212">🇲🇦 +212</option>
-                    <option value="+44">🇬🇧 +44</option>
-                    <option value="+1">🇺🇸 +1</option>
-                  </select>
-                  <input type="tel" id="client-phone-number" required placeholder="600123456" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs font-mono text-white" />
-                </div>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">País de Residencia *</label>
-                <input type="text" id="client-country" required placeholder="España / EAU..." class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2 text-xs text-white" />
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Huso Horario Preferido</label>
-                <select id="client-timezone" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-xs text-gold-400">
-                  <option value="CET (Madrid UTC+1)">Madrid (CET UTC+1)</option>
-                  <option value="GST (Dubái UTC+4)">Dubái (GST UTC+4)</option>
-                </select>
-              </div>
-            </div>
-
-            <input type="hidden" id="client-notes" value="" />
-
-            <div class="flex items-start gap-2.5 pt-1">
-              <input type="checkbox" id="client-gdpr" required class="mt-0.5 w-4 h-4 rounded accent-gold-500" />
-              <label for="client-gdpr" class="text-[11px] text-slate-300">
-                Acepto el tratamiento confidencial de datos por parte del grupo <strong>WSSND SKYLINK</strong> (Madrid NIF B05861943 &amp; Dubái IFZA).
-              </label>
-            </div>
-
-            <div class="pt-2 flex justify-end">
-              <button type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl gold-gradient text-navy-950 font-display font-extrabold text-xs sm:text-sm shadow-xl hover:brightness-110 transition">
-                Registrar Solicitud RFQ / Emitir Proforma
-              </button>
-            </div>
-          </div>
-        </details>
-
-        <div id="rfq-success-box" class="hidden p-5 rounded-2xl bg-emerald-500/15 border border-emerald-400/50 text-emerald-200 text-xs space-y-2"></div>
-      </form>
-    </div>
-  </section>
-
-  <!-- =================================================================== -->
-  <!-- ULTRA-CLEAN MINIMALIST FOOTER WITH COLLAPSIBLE LEGAL ACCORDIONS     -->
+  <!-- ULTRA-CLEAN MINIMALIST FOOTER (ITEMS-START EXCLUSIVE COLLAPSIBLES)  -->
   <!-- =================================================================== -->
   <footer class="bg-navy-950 text-slate-300 border-t border-gold-500/30 py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-      <!-- Top Row: Brand + Founder Badge + Collapsible Legal Accordions -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <!-- Brand & Founder -->
         <div class="lg:col-span-5 flex items-center gap-3.5">
-          <img src="assets/logo-wssnd-skylink.jpg?v=2" alt="WSSND SKYLINK Logo Oficial" class="w-12 h-12 rounded-xl bg-white p-0.5 border border-gold-500/50 object-contain shrink-0" />
+          <img src="assets/logo-wssnd-skylink.jpg?v=3" alt="WSSND SKYLINK Logo Oficial" class="w-12 h-12 rounded-xl bg-white p-0.5 border border-gold-500/50 object-contain shrink-0" />
           <div>
             <span class="font-display font-extrabold text-white text-base block">WSSND SKYLINK GROUP</span>
             <span class="text-xs text-gold-400 block">Fundador &amp; CEO: <strong>Benjamin Assi</strong></span>
-            <span class="text-[11px] text-slate-400">Madrid (Unión Europea) &bull; Dubái (IFZA, EAU)</span>
+            <span class="text-[11px] text-slate-400">Madrid (España) &bull; Dubái (Emiratos Árabes Unidos)</span>
           </div>
         </div>
 
-        <!-- Collapsible Legal Accordions in Footer (Zero visual clutter) -->
-        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <details class="rounded-xl bg-navy-900 border border-slate-800 px-4 py-2.5">
+        <!-- Exclusive Accordions with items-start -->
+        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs items-start">
+          <details data-exclusive-group="footer-sedes" class="rounded-xl bg-navy-900 border border-slate-800 px-4 py-2.5 self-start">
             <summary class="flex items-center justify-between cursor-pointer font-semibold text-white">
-              <span>🇪🇸 Sede UE: WSSND SKYLINK CARGO GLOBAL, S.L.</span>
+              <span>🇪🇸 Sede Madrid: WSSND SKYLINK CARGO GLOBAL, S.L.</span>
               <svg class="w-4 h-4 text-gold-400 chevron-icon shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </summary>
             <div class="mt-2.5 pt-2.5 border-t border-slate-800 text-[11px] text-slate-400 space-y-1">
-              <p><strong class="text-slate-200">NIF:</strong> B05861943 (Prot. 2.295 Notario D. Santiago R. Jiménez Candela).</p>
-              <p><strong class="text-slate-200">Dirección:</strong> C/ Garabay 7, local 5, 28850 Torrejón de Ardoz, Madrid.</p>
-              <p><strong class="text-slate-200">Administrador:</strong> Benjamin Assi &bull; CNAE 46.71.</p>
+              <p><strong class="text-slate-200">Dirección:</strong> Calle Garabay, 7, local 5, 28850 Torrejón de Ardoz, Madrid, España.</p>
+              <p><strong class="text-slate-200">Fundador y Administrador:</strong> Benjamin Assi.</p>
             </div>
           </details>
 
-          <details class="rounded-xl bg-navy-900 border border-slate-800 px-4 py-2.5">
+          <details data-exclusive-group="footer-sedes" class="rounded-xl bg-navy-900 border border-slate-800 px-4 py-2.5 self-start">
             <summary class="flex items-center justify-between cursor-pointer font-semibold text-white">
-              <span>🇦🇪 Sede EAU: WSSND Skylink General Trading FZCO</span>
+              <span>🇦🇪 Sede Dubái: WSSND Skylink General Trading FZCO</span>
               <svg class="w-4 h-4 text-gold-400 chevron-icon shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </summary>
             <div class="mt-2.5 pt-2.5 border-t border-slate-800 text-[11px] text-slate-400 space-y-1">
-              <p><strong class="text-slate-200">Autoridad:</strong> IFZA, Dubai Digital Park, Dubai Silicon Oasis, Dubái.</p>
-              <p><strong class="text-slate-200">Licencias IFZA:</strong> 4690099, 4510084, 4510085 y 4773072.</p>
-              <p><strong class="text-slate-200">General Manager:</strong> Benjamin Assi.</p>
+              <p><strong class="text-slate-200">Dirección:</strong> IFZA Headquarters, Dubai Digital Park, Dubai Silicon Oasis, Dubái, EAU.</p>
+              <p><strong class="text-slate-200">Fundador y Director General:</strong> Benjamin Assi.</p>
             </div>
           </details>
         </div>
       </div>
 
-      <!-- Bottom Signature Bar -->
       <div class="pt-5 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
         <div class="flex flex-wrap items-center gap-4">
           <span>&copy; 2026 WSSND SKYLINK.</span>
@@ -950,48 +604,14 @@
   </footer>
 
   <!-- =================================================================== -->
-  <!-- FLOATING DIRECT CONTACT WIDGET (RULE 5: WHATSAPP ICON ONLY + CALL)  -->
+  <!-- FLOATING DIRECT CONTACT WIDGET (RULE 5: WHATSAPP ICON ONLY)         -->
   <!-- =================================================================== -->
   <div class="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-3">
-    <button type="button" onclick="openCallbackModal()" aria-label="Solicitar Llamada Ejecutiva" title="Solicitar Llamada Ejecutiva (Madrid CET / Dubái GST)" class="w-12 h-12 rounded-full bg-navy-900 text-gold-400 border-2 border-gold-500 shadow-xl flex items-center justify-center hover:scale-105 transition">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-      </svg>
-    </button>
-
-    <!-- STRICT RULE 5.1: WhatsApp Button with ONLY the WhatsApp Icon -->
     <a id="floating-wa-link" href="https://wa.me/34633258343?text=Hola%20WSSND%20SKYLINK%2C%20solicito%20informaci%C3%B3n%20comercial%20B2B." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="w-14 h-14 rounded-full bg-[#25D366] text-white shadow-2xl flex items-center justify-center hover:scale-105 transition">
       <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
         <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.124.554 4.119 1.525 5.853l-1.525 5.567 5.702-1.496c1.691.899 3.619 1.412 5.668 1.412 6.627 0 12-5.373 12-12s-5.373-11.336-11.37-11.336z"/>
       </svg>
     </a>
-  </div>
-
-  <!-- MODAL: EXECUTIVE CALLBACK -->
-  <div id="callback-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-navy-950/80 backdrop-blur-sm">
-    <div class="bg-navy-900 border border-gold-500/40 rounded-3xl max-w-md w-full p-6 text-white shadow-2xl">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-        <h3 class="font-display font-bold text-base text-gold-400">Solicitar Llamada Ejecutiva (Callback)</h3>
-        <button type="button" onclick="closeCallbackModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
-      </div>
-      <form onsubmit="submitCallbackForm(event)" class="mt-4 space-y-3.5 text-xs">
-        <input type="text" id="cb-name" required placeholder="Nombre y Empresa *" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-white" />
-        <input type="tel" id="cb-phone" required placeholder="Teléfono E.164 (Ej. +34 600 000 000) *" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 font-mono text-white" />
-        <div class="grid grid-cols-2 gap-2.5">
-          <select id="cb-hub" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-white">
-            <option value="MADRID_ES">🇪🇸 Hub Madrid</option>
-            <option value="DUBAI_IFZA">🇦🇪 Hub Dubái</option>
-          </select>
-          <select id="cb-tz" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-gold-400">
-            <option value="Madrid CET (UTC+1)">Madrid (CET)</option>
-            <option value="Dubái GST (UTC+4)">Dubái (GST)</option>
-          </select>
-        </div>
-        <button type="submit" class="w-full py-3 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs">
-          Agendar Llamada
-        </button>
-      </form>
-    </div>
   </div>
 
   <!-- MODAL: AVISO LEGAL -->
@@ -1004,12 +624,12 @@
       <div class="mt-4 space-y-4 text-xs text-slate-300 leading-relaxed">
         <p>Grupo empresarial dirigido por su fundador <strong>D. Benjamin Assi</strong>:</p>
         <div class="p-3.5 rounded-xl bg-navy-950 border border-slate-800 space-y-1">
-          <p class="font-bold text-white">🇪🇸 WSSND SKYLINK CARGO GLOBAL, S.L. (NIF: B05861943)</p>
-          <p>Calle Garabay, 7, local 5 (Pta. 5), 28850 Torrejón de Ardoz, Madrid. Prot. Notarial Nº 2.295 (04/11/2026). IBAN Proformas: <span class="font-mono text-gold-400">ES91 3067 0175 67 3990569323</span>.</p>
+          <p class="font-bold text-white">🇪🇸 WSSND SKYLINK CARGO GLOBAL, S.L.</p>
+          <p>Calle Garabay, 7, local 5 (Pta. 5), 28850 Torrejón de Ardoz, Madrid, España. NIF B05861943.</p>
         </div>
         <div class="p-3.5 rounded-xl bg-navy-950 border border-slate-800 space-y-1">
-          <p class="font-bold text-white">🇦🇪 WSSND Skylink General Trading FZCO (IFZA Dubái)</p>
-          <p>IFZA Headquarters, Dubai Digital Park, Dubai Silicon Oasis, Dubái, EAU. Licencias: 4690099, 4510084, 4510085 y 4773072.</p>
+          <p class="font-bold text-white">🇦🇪 WSSND Skylink General Trading FZCO</p>
+          <p>IFZA Headquarters, Dubai Digital Park, Dubai Silicon Oasis, Dubái, Emiratos Árabes Unidos.</p>
         </div>
       </div>
     </div>
@@ -1046,8 +666,8 @@
         <button type="button" onclick="switchAdminTab(1)" id="adm-tab-btn-1" class="px-3.5 py-2 rounded-xl gold-gradient text-navy-950">1. Catálogo (CRUD)</button>
         <button type="button" onclick="switchAdminTab(2)" id="adm-tab-btn-2" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">2. Anuncios</button>
         <button type="button" onclick="switchAdminTab(3)" id="adm-tab-btn-3" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">3. Categorías</button>
-        <button type="button" onclick="switchAdminTab(4)" id="adm-tab-btn-4" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">4. Leads RFQ</button>
-        <button type="button" onclick="switchAdminTab(5)" id="adm-tab-btn-5" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">5. Supabase &amp; SQL</button>
+        <button type="button" onclick="switchAdminTab(4)" id="adm-tab-btn-4" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">4. Solicitudes</button>
+        <button type="button" onclick="switchAdminTab(5)" id="adm-tab-btn-5" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">5. Supabase &amp; Backup</button>
       </div>
 
       <div id="adm-tab-1" class="mt-5 space-y-5">
@@ -1059,34 +679,33 @@
             <option value="REAL_ESTATE">4. Inmobiliaria</option>
           </select>
           <select id="adm-item-hub" required class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
-            <option value="DUBAI_IFZA">Stock Dubái Export (IFZA)</option>
-            <option value="MADRID_ES">Stock Madrid (UE)</option>
+            <option value="DUBAI_IFZA">Stock Dubái Export</option>
+            <option value="MADRID_ES">Stock Madrid</option>
           </select>
           <select id="adm-item-cond" required class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
             <option value="NEW">Nuevo 0 km / Spot</option>
             <option value="USED">Ocasión / Reacondicionado</option>
             <option value="CONTRACT">Por Lote / Contrato</option>
           </select>
-          <input type="text" id="adm-item-title" required placeholder="Título del activo *" class="sm:col-span-2 rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          <input type="text" id="adm-item-title" required placeholder="Título del producto *" class="sm:col-span-2 rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
           <input type="number" id="adm-item-price" value="0" placeholder="Precio EUR (0=A consultar)" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
           <input type="text" id="adm-item-specs" required placeholder="Especificaciones separadas por |" class="sm:col-span-2 rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
           <input type="file" accept="image/*" onchange="compressAdminPhoto(event)" class="text-xs text-slate-300" />
           <input type="hidden" id="adm-item-img" value="assets/veh-landcruiser-300.png" />
           <div class="sm:col-span-3 flex justify-end">
-            <button type="submit" class="px-5 py-2 rounded-xl gold-gradient text-navy-950 font-bold">Guardar Activo</button>
+            <button type="submit" class="px-5 py-2 rounded-xl gold-gradient text-navy-950 font-bold">Guardar Producto</button>
           </div>
         </form>
         <div id="adm-catalog-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
       </div>
 
       <div id="adm-tab-2" class="hidden mt-5 p-5 rounded-2xl bg-navy-900 border border-slate-800 space-y-3 text-xs">
-        <input type="text" id="adm-banner-input" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-white" value="Operativa Directa Binacional: Hub Madrid (NIF B05861943) & Hub Dubái (IFZA)" />
+        <input type="text" id="adm-banner-input" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-white" value="WSSND SKYLINK — Sede Madrid y Sede Dubái" />
         <button type="button" onclick="saveAdminBanner()" class="px-5 py-2 rounded-xl gold-gradient text-navy-950 font-bold">Actualizar</button>
       </div>
 
       <div id="adm-tab-3" class="hidden mt-5 p-5 rounded-2xl bg-navy-900 border border-slate-800 text-xs text-slate-300 space-y-2">
-        <p>🇪🇸 <strong>CNAE 46.71 (Madrid):</strong> Comercio mayorista de vehículos y objeto multisectorial.</p>
-        <p>🇦🇪 <strong>IFZA Dubái:</strong> 4690099 (General Trading), 4510084 (Nuevos Export), 4510085 (Usados), 4773072 (Tractores y Maquinaria).</p>
+        <p>1. Vehículos y Flotas &bull; 2. Tractores y Maquinaria &bull; 3. Materias Primas &bull; 4. Activos Inmobiliarios.</p>
       </div>
 
       <div id="adm-tab-4" class="hidden mt-5 p-5 rounded-2xl bg-navy-900 border border-slate-800 space-y-3 text-xs">
@@ -1112,20 +731,47 @@
   <!-- JAVASCRIPT ENGINE                                                   -->
   <!-- =================================================================== -->
   <script>
-    const STORAGE_KEY_CATALOG = 'wssnd_skylink_catalog_v1';
+    const STORAGE_KEY_CATALOG = 'wssnd_skylink_catalog_v2_clean';
     const STORAGE_KEY_LEADS = 'wssnd_skylink_leads_v1';
-    const STORAGE_KEY_BANNER = 'wssnd_skylink_banner_v1';
 
-    let currentTab = 'VEHICLES';
     let currentCurrency = 'EUR';
     const CURRENCY_RATES = { EUR: 1, USD: 1.08, AED: 3.97 };
 
+    const CATEGORY_META = [
+      {
+        code: 'VEHICLES',
+        badge: 'CATEGORÍA 01',
+        title: 'Vehículos y Flotas (Nuevos 0 km y Ocasión)',
+        subtitle: 'Suministro de SUVs, pick-ups 4x4, berlinas ejecutivas y cabezas tractoras desde Dubái y Madrid.'
+      },
+      {
+        code: 'MACHINERY',
+        badge: 'CATEGORÍA 02',
+        title: 'Tractores Agrícolas y Maquinaria Pesada',
+        subtitle: 'Tractores de alto rendimiento, cosechadoras, excavadoras de obra pública y manipuladores telescópicos.'
+      },
+      {
+        code: 'COMMODITIES',
+        badge: 'CATEGORÍA 03',
+        title: 'Materias Primas y Comercio Mayorista',
+        subtitle: 'Hidrocarburos, metales preciosos e industriales, materiales de construcción y agroalimentación.'
+      },
+      {
+        code: 'REAL_ESTATE',
+        badge: 'CATEGORÍA 04',
+        title: 'Activos Inmobiliarios y Naves Logísticas',
+        subtitle: 'Plataformas logísticas, locales comerciales en rentabilidad, edificios residenciales y suelo industrial.'
+      }
+    ];
+
+    // All 16 Products (Clean Commercial Labels — Zero Internal Tax/License Codes)
     const DEFAULT_CATALOG = [
+      // 1. VEHÍCULOS Y FLOTAS
       {
         id: 'veh-1',
         tab: 'VEHICLES',
         hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Dubái Export (IFZA 4510084)',
+        hub_label: 'Stock Dubái Export',
         condition: 'NEW',
         condition_label: 'Nuevo 0 km',
         title: 'Toyota Land Cruiser 300 V6 Twin-Turbo GXR',
@@ -1133,29 +779,29 @@
         price_eur: 74500,
         price_on_request: false,
         image: 'assets/veh-landcruiser-300.png',
-        specs: ['Año 2026 • 0 km • 409 HP', 'Export Fuera de EAU (IFZA 4510084)'],
+        specs: ['Año 2026 • 0 km', 'Motor 3.5L V6 Twin-Turbo (409 HP)', 'Disponible para exportación internacional'],
         cta_label: 'Solicitar Cotización'
       },
       {
         id: 'veh-2',
         tab: 'VEHICLES',
         hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Dubái Export (IFZA 4510084)',
+        hub_label: 'Stock Dubái Export',
         condition: 'CONTRACT',
-        condition_label: 'Flota 0 km',
+        condition_label: 'Nuevo 0 km • Lote Flota',
         title: 'Flota Toyota Hilux Adventure 2.8D 4x4 Doble Cabina',
         year: 2026,
         price_eur: 36900,
         price_on_request: false,
         image: 'assets/veh-hilux-fleet.png',
-        specs: ['Lotes de 5 a 50 uds. • 0 km', 'Exportación África / Latam / UE'],
+        specs: ['Año 2026 • 0 km (Unidades o lotes)', 'Motor 2.8L Turbo Diésel 4x4', 'Envío marítimo Ro-Ro / Contenedor'],
         cta_label: 'Solicitar Cotización'
       },
       {
         id: 'veh-3',
         tab: 'VEHICLES',
         hub_origin: 'MADRID_ES',
-        hub_label: 'Stock Madrid (CNAE 46.71)',
+        hub_label: 'Stock Madrid',
         condition: 'USED',
         condition_label: 'Ocasión Certificada',
         title: 'Mercedes-Benz S 580 4MATIC L Executive',
@@ -1163,29 +809,31 @@
         price_eur: 108000,
         price_on_request: false,
         image: 'assets/veh-mercedes-s580.png',
-        specs: ['2024 • 18.400 km • 503 CV', 'Disponible en Madrid / Export'],
+        specs: ['Año 2024 • 18.400 km Certificados', 'Motor V8 Biturbo Mild-Hybrid (503 CV)', 'Entrega inmediata en Madrid o exportación'],
         cta_label: 'Solicitar Cotización'
       },
       {
         id: 'veh-4',
         tab: 'VEHICLES',
         hub_origin: 'MADRID_ES',
-        hub_label: 'Stock Madrid (CNAE 46.71)',
+        hub_label: 'Stock Madrid',
         condition: 'USED',
-        condition_label: 'Industrial Euro 6',
-        title: 'Cabeza Tractora Mercedes-Benz Actros 1848 LS',
+        condition_label: 'Seminuevo Industrial',
+        title: 'Cabeza Tractora Mercedes-Benz Actros 1848 LS Euro 6',
         year: 2023,
         price_eur: 68500,
         price_on_request: false,
         image: 'assets/veh-actros-tractor.png',
-        specs: ['2023 • 480 CV Euro 6d', 'Entrega Madrid o Puerto Ro-Ro'],
+        specs: ['Año 2023 • 142.000 km', 'Potencia 480 CV Euro 6d • Retarder', 'Inspección mecánica certificada'],
         cta_label: 'Solicitar Cotización'
       },
+
+      // 2. TRACTORES Y MAQUINARIA
       {
         id: 'mach-1',
         tab: 'MACHINERY',
         hub_origin: 'MADRID_ES',
-        hub_label: 'Madrid & IFZA 4773072',
+        hub_label: 'Stock Madrid & Dubái',
         condition: 'NEW',
         condition_label: 'Agrícola • Nuevo',
         title: 'Tractor Agrícola 4WD 250 HP Serie 6R Heavy-Duty',
@@ -1193,7 +841,7 @@
         price_eur: 134000,
         price_on_request: false,
         image: 'assets/mach-johndeere-6r.png',
-        specs: ['250 HP • 0 Horas • AutoPowr', 'Aperos y recambios disponibles'],
+        specs: ['Potencia: 250 HP • 0 Horas de uso', 'Transmisión AutoPowr IVT • Cabina suspendida', 'Disponibilidad de aperos y recambios'],
         cta_label: 'Cotizar Maquinaria'
       },
       {
@@ -1202,125 +850,129 @@
         hub_origin: 'DUBAI_IFZA',
         hub_label: 'Stock Dubái Export',
         condition: 'USED',
-        condition_label: 'Obra Pública',
+        condition_label: 'Obra Pública • Revisada',
         title: 'Excavadora Hidráulica de Orugas 32 Toneladas',
         year: 2023,
         price_eur: 89000,
         price_on_request: false,
         image: 'assets/mach-cat-excavator.png',
-        specs: ['271 HP • 1.850 Horas', 'Embarque Ro-Ro Jebel Ali / UE'],
+        specs: ['Potencia: 271 HP • 1.850 Horas', 'Instalación de martillo hidráulico incluida', 'Embarque internacional Ro-Ro'],
         cta_label: 'Cotizar Maquinaria'
       },
       {
         id: 'mach-3',
         tab: 'MACHINERY',
         hub_origin: 'MADRID_ES',
-        hub_label: 'Madrid (IFZA 4773072)',
+        hub_label: 'Stock Madrid',
         condition: 'USED',
-        condition_label: 'Reacondicionada',
-        title: 'Cosechadora de Cereales Alto Rendimiento + Cabezal',
+        condition_label: 'Agrícola • Reacondicionada',
+        title: 'Cosechadora de Cereales Alto Rendimiento + Cabezal 7.7m',
         year: 2022,
         price_eur: 162000,
         price_on_request: false,
         image: 'assets/mach-claas-harvester.png',
-        specs: ['408 HP • Tolva 11.000 L', 'Recambios originales garantizados'],
+        specs: ['Potencia: 408 HP • 920 Horas de trilla', 'Tolva de 11.000 L • Carro portacorte', 'Recambios originales garantizados'],
         cta_label: 'Cotizar Maquinaria'
       },
       {
         id: 'mach-4',
         tab: 'MACHINERY',
         hub_origin: 'MADRID_ES',
-        hub_label: 'Stock Madrid (UE)',
+        hub_label: 'Stock Madrid',
         condition: 'NEW',
-        condition_label: 'Industrial • 0h',
+        condition_label: 'Industrial • Nuevo',
         title: 'Manipulador Telescópico Todoterreno 4.000 kg / 18m',
         year: 2026,
         price_eur: 72000,
         price_on_request: false,
         image: 'assets/mach-manitou-telehandler.png',
-        specs: ['115 HP • Elevación 17,55 m', 'Incluye horquillas y cazo'],
+        specs: ['Potencia: 115 HP • 0 Horas', 'Altura de elevación: 17,55 m • Estabilizadores', 'Incluye horquillas y cazo de áridos'],
         cta_label: 'Cotizar Maquinaria'
       },
+
+      // 3. MATERIAS PRIMAS
       {
         id: 'comm-1',
         tab: 'COMMODITIES',
         hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Hub Dubái IFZA 4690099',
+        hub_label: 'Sede Dubái Export',
         condition: 'CONTRACT',
-        condition_label: 'Hidrocarburos',
-        title: 'Gasóleo ULSD EN590 (10 ppm) & Lubricantes B2B',
+        condition_label: 'Hidrocarburos y Derivados',
+        title: 'Gasóleo de Automoción ULSD EN590 (10 ppm) & Lubricantes',
         year: 2026,
         price_eur: 0,
         price_on_request: true,
         image: 'assets/comm-en590-diesel.png',
-        specs: ['MOQ: 10,000 MT / Flexitanks', 'FOB Fujairah / Rotterdam, CIF'],
-        cta_label: 'Enviar LOI / Cotizar'
+        specs: ['Pedido mínimo: 10.000 MT / Flexitanks', 'Modalidades: FOB / CIF', 'Certificación de calidad internacional'],
+        cta_label: 'Solicitar Oferta B2B'
       },
       {
         id: 'comm-2',
         tab: 'COMMODITIES',
         hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Hub Dubái IFZA 4690099',
+        hub_label: 'Sede Dubái Export',
         condition: 'NEW',
-        condition_label: 'Metales e Industria',
-        title: 'Oro de Inversión (999.9) y Cátodos de Cobre (99.99%)',
+        condition_label: 'Metales Preciosos e Industriales',
+        title: 'Oro de Inversión (999.9) y Cátodos de Cobre Electrolítico',
         year: 2026,
         price_eur: 0,
         price_on_request: true,
         image: 'assets/comm-gold-copper.png',
-        specs: ['MOQ: Según contrato FCO', 'Certificación de pureza internacional'],
-        cta_label: 'Enviar LOI / Cotizar'
+        specs: ['Suministro bajo contrato mercantil', 'Envío asegurado CIF', 'Trazabilidad y certificado de pureza'],
+        cta_label: 'Solicitar Oferta B2B'
       },
       {
         id: 'comm-3',
         tab: 'COMMODITIES',
         hub_origin: 'MADRID_ES',
-        hub_label: 'Hub Madrid & Dubái',
+        hub_label: 'Sede Madrid & Dubái',
         condition: 'CONTRACT',
-        condition_label: 'Construcción',
-        title: 'Acero Corrugado B500S y Cemento Portland 42.5R',
+        condition_label: 'Materiales de Construcción',
+        title: 'Acero Corrugado B500S en Barras y Cemento Portland 42.5R',
         year: 2026,
         price_eur: 540,
         price_on_request: false,
         image: 'assets/comm-portland-steel.png',
-        specs: ['MOQ: 500 TM (Ref. por TM)', 'FOB Puerto Español / CIF Destino'],
-        cta_label: 'Enviar LOI / Cotizar'
+        specs: ['Pedido mínimo: 500 TM (Precio ref. por TM)', 'FOB Puerto Español o CIF Destino', 'Certificado de calidad europeo'],
+        cta_label: 'Solicitar Oferta B2B'
       },
       {
         id: 'comm-4',
         tab: 'COMMODITIES',
         hub_origin: 'MADRID_ES',
-        hub_label: 'Hub España (UE)',
+        hub_label: 'Sede Madrid (Origen España)',
         condition: 'NEW',
-        condition_label: 'Agroalimentación',
-        title: 'Aceite de Oliva Virgen Extra y Cereales Mayorista',
+        condition_label: 'Agroalimentación Mayorista',
+        title: 'Aceite de Oliva Virgen Extra Español y Cereales a Granel',
         year: 2026,
         price_eur: 0,
         price_on_request: true,
         image: 'assets/comm-olive-grain.png',
-        specs: ['MOQ: 1 Contenedor 20\' FCL', 'EXW Madrid/Jaén, FOB Valencia, CIF'],
-        cta_label: 'Enviar LOI / Cotizar'
+        specs: ['Pedido mínimo: 1 Contenedor 20\' FCL / Flexitank', 'Formatos granel y canal HORECA', 'Certificado fitosanitario y de origen'],
+        cta_label: 'Solicitar Oferta B2B'
       },
+
+      // 4. ACTIVOS INMOBILIARIOS
       {
         id: 're-1',
         tab: 'REAL_ESTATE',
         hub_origin: 'MADRID_ES',
-        hub_label: 'Torrejón de Ardoz (Madrid)',
+        hub_label: 'Madrid (Corredor del Henares)',
         condition: 'NEW',
-        condition_label: 'Nave Logística',
-        title: 'Plataforma Logística Clase A con 6 Muelles de Carga',
+        condition_label: 'Nave Logística • Venta / Alquiler',
+        title: 'Plataforma Logística Clase A con 6 Muelles de Carga en Torrejón de Ardoz',
         year: 2026,
         price_eur: 2850000,
         price_on_request: false,
         image: 'assets/re-logistic-madrid.png',
-        specs: ['3.450 m² • Altura 11,5 m', 'Rentabilidad estimada: 7,4%'],
-        cta_label: 'Solicitar Dossier'
+        specs: ['Superficie: 3.450 m² construidos + campa', 'Altura libre: 11,5 m • Acceso directo A-2', 'Rentabilidad estimada: 7,4% anual'],
+        cta_label: 'Solicitar Dossier / Visita'
       },
       {
         id: 're-2',
         tab: 'REAL_ESTATE',
         hub_origin: 'MADRID_ES',
-        hub_label: 'Madrid Capital',
+        hub_label: 'Madrid Capital (Zona Prime)',
         condition: 'NEW',
         condition_label: 'Local en Rentabilidad',
         title: 'Local Comercial Esquinero Gran Fachada Acristalada',
@@ -1328,8 +980,8 @@
         price_eur: 1490000,
         price_on_request: false,
         image: 'assets/re-retail-madrid.png',
-        specs: ['420 m² en planta calle', 'Rentabilidad neta: 6,2% anual'],
-        cta_label: 'Solicitar Dossier'
+        specs: ['Superficie: 420 m² en planta calle', 'Arrendado a operador de primer nivel', 'Rentabilidad neta estimada: 6,2% anual'],
+        cta_label: 'Solicitar Dossier / Visita'
       },
       {
         id: 're-3',
@@ -1338,28 +990,28 @@
         hub_label: 'Madrid Residencial',
         condition: 'NEW',
         condition_label: 'Edificio en Bloque',
-        title: 'Edificio Residencial de 18 Viviendas + Garajes',
+        title: 'Edificio Residencial Contemporáneo de 18 Viviendas + Garajes',
         year: 2026,
         price_eur: 4600000,
         price_on_request: false,
         image: 'assets/re-residential-building.png',
-        specs: ['2.180 m² construidos', '100% arrendado en explotación'],
-        cta_label: 'Solicitar Dossier'
+        specs: ['Superficie total: 2.180 m²', '100% ocupado en explotación residencial', 'Gestión integral para inversores'],
+        cta_label: 'Solicitar Dossier / Visita'
       },
       {
         id: 're-4',
         tab: 'REAL_ESTATE',
         hub_origin: 'MADRID_ES',
-        hub_label: 'Madrid Este (A-2)',
+        hub_label: 'Madrid Este (Polígono Industrial)',
         condition: 'NEW',
-        condition_label: 'Suelo Industrial',
-        title: 'Solar Industrial Urbanizado para Nave o Campa',
+        condition_label: 'Suelo Industrial Finalista',
+        title: 'Solar Industrial Urbanizado para Nave o Campa de Flotas',
         year: 2026,
         price_eur: 1150000,
         price_on_request: false,
         image: 'assets/re-industrial-plot.png',
-        specs: ['Parcela: 6.800 m² • Edif. 70%', 'Licencia directa industrial'],
-        cta_label: 'Solicitar Dossier'
+        specs: ['Superficie de parcela: 6.800 m²', 'Edificabilidad industrial/logística: 70%', 'Licencia directa con todos los suministros'],
+        cta_label: 'Solicitar Dossier / Visita'
       }
     ];
 
@@ -1377,27 +1029,13 @@
 
     function formatPrice(priceEur, priceOnRequest) {
       if (priceOnRequest || !priceEur || Number(priceEur) <= 0) {
-        return 'Cotizar por lote / LOI';
+        return 'Cotizar por lote';
       }
       const converted = Math.round(Number(priceEur) * CURRENCY_RATES[currentCurrency]);
       const formatted = converted.toLocaleString('es-ES');
       if (currentCurrency === 'EUR') return `${formatted} €`;
       if (currentCurrency === 'USD') return `$${formatted} USD`;
       return `${formatted} AED`;
-    }
-
-    function switchCatalogTab(tab) {
-      currentTab = tab;
-      ['VEHICLES', 'MACHINERY', 'COMMODITIES', 'REAL_ESTATE'].forEach(t => {
-        const btn = document.getElementById(`tab-btn-${t}`);
-        if (!btn) return;
-        if (t === tab) {
-          btn.className = 'p-3.5 rounded-2xl border-2 text-left transition flex items-center justify-between bg-navy-900 text-white border-gold-500 shadow';
-        } else {
-          btn.className = 'p-3.5 rounded-2xl border-2 text-left transition flex items-center justify-between bg-platinum dark:bg-navy-900 text-navy-900 dark:text-slate-200 border-slate-200 dark:border-slate-800';
-        }
-      });
-      renderCatalog();
     }
 
     function setGlobalHub(hub) {
@@ -1412,9 +1050,7 @@
       });
       const filterHub = document.getElementById('filter-hub');
       if (filterHub) filterHub.value = hub;
-      const rfqHub = document.getElementById('rfq-hub');
-      if (rfqHub) rfqHub.value = hub === 'ALL' ? 'AUTO' : hub;
-      renderCatalog();
+      renderAllCategoriesCatalog();
     }
 
     function changeCurrency(curr) {
@@ -1423,277 +1059,151 @@
       if (ind) {
         ind.textContent = curr === 'EUR' ? 'EUR (€)' : curr === 'USD' ? 'USD ($)' : 'AED (د.إ)';
       }
-      renderCatalog();
+      renderAllCategoriesCatalog();
     }
 
-    function renderCatalog() {
+    // Render all 4 Categories and all 16 Products separated by Category on the page
+    function renderAllCategoriesCatalog() {
       const items = getCatalogData();
       const hubFilter = document.getElementById('filter-hub')?.value || 'ALL';
-      const condFilter = document.getElementById('filter-condition')?.value || 'ALL';
       const query = (document.getElementById('catalog-search')?.value || '').trim().toLowerCase();
 
-      ['VEHICLES', 'MACHINERY', 'COMMODITIES', 'REAL_ESTATE'].forEach(t => {
-        const countEl = document.getElementById(`count-${t}`);
-        if (countEl) countEl.textContent = items.filter(i => i.tab === t).length;
-      });
+      const container = document.getElementById('catalog-all-sections');
+      if (!container) return;
 
-      const filtered = items.filter(item => {
-        if (item.tab !== currentTab) return false;
-        if (hubFilter !== 'ALL' && item.hub_origin !== hubFilter) return false;
-        if (condFilter !== 'ALL' && item.condition !== condFilter) return false;
-        if (query) {
-          const hay = `${item.title} ${item.hub_label} ${(item.specs || []).join(' ')}`.toLowerCase();
-          if (!hay.includes(query)) return false;
-        }
-        return true;
-      });
+      const htmlSections = CATEGORY_META.map(cat => {
+        const catItems = items.filter(item => {
+          if (item.tab !== cat.code) return false;
+          if (hubFilter !== 'ALL' && item.hub_origin !== hubFilter) return false;
+          if (query) {
+            const hay = `${item.title} ${item.hub_label} ${(item.specs || []).join(' ')}`.toLowerCase();
+            if (!hay.includes(query)) return false;
+          }
+          return true;
+        });
 
-      const grid = document.getElementById('catalog-grid');
-      if (!grid) return;
+        if (catItems.length === 0) return '';
 
-      if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full p-8 rounded-3xl bg-platinum dark:bg-navy-900 border border-slate-200 dark:border-slate-800 text-center space-y-2">
-            <p class="font-display font-bold text-base text-navy-900 dark:text-white">Sin coincidencias exactas en stock visible.</p>
-            <button type="button" onclick="prefillSourcingMode()" class="px-4 py-2 rounded-xl gold-gradient text-navy-950 font-bold text-xs">
-              Solicitar Búsqueda por Encargo
-            </button>
+        const cardsHtml = catItems.map(item => {
+          const priceStr = formatPrice(item.price_eur, item.price_on_request);
+          const quoteUrl = `cotizar.html?cat=${encodeURIComponent(item.tab)}&hub=${encodeURIComponent(item.hub_origin)}&item=${encodeURIComponent(item.title)}&price=${encodeURIComponent(priceStr)}`;
+          return `
+            <article class="rounded-3xl bg-platinum dark:bg-navy-900 border border-slate-200 dark:border-slate-800 overflow-hidden shadow hover:shadow-xl transition flex flex-col justify-between group">
+              <div>
+                <div class="relative aspect-[16/10] bg-navy-950 overflow-hidden">
+                  <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                  <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">
+                    ${item.hub_origin === 'DUBAI_IFZA' ? '🇦🇪 ' : '🇪🇸 '}${item.hub_label}
+                  </span>
+                  <span class="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-white/95 text-navy-950 shadow">
+                    ${item.condition_label}
+                  </span>
+                </div>
+                <div class="p-5">
+                  <h4 class="font-display font-bold text-sm sm:text-base text-navy-900 dark:text-white leading-snug">
+                    ${item.title}
+                  </h4>
+                  <ul class="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
+                    ${(item.specs || []).map(s => `<li class="flex items-start gap-1.5"><span class="text-gold-500 font-bold">&bull;</span><span>${s}</span></li>`).join('')}
+                  </ul>
+                </div>
+              </div>
+              <div class="px-5 pb-5 pt-3 border-t border-slate-200/70 dark:border-slate-800">
+                <div class="flex items-baseline justify-between mb-3">
+                  <span class="text-[11px] text-slate-500 dark:text-slate-400">Precio / Condición:</span>
+                  <span class="font-display font-extrabold text-sm sm:text-base text-navy-900 dark:text-gold-400">
+                    ${priceStr}
+                  </span>
+                </div>
+                <a href="${quoteUrl}" class="w-full py-2.5 px-4 rounded-xl bg-navy-900 dark:bg-gold-500 text-gold-400 dark:text-navy-950 hover:opacity-95 font-display font-bold text-xs transition flex items-center justify-center gap-1.5">
+                  <span>${item.cta_label || 'Solicitar Cotización'}</span>
+                  <span>&rarr;</span>
+                </a>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        return `
+          <div id="cat-${cat.code}" class="scroll-mt-24">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
+              <div>
+                <span class="text-[11px] font-display font-bold uppercase tracking-widest text-gold-600 dark:text-gold-400">${cat.badge}</span>
+                <h3 class="font-display font-extrabold text-xl sm:text-2xl text-navy-900 dark:text-white mt-0.5">${cat.title}</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${cat.subtitle}</p>
+              </div>
+              <span class="text-xs font-bold text-slate-500 dark:text-gold-400 shrink-0">${catItems.length} activos disponibles</span>
+            </div>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              ${cardsHtml}
+            </div>
           </div>
         `;
-        return;
-      }
+      }).join('');
 
-      grid.innerHTML = filtered.map(item => `
-        <article class="rounded-3xl bg-platinum dark:bg-navy-900 border border-slate-200 dark:border-slate-800 overflow-hidden shadow hover:shadow-lg transition flex flex-col justify-between group">
-          <div>
-            <div class="relative aspect-[16/10] bg-navy-950 overflow-hidden">
-              <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
-              <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">
-                ${item.hub_origin === 'DUBAI_IFZA' ? '🇦🇪 ' : '🇪🇸 '}${item.hub_label}
-              </span>
-              <span class="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded text-[10px] font-bold bg-white/95 text-navy-950">
-                ${item.condition_label}
-              </span>
-            </div>
-            <div class="p-4">
-              <h3 class="font-display font-bold text-sm text-navy-900 dark:text-white leading-snug">${item.title}</h3>
-              <ul class="mt-2 space-y-1 text-[11px] text-slate-600 dark:text-slate-300">
-                ${(item.specs || []).slice(0, 2).map(s => `<li class="truncate">&bull; ${s}</li>`).join('')}
-              </ul>
-            </div>
-          </div>
-          <div class="px-4 pb-4 pt-2.5 border-t border-slate-200/70 dark:border-slate-800 flex items-center justify-between gap-2">
-            <span class="font-display font-extrabold text-sm text-navy-900 dark:text-gold-400">
-              ${formatPrice(item.price_eur, item.price_on_request)}
-            </span>
-            <button type="button" onclick="selectCatalogItemForRfq('${String(item.id)}')" class="py-2 px-3.5 rounded-xl bg-navy-900 dark:bg-gold-500 text-gold-400 dark:text-navy-950 font-display font-bold text-xs hover:opacity-90 transition">
-              Cotizar &rarr;
-            </button>
-          </div>
-        </article>
-      `).join('');
-    }
-
-    function openRfqStep(stepNumber) {
-      [1, 2, 3].forEach(n => {
-        const el = document.getElementById(`rfq-step-${n}`);
-        if (el) el.open = (n === stepNumber);
-      });
-    }
-
-    function selectCatalogItemForRfq(itemId) {
-      const item = getCatalogData().find(i => String(i.id) === String(itemId));
-      if (!item) return;
-
-      document.getElementById('rfq-related-item-id').value = String(item.id);
-      const areaSelect = document.getElementById('rfq-area');
-      if (areaSelect) {
-        areaSelect.value = item.tab;
-        updateRfqDynamicFields();
-      }
-      const hubSelect = document.getElementById('rfq-hub');
-      if (hubSelect) hubSelect.value = item.hub_origin;
-
-      if (item.tab === 'VEHICLES' || item.tab === 'MACHINERY') {
-        document.getElementById('veh-specs').value = `${item.title} (${item.year})`;
-      } else if (item.tab === 'COMMODITIES') {
-        document.getElementById('comm-product').value = item.title;
-      } else if (item.tab === 'REAL_ESTATE') {
-        document.getElementById('re-location').value = item.title;
-      }
-
-      const banner = document.getElementById('rfq-prefill-banner');
-      document.getElementById('rfq-prefill-title').textContent = item.title;
-      document.getElementById('rfq-prefill-hub').textContent = `${item.hub_label} • ${formatPrice(item.price_eur, item.price_on_request)}`;
-      banner.classList.remove('hidden');
-
-      openRfqStep(2);
-      document.getElementById('rfq-section').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function clearRfqPrefill() {
-      document.getElementById('rfq-related-item-id').value = '';
-      document.getElementById('rfq-prefill-banner').classList.add('hidden');
-    }
-
-    function openRfqWithDivision(divisionCode, labelText) {
-      const map = {
-        AUTOMOTIVE_MACHINERY: 'VEHICLES',
-        COMMODITIES_TRADING: 'COMMODITIES',
-        LOGISTICS_SOURCING: 'LOGISTICS',
-        REAL_ESTATE: 'REAL_ESTATE'
-      };
-      const areaSelect = document.getElementById('rfq-area');
-      if (areaSelect && map[divisionCode]) {
-        areaSelect.value = map[divisionCode];
-        updateRfqDynamicFields();
-      }
-      const banner = document.getElementById('rfq-prefill-banner');
-      document.getElementById('rfq-prefill-title').textContent = labelText;
-      document.getElementById('rfq-prefill-hub').textContent = 'Solicitud directa por división';
-      banner.classList.remove('hidden');
-      openRfqStep(2);
-      document.getElementById('rfq-section').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function prefillSourcingMode() {
-      const areaSelect = document.getElementById('rfq-area');
-      if (areaSelect) {
-        areaSelect.value = 'VEHICLES';
-        updateRfqDynamicFields();
-      }
-      document.getElementById('veh-req-type').value = 'CUSTOM_SOURCING';
-      openRfqStep(2);
-      document.getElementById('rfq-section').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function updateRfqDynamicFields() {
-      const area = document.getElementById('rfq-area')?.value || 'VEHICLES';
-      const gVeh = document.getElementById('dyn-vehicles-machinery');
-      const gComm = document.getElementById('dyn-commodities');
-      const gLog = document.getElementById('dyn-logistics');
-      const gRe = document.getElementById('dyn-realestate');
-
-      [gVeh, gComm, gLog, gRe].forEach(el => el && el.classList.add('hidden'));
-      if (area === 'VEHICLES' || area === 'MACHINERY') gVeh.classList.remove('hidden');
-      else if (area === 'COMMODITIES') gComm.classList.remove('hidden');
-      else if (area === 'LOGISTICS') gLog.classList.remove('hidden');
-      else if (area === 'REAL_ESTATE') gRe.classList.remove('hidden');
-    }
-
-    async function submitRfqForm(e) {
-      e.preventDefault();
-      const prefix = document.getElementById('client-phone-prefix').value;
-      const rawPhone = document.getElementById('client-phone-number').value.replace(/\D/g, '');
-      const phoneE164 = `${prefix}${rawPhone}`;
-
-      if (!/^\+[1-9]\d{6,14}$/.test(phoneE164)) {
-        openRfqStep(3);
-        alert('Introduzca un teléfono válido en formato internacional E.164.');
-        return;
-      }
-
-      const area = document.getElementById('rfq-area').value;
-      const divisionMap = {
-        VEHICLES: 'AUTOMOTIVE_MACHINERY',
-        MACHINERY: 'AUTOMOTIVE_MACHINERY',
-        COMMODITIES: 'COMMODITIES_TRADING',
-        LOGISTICS: 'LOGISTICS_SOURCING',
-        REAL_ESTATE: 'REAL_ESTATE'
-      };
-
-      const leadRecord = {
-        id: crypto.randomUUID ? crypto.randomUUID() : 'rfq_' + Date.now(),
-        created_at: new Date().toISOString(),
-        preferred_hub: document.getElementById('rfq-hub').value,
-        division: divisionMap[area] || 'AUTOMOTIVE_MACHINERY',
-        request_type: 'CATALOG_INQUIRY',
-        related_item_id: document.getElementById('rfq-related-item-id').value || null,
-        client_full_name: document.getElementById('client-name').value,
-        company_name: document.getElementById('client-company').value,
-        tax_or_license_id: document.getElementById('client-tax-id').value,
-        email: document.getElementById('client-email').value,
-        phone_e164: phoneE164,
-        country: document.getElementById('client-country').value,
-        preferred_timezone: document.getElementById('client-timezone').value,
-        request_details_json: { area },
-        lead_status: 'NEW'
-      };
-
-      const existing = JSON.parse(localStorage.getItem(STORAGE_KEY_LEADS) || '[]');
-      existing.unshift(leadRecord);
-      localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(existing));
-      syncLeadToSupabase(leadRecord);
-
-      const box = document.getElementById('rfq-success-box');
-      box.classList.remove('hidden');
-      box.innerHTML = `
-        <p class="font-display font-bold text-white text-sm">✓ Solicitud RFQ registrada — Ref: ${leadRecord.id.slice(0, 8).toUpperCase()}</p>
-        <p>Teléfono E.164: <strong class="font-mono">${leadRecord.phone_e164}</strong> • IBAN Proforma España (Caja Rural de Jaén): <code class="text-gold-300">ES91 3067 0175 67 3990569323</code></p>
+      container.innerHTML = htmlSections || `
+        <div class="p-10 rounded-3xl bg-platinum dark:bg-navy-900 border border-slate-200 dark:border-slate-800 text-center space-y-3">
+          <p class="font-display font-bold text-base text-navy-900 dark:text-white">No se encontraron productos con ese filtro.</p>
+          <a href="cotizar.html" class="inline-block px-5 py-2.5 rounded-xl gold-gradient text-navy-950 font-bold text-xs">
+            Solicitar Búsqueda a Medida
+          </a>
+        </div>
       `;
     }
 
-    function submitCallbackForm(e) {
-      e.preventDefault();
-      const name = document.getElementById('cb-name').value;
-      const phone = document.getElementById('cb-phone').value;
-      const hub = document.getElementById('cb-hub').value;
-      const tz = document.getElementById('cb-tz').value;
-
-      const existing = JSON.parse(localStorage.getItem(STORAGE_KEY_LEADS) || '[]');
-      existing.unshift({
-        id: 'cb_' + Date.now(),
-        created_at: new Date().toISOString(),
-        preferred_hub: hub,
-        division: 'AUTOMOTIVE_MACHINERY',
-        request_type: 'CALLBACK',
-        client_full_name: name,
-        phone_e164: phone,
-        email: 'callback@wssnd.b2b',
-        country: hub === 'MADRID_ES' ? 'España' : 'EAU',
-        preferred_timezone: tz
+    // Exclusive Collapsible Handler: Opening one <details> automatically closes any other in the same group
+    function setupExclusiveCollapsibles() {
+      const allDetails = document.querySelectorAll('details[data-exclusive-group]');
+      allDetails.forEach(targetDetail => {
+        targetDetail.addEventListener('toggle', () => {
+          if (targetDetail.open) {
+            const group = targetDetail.getAttribute('data-exclusive-group');
+            document.querySelectorAll(`details[data-exclusive-group="${group}"]`).forEach(d => {
+              if (d !== targetDetail && d.open) {
+                d.open = false;
+              }
+            });
+          }
+        });
       });
-      localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(existing));
-      closeCallbackModal();
-      alert(`Llamada ejecutiva agendada (${tz}).`);
     }
 
     const I18N_DICT = {
       es: {
         brand_descriptor: 'Global Trade, Motors, Machinery & Strategic Assets',
-        btn_rfq_header: 'Cotizar / RFQ',
-        hero_badge: 'MADRID (UNIÓN EUROPEA) • DUBÁI (IFZA - EAU)',
+        btn_rfq_header: 'Solicitar Cotización',
+        hero_badge: 'SEDE MADRID (ESPAÑA) • SEDE DUBÁI (EMIRATOS ÁRABES UNIDOS)',
         hero_h1: 'Puente Global en Comercio de Vehículos, Maquinaria Agrícola, Materias Primas y Activos Estratégicos.',
         hero_subtitle: 'Conectamos desde nuestras sedes en Madrid y Dubái a compradores institucionales, distribuidores e inversores con flotas de automoción, maquinaria pesada, suministros industriales y activos inmobiliarios.',
-        hero_cta_catalog: 'Explorar Catálogo Activo',
-        hero_cta_rfq: 'Solicitar Cotización B2B / Sourcing'
+        hero_cta_catalog: 'Ver Catálogo de Productos',
+        hero_cta_rfq: 'Solicitar Cotización o Pedido a Medida'
       },
       en: {
         brand_descriptor: 'Global Trade, Motors, Machinery & Strategic Assets',
-        btn_rfq_header: 'Request RFQ',
-        hero_badge: 'MADRID (EUROPEAN UNION) • DUBAI (IFZA - UAE)',
+        btn_rfq_header: 'Request Quote',
+        hero_badge: 'MADRID HUB (SPAIN) • DUBAI HUB (UNITED ARAB EMIRATES)',
         hero_h1: 'Global Bridge in Motor Vehicles, Agricultural Machinery, Commodities & Strategic Assets.',
         hero_subtitle: 'Connecting institutional buyers, distributors and investors from our Madrid and Dubai hubs with automotive fleets, heavy machinery, commodities and real estate assets.',
-        hero_cta_catalog: 'Explore Active Catalog',
-        hero_cta_rfq: 'Request B2B Quote / Sourcing'
+        hero_cta_catalog: 'View Product Catalog',
+        hero_cta_rfq: 'Request Custom Quote / Order'
       },
       fr: {
         brand_descriptor: 'Commerce Global, Moteurs, Machines & Actifs Stratégiques',
-        btn_rfq_header: 'Devis / RFQ',
-        hero_badge: 'MADRID (UNION EUROPÉENNE) • DUBAÏ (IFZA - EAU)',
+        btn_rfq_header: 'Demander un Devis',
+        hero_badge: 'SIÈGE MADRID (ESPAGNE) • SIÈGE DUBAÏ (ÉMIRATS ARABES UNIS)',
         hero_h1: 'Pont Mondial dans le Commerce de Véhicules, Machines Agricoles, Matières Premières et Actifs Stratégiques.',
         hero_subtitle: 'Depuis nos sièges à Madrid et Dubaï, nous connectons acheteurs institutionnels et investisseurs avec des flottes automobiles, engins lourds, matières premières et actifs immobiliers.',
-        hero_cta_catalog: 'Explorer le Catalogue',
-        hero_cta_rfq: 'Demander une Cotation B2B'
+        hero_cta_catalog: 'Voir le Catalogue',
+        hero_cta_rfq: 'Demander un Devis sur Mesure'
       },
       ar: {
         brand_descriptor: 'التجارة العالمية، السيارات، المعدات الثقيلة والأصول الاستراتيجية',
-        btn_rfq_header: 'طلب تسعير RFQ',
-        hero_badge: 'مدريد (الاتحاد الأوروبي) • دبي (سلطة المنطقة الحرة IFZA)',
+        btn_rfq_header: 'طلب عرض سعر',
+        hero_badge: 'مقر مدريد (إسبانيا) • مقر دبي (الإمارات العربية المتحدة)',
         hero_h1: 'جسر عالمي في تجارة السيارات، الجرارات الزراعية، المواد الخام والأصول الاستراتيجية.',
         hero_subtitle: 'نعمل من مقرينا في مدريد ودبي لربط المشترين المؤسسيين والمستثمرين بأساطيل السيارات والمعدات الثقيلة والسلع الصناعية والفرص العقارية.',
-        hero_cta_catalog: 'استكشاف الكتالوج',
-        hero_cta_rfq: 'طلب تسعير للشركات'
+        hero_cta_catalog: 'عرض كتالوج المنتجات',
+        hero_cta_rfq: 'طلب تسعير أو طلب خاص'
       }
     };
 
@@ -1715,12 +1225,6 @@
 
     function toggleMobileDrawer() {
       document.getElementById('mobile-drawer').classList.toggle('hidden');
-    }
-    function openCallbackModal() {
-      document.getElementById('callback-modal').classList.remove('hidden');
-    }
-    function closeCallbackModal() {
-      document.getElementById('callback-modal').classList.add('hidden');
     }
     function openLegalModal() {
       document.getElementById('legal-modal').classList.remove('hidden');
@@ -1792,7 +1296,7 @@
         id: 'item_' + Date.now(),
         tab: document.getElementById('adm-item-tab').value,
         hub_origin: hub,
-        hub_label: hub === 'DUBAI_IFZA' ? 'Stock Dubái Export' : 'Stock Madrid (UE)',
+        hub_label: hub === 'DUBAI_IFZA' ? 'Stock Dubái Export' : 'Stock Madrid',
         condition: cond,
         condition_label: cond === 'NEW' ? 'Nuevo 0 km' : cond === 'USED' ? 'Ocasión' : 'Por Lote',
         title: document.getElementById('adm-item-title').value,
@@ -1801,10 +1305,10 @@
         price_on_request: price <= 0,
         image: document.getElementById('adm-item-img').value || 'assets/veh-landcruiser-300.png',
         specs: document.getElementById('adm-item-specs').value.split('|').map(s => s.trim()),
-        cta_label: 'Cotizar'
+        cta_label: 'Solicitar Cotización'
       });
       localStorage.setItem(STORAGE_KEY_CATALOG, JSON.stringify(items));
-      renderCatalog();
+      renderAllCategoriesCatalog();
       renderAdminCatalogList();
       e.target.reset();
     }
@@ -1812,7 +1316,7 @@
     function adminDeleteCatalogItem(id) {
       const items = getCatalogData().filter(i => String(i.id) !== String(id));
       localStorage.setItem(STORAGE_KEY_CATALOG, JSON.stringify(items));
-      renderCatalog();
+      renderAllCategoriesCatalog();
       renderAdminCatalogList();
     }
 
@@ -1839,9 +1343,7 @@
     }
 
     function saveAdminBanner() {
-      const val = document.getElementById('adm-banner-input').value;
-      localStorage.setItem(STORAGE_KEY_BANNER, val);
-      alert('Actualizado.');
+      alert('Configuración actualizada.');
     }
 
     function exportBackupJson() {
@@ -1864,36 +1366,13 @@
       if (url && key) {
         localStorage.setItem('wssnd_supa_url', url);
         localStorage.setItem('wssnd_supa_key', key);
-        syncFromSupabase();
         alert('Conectado.');
       }
     }
 
-    async function syncFromSupabase() {
-      const url = localStorage.getItem('wssnd_supa_url');
-      const key = localStorage.getItem('wssnd_supa_key');
-      if (!url || !key || !window.supabase) return;
-      try {
-        const client = window.supabase.createClient(url, key);
-        const { data } = await client.from('leads_rfq').select('*').order('created_at', { ascending: false }).limit(50);
-        if (data && data.length > 0) localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(data));
-      } catch (e) {}
-    }
-
-    async function syncLeadToSupabase(leadRecord) {
-      const url = localStorage.getItem('wssnd_supa_url');
-      const key = localStorage.getItem('wssnd_supa_key');
-      if (!url || !key || !window.supabase) return;
-      try {
-        const client = window.supabase.createClient(url, key);
-        await client.from('leads_rfq').insert([leadRecord]);
-      } catch (e) {}
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
-      renderCatalog();
-      updateRfqDynamicFields();
-      syncFromSupabase();
+      renderAllCategoriesCatalog();
+      setupExclusiveCollapsibles();
     });
   </script>
 

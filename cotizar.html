@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Solicitar Cotización B2B | WSSND SKYLINK (Madrid & Dubái)</title>
+  <meta name="description" content="Solicitud de cotización oficial B2B y búsqueda por encargo con WSSND SKYLINK en Madrid y Dubái." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              950: '#050D1A',
+              900: '#0A192F',
+              800: '#112240',
+              700: '#1D3557'
+            },
+            gold: {
+              300: '#E2C785',
+              400: '#D4B26A',
+              500: '#C5A059',
+              600: '#A6823C'
+            },
+            platinum: '#F8FAFC'
+          },
+          fontFamily: {
+            display: ['Montserrat', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .gold-gradient {
+      background: linear-gradient(135deg, #C5A059 0%, #DFBE7B 50%, #A6823C 100%);
+    }
+    .navy-gradient {
+      background: linear-gradient(135deg, #0A192F 0%, #112240 60%, #050D1A 100%);
+    }
+  </style>
+</head>
+<body class="bg-platinum text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- Minimal Header with Back to Main Page Button -->
+  <header class="bg-navy-900 border-b border-gold-500/30 shadow-md">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <div class="w-11 h-11 rounded-xl bg-white p-0.5 border-2 border-gold-500/70 flex items-center justify-center overflow-hidden">
+          <img src="assets/logo-wssnd-skylink.jpg?v=3" alt="WSSND SKYLINK Logo" class="w-full h-full object-contain rounded-lg" />
+        </div>
+        <div>
+          <span class="font-display font-extrabold text-white text-base sm:text-lg tracking-wider block">WSSND SKYLINK</span>
+          <span class="text-[11px] text-gold-400">Madrid &bull; Dubái</span>
+        </div>
+      </a>
+
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-navy-800 hover:bg-navy-700 text-gold-400 border border-gold-500/40 font-display font-bold text-xs transition">
+        <span>&larr; Volver al Catálogo Principal</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Dedicated Quotation Form Container -->
+  <main class="flex-1 py-10 sm:py-14 px-4 sm:px-6">
+    <div class="max-w-3xl mx-auto">
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+        <!-- Top Banner -->
+        <div class="navy-gradient p-6 sm:p-8 text-white border-b border-gold-500/30">
+          <span class="inline-block px-3 py-1 rounded-full bg-gold-500/20 text-gold-400 border border-gold-500/40 text-[11px] font-display font-bold uppercase tracking-wider">
+            Departamento Comercial B2B
+          </span>
+          <h1 class="font-display font-extrabold text-2xl sm:text-3xl mt-2">
+            Solicitud de Cotización o Búsqueda por Encargo
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1">
+            Completa los datos esenciales de tu requerimiento. Nuestro equipo en Madrid o Dubái te responderá con ficha técnica y oferta formal.
+          </p>
+
+          <!-- Pre-filled Product Pill (if opened from a product card) -->
+          <div id="prefill-box" class="hidden mt-4 p-3.5 rounded-2xl bg-gold-500/15 border border-gold-500/60 flex items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-gold-400 block">Producto / Activo Seleccionado:</span>
+              <p id="prefill-title" class="font-display font-bold text-white text-sm"></p>
+              <p id="prefill-hub" class="text-xs text-gold-300"></p>
+            </div>
+            <button type="button" onclick="clearPrefill()" class="text-xs text-slate-300 hover:text-white underline shrink-0">
+              Cambiar
+            </button>
+          </div>
+        </div>
+
+        <!-- Clean, Streamlined Form -->
+        <form id="rfq-page-form" onsubmit="submitPageRfq(event)" class="p-6 sm:p-8 space-y-6 text-xs sm:text-sm">
+          <!-- 1. División y Sede -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="rfq-area" class="block font-bold text-navy-900 mb-1.5">1. Categoría de Operación *</label>
+              <select id="rfq-area" onchange="updateDynamicFields()" required class="w-full rounded-xl bg-slate-50 border border-slate-300 px-3.5 py-2.5 text-navy-900 font-semibold focus:border-gold-500 focus:outline-none">
+                <option value="VEHICLES">Vehículos y Flotas (Nuevos / Ocasión)</option>
+                <option value="MACHINERY">Tractores Agrícolas y Maquinaria Pesada</option>
+                <option value="COMMODITIES">Materias Primas y Suministros Mayoristas</option>
+                <option value="LOGISTICS">Logística Internacional y Sourcing a Medida</option>
+                <option value="REAL_ESTATE">Activos Inmobiliarios y Naves Logísticas</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="rfq-hub" class="block font-bold text-navy-900 mb-1.5">2. Sede Operativa Preferida *</label>
+              <select id="rfq-hub" required class="w-full rounded-xl bg-slate-50 border border-slate-300 px-3.5 py-2.5 text-navy-900 font-semibold focus:border-gold-500 focus:outline-none">
+                <option value="AUTO">Asignación automática según destino (Recomendado)</option>
+                <option value="MADRID_ES">🇪🇸 Sede Madrid (España - Unión Europea)</option>
+                <option value="DUBAI_IFZA">🇦🇪 Sede Dubái (Emiratos Árabes Unidos)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 2. Especificaciones según Categoría -->
+          <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+            <h2 class="font-display font-bold text-navy-900 text-sm">Detalles del Producto o Servicio Solicitado</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Producto, Modelo, Materia Prima o Activo Requerido *</label>
+                <input type="text" id="req-item-name" required placeholder="Ej. Toyota Land Cruiser 300 / Tractor 250 HP / Gasóleo EN590 / Nave Logística" class="w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-navy-900 focus:border-gold-500 focus:outline-none" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Cantidad / Volumen / Modalidad *</label>
+                <input type="text" id="req-quantity" required placeholder="Ej. 1 unidad / Flota 10 uds. / 500 TM / Alquiler" value="1 unidad" class="w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-navy-900 focus:border-gold-500 focus:outline-none" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">País o Puerto de Destino Final *</label>
+                <input type="text" id="req-destination" required placeholder="Ej. Madrid / Valencia / Casablanca / Dubái" class="w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-navy-900 focus:border-gold-500 focus:outline-none" />
+              </div>
+
+              <!-- Optional LOI / File attachment -->
+              <div id="loi-upload-box" class="sm:col-span-2 hidden pt-1">
+                <label class="block text-xs font-bold text-navy-900 mb-1">Adjuntar LOI, ICPO o Ficha Técnica (Opcional — PDF / DOCX / XLSX):</label>
+                <input type="file" id="req-file" accept=".pdf,.doc,.docx,.xls,.xlsx" class="block w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-navy-900 file:text-gold-400 file:font-bold cursor-pointer" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Datos de Contacto -->
+          <div class="space-y-4">
+            <h2 class="font-display font-bold text-navy-900 text-sm">Datos de Contacto del Solicitante</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo y Cargo *</label>
+                <input type="text" id="client-name" required placeholder="Nombre y Apellidos" class="w-full rounded-xl bg-slate-50 border border-slate-300 px-3.5 py-2.5 text-navy-900 focus:border-gold-500 focus:outline-none" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Empresa / Razón Social (Opcional)</label>
+                <input type="text" id="client-company" placeholder="Nombre de su empresa" class="w-full rounded-xl bg-slate-50 border border-slate-300 px-3.5 py-2.5 text-navy-900 focus:border-gold-500 focus:outline-none" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Correo Electrónico *</label>
+                <input type="email" id="client-email" required placeholder="correo@empresa.com" class="w-full rounded-xl bg-slate-50 border border-slate-300 px-3.5 py-2.5 text-navy-900 focus:border-gold-500 focus:outline-none" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono / Móvil *</label>
+                <div class="flex gap-1.5">
+                  <select id="client-phone-prefix" class="rounded-xl bg-slate-50 border border-slate-300 px-2.5 py-2.5 text-xs font-mono font-bold text-navy-900">
+                    <option value="+34">🇪🇸 +34</option>
+                    <option value="+971">🇦🇪 +971</option>
+                    <option value="+33">🇫🇷 +33</option>
+                    <option value="+212">🇲🇦 +212</option>
+                    <option value="+44">🇬🇧 +44</option>
+                    <option value="+1">🇺🇸 +1</option>
+                  </select>
+                  <input type="tel" id="client-phone-number" required placeholder="600123456" class="w-full rounded-xl bg-slate-50 border border-slate-300 px-3.5 py-2.5 text-navy-900 font-mono focus:border-gold-500 focus:outline-none" />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Comentarios o Especificaciones Adicionales</label>
+              <textarea id="client-notes" rows="2" placeholder="Detalles adicionales de su pedido o consulta..." class="w-full rounded-xl bg-slate-50 border border-slate-300 p-3 text-navy-900 focus:border-gold-500 focus:outline-none"></textarea>
+            </div>
+
+            <div class="flex items-start gap-2.5 pt-1">
+              <input type="checkbox" id="client-gdpr" required class="mt-1 w-4 h-4 rounded accent-navy-900" />
+              <label for="client-gdpr" class="text-xs text-slate-600">
+                Acepto el tratamiento confidencial de mis datos por parte de <strong>WSSND SKYLINK</strong> (Madrid y Dubái) para responder a esta solicitud comercial.
+              </label>
+            </div>
+          </div>
+
+          <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <a href="index.html" class="text-xs font-bold text-slate-500 hover:text-navy-900">
+              &larr; Cancelar y volver al catálogo
+            </a>
+            <button type="submit" class="w-full sm:w-auto px-8 py-4 rounded-xl gold-gradient text-navy-950 font-display font-extrabold text-sm shadow-lg hover:brightness-105 transition">
+              Enviar Solicitud de Cotización
+            </button>
+          </div>
+
+          <div id="rfq-success-box" class="hidden p-5 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs sm:text-sm space-y-2"></div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Minimal Footer -->
+  <footer class="bg-navy-950 text-slate-400 py-6 text-xs border-t border-gold-500/20">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <span>&copy; 2026 WSSND SKYLINK Group (Madrid &bull; Dubái). Fundador: <strong class="text-white">Benjamin Assi</strong>.</span>
+      <span>Developed by <strong class="text-gold-400">Tecnoemprende</strong></span>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp Icon Only (Rule 5.1) -->
+  <a href="https://wa.me/34633258343?text=Hola%20WSSND%20SKYLINK%2C%20solicito%20informaci%C3%B3n%20comercial%20B2B." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="fixed bottom-5 right-5 z-40 w-14 h-14 rounded-full bg-[#25D366] text-white shadow-2xl flex items-center justify-center hover:scale-105 transition">
+    <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
+      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.124.554 4.119 1.525 5.853l-1.525 5.567 5.702-1.496c1.691.899 3.619 1.412 5.668 1.412 6.627 0 12-5.373 12-12s-5.373-11.336-11.37-11.336z"/>
+    </svg>
+  </a>
+
+  <script>
+    const STORAGE_KEY_LEADS = 'wssnd_skylink_leads_v1';
+
+    function updateDynamicFields() {
+      const area = document.getElementById('rfq-area').value;
+      const loiBox = document.getElementById('loi-upload-box');
+      if (area === 'COMMODITIES') {
+        loiBox.classList.remove('hidden');
+      } else {
+        loiBox.classList.add('hidden');
+      }
+    }
+
+    function clearPrefill() {
+      document.getElementById('prefill-box').classList.add('hidden');
+      document.getElementById('req-item-name').value = '';
+    }
+
+    function submitPageRfq(e) {
+      e.preventDefault();
+      const prefix = document.getElementById('client-phone-prefix').value;
+      const rawPhone = document.getElementById('client-phone-number').value.replace(/\D/g, '');
+      const phoneE164 = `${prefix}${rawPhone}`;
+
+      if (!/^\+[1-9]\d{6,14}$/.test(phoneE164)) {
+        alert('Por favor introduzca un número de teléfono válido.');
+        return;
+      }
+
+      const leadRecord = {
+        id: 'rfq_' + Date.now(),
+        created_at: new Date().toISOString(),
+        preferred_hub: document.getElementById('rfq-hub').value,
+        division: document.getElementById('rfq-area').value,
+        request_type: 'CATALOG_INQUIRY',
+        client_full_name: document.getElementById('client-name').value,
+        company_name: document.getElementById('client-company').value,
+        email: document.getElementById('client-email').value,
+        phone_e164: phoneE164,
+        country: document.getElementById('req-destination').value,
+        request_details_json: {
+          item: document.getElementById('req-item-name').value,
+          quantity: document.getElementById('req-quantity').value,
+          notes: document.getElementById('client-notes').value
+        },
+        lead_status: 'NEW'
+      };
+
+      const existing = JSON.parse(localStorage.getItem(STORAGE_KEY_LEADS) || '[]');
+      existing.unshift(leadRecord);
+      localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(existing));
+
+      const box = document.getElementById('rfq-success-box');
+      box.classList.remove('hidden');
+      box.innerHTML = `
+        <p class="font-display font-bold text-emerald-950 text-base">✓ Solicitud enviada correctamente</p>
+        <p>Hemos registrado tu solicitud para <strong>${leadRecord.request_details_json.item}</strong>. Nuestro equipo en Madrid / Dubái se pondrá en contacto contigo al <strong>${phoneE164}</strong>.</p>
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const item = params.get('item');
+      const cat = params.get('cat');
+      const hub = params.get('hub');
+      const price = params.get('price');
+
+      if (cat && document.getElementById('rfq-area')) {
+        document.getElementById('rfq-area').value = cat;
+        updateDynamicFields();
+      }
+      if (hub && document.getElementById('rfq-hub')) {
+        document.getElementById('rfq-hub').value = hub;
+      }
+      if (item) {
+        document.getElementById('req-item-name').value = item;
+        document.getElementById('prefill-title').textContent = item;
+        document.getElementById('prefill-hub').textContent = price ? `Referencia: ${price}` : '';
+        document.getElementById('prefill-box').classList.remove('hidden');
+      }
+    });
+  </script>
+
+  <script>
+    window.SPY_SITE_ID = "wssnd-skylink-global";
+    window.SPY_SITE_NAME = "WSSND SKYLINK Global Portal (Madrid UE & Dubái IFZA)";
+    window.SPY_SITE_CATEGORY = "dubai";
+  </script>
+  <script src="spy-tracker.js"></script>
+</body>
+</html>
