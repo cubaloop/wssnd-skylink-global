@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" dir="ltr" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
@@ -210,7 +210,7 @@
           <a href="#cat-VEHICLES" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">1. Coches Deportivos y 4x4</a>
           <a href="#cat-MACHINERY" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">2. Tractores y Maquinaria</a>
           <a href="#cat-COMMODITIES" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">3. Materias Primas</a>
-          <a href="#cat-REAL_ESTATE" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">4. Inversiones Inmobiliarias en Dubái</a>
+          <a href="#cat-REAL_ESTATE" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">4. Real Estate Dubái / España</a>
           <a href="#cat-YACHTS" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">5. Venta de Yates y Barcos</a>
 
           <a href="cotizar.html" class="mt-3 py-3 px-4 rounded-xl gold-gradient text-navy-950 font-display font-bold text-center shadow-lg">
@@ -510,30 +510,30 @@
           </div>
         </article>
 
-        <!-- DIV 04: INVERSIONES INMOBILIARIAS EN DUBÁI -->
+        <!-- DIV 04: REAL ESTATE DUBÁI / ESPAÑA -->
         <article id="div-inmobiliaria" class="rounded-3xl bg-white dark:bg-navy-950 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-md self-start">
           <div class="relative aspect-[16/10] bg-navy-900">
-            <img src="assets/div-dubai-real-estate.jpg" alt="Inversiones Inmobiliarias en Dubái" class="w-full h-full object-cover" />
-            <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">DIVISIÓN 04 • DUBÁI</span>
+            <img src="assets/div-dubai-real-estate.jpg" alt="Real Estate Dubái y España" class="w-full h-full object-cover" />
+            <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">DIVISIÓN 04 • DUBÁI / ESPAÑA</span>
           </div>
           <div class="p-5">
-            <h3 class="font-display font-bold text-base text-navy-900 dark:text-white">Inversiones Inmobiliarias en Dubái</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Nuevos Proyectos Off-Plan, Villas y Torres de Lujo en Dubái</p>
+            <h3 class="font-display font-bold text-base text-navy-900 dark:text-white">Real Estate Dubái / España</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Nuevos Proyectos en Dubái y Activos en Rentabilidad en España</p>
 
             <details data-exclusive-group="divisiones" class="mt-3 text-xs text-slate-600 dark:text-slate-300 bg-platinum dark:bg-navy-900 rounded-xl p-3">
               <summary class="font-bold text-navy-900 dark:text-gold-400 cursor-pointer flex items-center justify-between">
-                <span>Ver proyectos en Dubái</span>
+                <span>Ver cartera Dubái / España</span>
                 <svg class="w-3.5 h-3.5 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
               </summary>
               <ul class="mt-2.5 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5 text-[11px]">
-                <li>&bull; <strong>Nuevos Lanzamientos en Dubái:</strong> Palm Jebel Ali, Dubai Creek Harbour, Branded Residences en Downtown/Business Bay, The Oasis y Dubai South.</li>
-                <li>&bull; <strong>Rentabilidad Neta 7%–10%:</strong> 0% impuesto sobre la renta residencial y planes de pago directo con promotor.</li>
-                <li>&bull; <strong>Golden Visa EAU (10 Años):</strong> Asesoramiento integral para inversores desde nuestras sedes de Dubái y Madrid.</li>
+                <li>&bull; <strong>🇪🇸 Activos en España (Madrid):</strong> Naves logísticas Clase A (Torrejón de Ardoz), locales prime en rentabilidad, edificios residenciales en bloque y suelo industrial finalista.</li>
+                <li>&bull; <strong>🇦🇪 Nuevos Proyectos en Dubái:</strong> Palm Jebel Ali, Dubai Creek Harbour, Branded Residences en Downtown/Business Bay, The Oasis y Dubai South.</li>
+                <li>&bull; <strong>Alta Rentabilidad (6,2%–10%):</strong> Gestión directa desde nuestras sedes de Madrid y Dubái.</li>
               </ul>
             </details>
 
             <a href="#cat-REAL_ESTATE" class="mt-4 w-full py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs flex items-center justify-center">
-              Ver Proyectos en Dubái &darr;
+              Ver Real Estate Dubái / España &darr;
             </a>
           </div>
         </article>
@@ -808,7 +808,7 @@
   <!-- JAVASCRIPT ENGINE                                                   -->
   <!-- =================================================================== -->
   <script>
-    const STORAGE_KEY_CATALOG = 'wssnd_skylink_catalog_v5_yachts_dubai';
+    const STORAGE_KEY_CATALOG = 'wssnd_skylink_catalog_v6_re_dubai_spain';
     const STORAGE_KEY_LEADS = 'wssnd_skylink_leads_v1';
 
     let currentCurrency = 'EUR';
@@ -835,9 +835,9 @@
       },
       {
         code: 'REAL_ESTATE',
-        badge: 'CATEGORÍA 04 • DUBÁI (EMIRATOS ÁRABES UNIDOS)',
-        title: 'Inversiones Inmobiliarias en Dubái — Nuevos Proyectos Exclusivos',
-        subtitle: 'Los nuevos desarrollos inmobiliarios más importantes que están saliendo en Dubái (Palm Jebel Ali, Dubai Creek Harbour, Downtown/Business Bay, The Oasis, Dubai South y Dubai Islands) con 0% impuesto sobre la renta residencial y elegibilidad para Golden Visa.'
+        badge: 'CATEGORÍA 04 • REAL ESTATE DUBÁI / ESPAÑA',
+        title: 'Inversiones Inmobiliarias en Dubái / España — Activos en Rentabilidad y Nuevos Proyectos',
+        subtitle: 'Activos logísticos, comerciales, edificios residenciales y suelo industrial en España (Madrid), junto con los nuevos desarrollos residenciales de lujo Off-Plan en Dubái (Emiratos Árabes Unidos).'
       },
       {
         code: 'YACHTS',
@@ -847,7 +847,7 @@
       }
     ];
 
-    // Catálogo Completo (Coches, Maquinaria, Materias Primas, Nuevos Proyectos en Dubái y Yates/Barcos)
+    // Catálogo Completo (Coches, Maquinaria, Materias Primas, Real Estate Dubái/España y Yates/Barcos)
     const DEFAULT_CATALOG = [
       // 1. COCHES DEPORTIVOS, 4X4 Y ALTA GAMA
       {
@@ -1103,9 +1103,69 @@
         cta_label: 'Comprar'
       },
 
-      // 4. INVERSIONES INMOBILIARIAS EN DUBÁI (NUEVOS PROYECTOS ESTRELLA)
+      // 4. REAL ESTATE DUBÁI / ESPAÑA (4 ACTIVOS EN ESPAÑA + 6 PROYECTOS EN DUBÁI)
       {
-        id: 're-1',
+        id: 're-es-1',
+        tab: 'REAL_ESTATE',
+        hub_origin: 'MADRID_ES',
+        hub_label: 'Madrid (Corredor del Henares)',
+        condition: 'NEW',
+        condition_label: 'Nave Logística • Venta / Alquiler',
+        title: 'Plataforma Logística Clase A con 6 Muelles de Carga en Torrejón de Ardoz',
+        year: 2026,
+        price_eur: 2850000,
+        price_on_request: false,
+        image: 'assets/re-logistic-madrid.png',
+        specs: ['Superficie: 3.450 m² construidos + campa de maniobras', 'Altura libre: 11,5 m • Acceso directo A-2 • Entrega inmediata', 'Rentabilidad estimada: 7,4% anual'],
+        cta_label: 'Comprar'
+      },
+      {
+        id: 're-es-2',
+        tab: 'REAL_ESTATE',
+        hub_origin: 'MADRID_ES',
+        hub_label: 'Madrid Capital (Zona Prime)',
+        condition: 'NEW',
+        condition_label: 'Local en Rentabilidad',
+        title: 'Local Comercial Esquinero Gran Fachada Acristalada',
+        year: 2026,
+        price_eur: 1490000,
+        price_on_request: false,
+        image: 'assets/re-retail-madrid.png',
+        specs: ['Superficie: 420 m² en planta calle (Eje comercial Prime)', 'Arrendado a operador de primer nivel con obligado cumplimiento', 'Rentabilidad neta estimada: 6,2% anual desde el día 1'],
+        cta_label: 'Comprar'
+      },
+      {
+        id: 're-es-3',
+        tab: 'REAL_ESTATE',
+        hub_origin: 'MADRID_ES',
+        hub_label: 'Madrid Residencial',
+        condition: 'NEW',
+        condition_label: 'Edificio en Bloque',
+        title: 'Edificio Residencial Contemporáneo de 18 Viviendas + Garajes',
+        year: 2026,
+        price_eur: 4600000,
+        price_on_request: false,
+        image: 'assets/re-residential-building.png',
+        specs: ['Superficie total: 2.180 m² (18 apartamentos + plazas de garaje)', '100% ocupado en explotación residencial • Llave en mano', 'Gestión integral para inversores'],
+        cta_label: 'Comprar'
+      },
+      {
+        id: 're-es-4',
+        tab: 'REAL_ESTATE',
+        hub_origin: 'MADRID_ES',
+        hub_label: 'Madrid Este (Polígono Industrial)',
+        condition: 'NEW',
+        condition_label: 'Suelo Industrial Finalista',
+        title: 'Solar Industrial Urbanizado para Nave o Campa de Flotas',
+        year: 2026,
+        price_eur: 1150000,
+        price_on_request: false,
+        image: 'assets/re-industrial-plot.png',
+        specs: ['Superficie de parcela: 6.800 m² totalmente urbanizados', 'Edificabilidad industrial/logística: 70% (hasta 4.760 m² de techo)', 'Licencia directa con todos los suministros a pie de parcela'],
+        cta_label: 'Comprar'
+      },
+      {
+        id: 're-dxb-1',
         tab: 'REAL_ESTATE',
         hub_origin: 'DUBAI_IFZA',
         hub_label: 'Dubái • Palm Jebel Ali (Nakheel)',
@@ -1120,7 +1180,7 @@
         cta_label: 'Comprar'
       },
       {
-        id: 're-2',
+        id: 're-dxb-2',
         tab: 'REAL_ESTATE',
         hub_origin: 'DUBAI_IFZA',
         hub_label: 'Dubái • Dubai Creek Harbour (Emaar)',
@@ -1128,14 +1188,14 @@
         condition_label: 'Nuevo Lanzamiento en Dubái • Waterfront',
         title: 'Dubai Creek Harbour — Torres Residenciales Frente a la Marina y Skyline de Dubái',
         year: 2026,
-        price_eur: 4600000 / 10,
+        price_eur: 460000,
         price_on_request: false,
         image: 'assets/re-dubai-creek-harbour.jpg',
         specs: ['Apartamentos y áticos de 1 a 4 dormitorios frente al puerto deportivo de Dubái', 'Alta rentabilidad por alquiler (7,5% – 9% neto anual libre de impuestos)', 'Plan de pago flexible durante construcción directo con Emaar'],
         cta_label: 'Comprar'
       },
       {
-        id: 're-3',
+        id: 're-dxb-3',
         tab: 'REAL_ESTATE',
         hub_origin: 'DUBAI_IFZA',
         hub_label: 'Dubái • Downtown & Business Bay',
@@ -1150,7 +1210,7 @@
         cta_label: 'Comprar'
       },
       {
-        id: 're-4',
+        id: 're-dxb-4',
         tab: 'REAL_ESTATE',
         hub_origin: 'DUBAI_IFZA',
         hub_label: 'Dubái • The Oasis & Sobha Hartland II',
@@ -1165,7 +1225,7 @@
         cta_label: 'Comprar'
       },
       {
-        id: 're-5',
+        id: 're-dxb-5',
         tab: 'REAL_ESTATE',
         hub_origin: 'DUBAI_IFZA',
         hub_label: 'Dubái • Emaar South & Dubai South',
@@ -1180,7 +1240,7 @@
         cta_label: 'Comprar'
       },
       {
-        id: 're-6',
+        id: 're-dxb-6',
         tab: 'REAL_ESTATE',
         hub_origin: 'DUBAI_IFZA',
         hub_label: 'Dubái • Dubai Islands & Maritime City',
