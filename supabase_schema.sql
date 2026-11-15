@@ -1,81 +1,106 @@
 -- =====================================================================
--- WSSND SKYLINK GLOBAL PORTAL (MADRID UE & DUBAI IFZA)
--- Esquema Completo de Base de Datos PostgreSQL para Supabase
--- Entidades:
---   1. WSSND SKYLINK CARGO GLOBAL, S.L. (NIF: B05861943 - Madrid, España)
---   2. WSSND Skylink General Trading FZCO (IFZA - Dubái, EAU)
+-- WSSND SKYLINK GLOBAL PORTAL v7 (MADRID UE & DUBAI / AJMAN HUB)
+-- Esquema Completo PostgreSQL para Supabase (Dual-Layer Sync)
+-- Incluye: Catálogo White-Label (+5%), Usuarios, Atribución (?ref=),
+-- Directorio Confidencial (Proveedores y Compradores) y Solicitudes de Catálogo
 -- =====================================================================
 
--- 1. Catálogo de Vehículos, Tractores, Maquinaria y Recambios
-CREATE TABLE IF NOT EXISTS catalog_vehicles_machinery (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+-- 1. Usuarios Registrados (Compradores y Proveedores Externos)
+CREATE TABLE IF NOT EXISTS wssnd_users (
+    id TEXT PRIMARY KEY,
     created_at TIMESTAMPTZ DEFAULT now(),
-    hub_origin TEXT NOT NULL CHECK (hub_origin IN ('DUBAI_IFZA', 'MADRID_ES', 'BOTH')),
-    category TEXT NOT NULL CHECK (category IN ('NEW_VEHICLE', 'USED_VEHICLE', 'TRACTOR_AGRI', 'HEAVY_MACHINERY', 'COMMERCIAL_TRUCK', 'SPARE_PARTS')),
-    title TEXT NOT NULL,
-    brand TEXT NOT NULL,
-    model TEXT NOT NULL,
-    manufacture_year INT,
-    condition TEXT NOT NULL CHECK (condition IN ('NEW', 'USED', 'REFURBISHED')),
-    mileage_or_hours TEXT,
-    power_hp INT,
-    export_restriction TEXT DEFAULT 'WORLDWIDE', -- Ej. 'OUTSIDE_UAE_ONLY' para licencia 4510084
-    price_amount NUMERIC(12,2),
-    currency TEXT DEFAULT 'EUR' CHECK (currency IN ('EUR', 'USD', 'AED')),
-    price_on_request BOOLEAN DEFAULT false,
-    specs_json JSONB DEFAULT '{}'::jsonb,
-    images_urls TEXT[] DEFAULT '{}',
-    status TEXT DEFAULT 'AVAILABLE' CHECK (status IN ('AVAILABLE', 'RESERVED', 'SOLD'))
-);
-
--- 2. Catálogo de Materias Primas y Comercio General (General Trading)
-CREATE TABLE IF NOT EXISTS catalog_commodities (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    created_at TIMESTAMPTZ DEFAULT now(),
-    hub_origin TEXT NOT NULL CHECK (hub_origin IN ('DUBAI_IFZA', 'MADRID_ES', 'BOTH')),
-    sector TEXT NOT NULL CHECK (sector IN ('HYDROCARBONS', 'PRECIOUS_METALS', 'CONSTRUCTION_MATERIALS', 'AGRO_FOOD', 'GENERAL_MERCHANDISE')),
-    product_name TEXT NOT NULL,
-    technical_summary TEXT,
-    min_order_quantity TEXT NOT NULL,
-    available_incoterms TEXT[] DEFAULT ARRAY['FOB', 'CIF', 'EXW'],
-    origin_region TEXT,
-    spec_sheet_pdf_url TEXT,
-    is_active BOOLEAN DEFAULT true
-);
-
--- 3. Catálogo de Activos Inmobiliarios
-CREATE TABLE IF NOT EXISTS catalog_real_estate (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    created_at TIMESTAMPTZ DEFAULT now(),
-    title TEXT NOT NULL,
-    asset_type TEXT NOT NULL CHECK (asset_type IN ('INDUSTRIAL_WAREHOUSE', 'COMMERCIAL_RETAIL', 'RESIDENTIAL', 'LAND_PLOT', 'OFFICE')),
-    operation_type TEXT NOT NULL CHECK (operation_type IN ('SALE', 'RENT', 'INVESTMENT')),
-    country TEXT NOT NULL DEFAULT 'Spain',
-    city_zone TEXT NOT NULL,
-    area_sqm NUMERIC(10,2),
-    price_amount NUMERIC(14,2),
-    currency TEXT DEFAULT 'EUR' CHECK (currency IN ('EUR', 'USD', 'AED')),
-    estimated_yield_pct NUMERIC(5,2),
-    images_urls TEXT[] DEFAULT '{}',
-    status TEXT DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'UNDER_OFFER', 'CLOSED'))
-);
-
--- 4. Registro Centralizado de Leads, Cotizaciones (RFQ) y Búsquedas por Encargo
-CREATE TABLE IF NOT EXISTS leads_rfq (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    created_at TIMESTAMPTZ DEFAULT now(),
-    preferred_hub TEXT DEFAULT 'AUTO' CHECK (preferred_hub IN ('AUTO', 'DUBAI_IFZA', 'MADRID_ES')),
-    division TEXT NOT NULL CHECK (division IN ('AUTOMOTIVE_MACHINERY', 'COMMODITIES_TRADING', 'LOGISTICS_SOURCING', 'REAL_ESTATE')),
-    request_type TEXT NOT NULL, -- Ej. 'CATALOG_INQUIRY', 'CUSTOM_SOURCING', 'LOI_SUBMISSION', 'CALLBACK'
-    related_item_id UUID,
-    client_full_name TEXT NOT NULL,
+    role TEXT NOT NULL CHECK (role IN ('MASTER_ADMIN', 'BUYER', 'SUPPLIER')),
+    username TEXT UNIQUE NOT NULL,
+    display_name TEXT NOT NULL,
     company_name TEXT,
-    tax_or_license_id TEXT,
-    email TEXT NOT NULL,
-    phone_e164 TEXT NOT NULL,
-    country TEXT NOT NULL,
-    preferred_timezone TEXT,
-    request_details_json JSONB NOT NULL DEFAULT '{}'::jsonb,
-    attachment_file_url TEXT,
-    lead_status TEXT DEFAULT 'NEW' CHECK (lead_status IN ('NEW', 'CONTACTED', 'PROFORMA_SENT', 'CLOSED_WON', 'ARCHIVED'))
+    contact_person TEXT,
+    phone TEXT,
+    email TEXT,
+    products_or_interest TEXT,
+    captured_by TEXT DEFAULT 'Se registró solo' CHECK (captured_by IN ('Benjamín', 'David', 'Se registró solo')),
+    password_hash TEXT NOT NULL
+);
+
+-- 2. Directorio Privado de Proveedores (Exclusivo Benja & David)
+CREATE TABLE IF NOT EXISTS wssnd_directory_suppliers (
+    id TEXT PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    company_name TEXT NOT NULL,
+    contact_person TEXT,
+    phone TEXT,
+    products TEXT,
+    prices TEXT,
+    closed_deals INT DEFAULT 0,
+    captured_by TEXT DEFAULT 'David' CHECK (captured_by IN ('Benjamín', 'David', 'Se registró solo')),
+    sector TEXT DEFAULT 'COMMODITIES',
+    status TEXT DEFAULT 'Contactado'
+);
+
+-- 3. Directorio Privado de Compradores / Clientes (Exclusivo Benja & David)
+CREATE TABLE IF NOT EXISTS wssnd_directory_buyers (
+    id TEXT PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    name TEXT NOT NULL,
+    company TEXT,
+    contact TEXT,
+    product_required TEXT NOT NULL,
+    request_date TEXT NOT NULL,
+    status TEXT DEFAULT 'Abierto' CHECK (status IN ('Abierto', 'Cerrado')),
+    close_date TEXT DEFAULT '',
+    total_amount NUMERIC(14,2) DEFAULT 0,
+    profit_amount NUMERIC(14,2) DEFAULT 0,
+    captured_by TEXT DEFAULT 'Se registró solo' CHECK (captured_by IN ('Benjamín', 'David', 'Se registró solo')),
+    notes TEXT
+);
+
+-- 4. Solicitudes de Catálogo de Proveedores (Cola de Aprobación)
+CREATE TABLE IF NOT EXISTS wssnd_supplier_submissions (
+    id TEXT PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    supplier_user_id TEXT,
+    company_name TEXT NOT NULL,
+    contact_person TEXT,
+    phone TEXT,
+    captured_by TEXT DEFAULT 'Se registró solo',
+    category TEXT DEFAULT 'COMMODITIES',
+    hub_origin TEXT DEFAULT 'DUBAI_IFZA',
+    product_title TEXT NOT NULL,
+    net_price NUMERIC(14,2) DEFAULT 0,
+    currency TEXT DEFAULT 'USD',
+    unit_label TEXT,
+    specs TEXT,
+    image_data TEXT,
+    catalog_doc_name TEXT,
+    review_status TEXT DEFAULT 'PENDING_REVIEW' CHECK (review_status IN ('PENDING_REVIEW', 'APPROVED', 'REJECTED'))
+);
+
+-- 5. Catálogo Maestro con Control Privado de Margen (+5% por defecto)
+CREATE TABLE IF NOT EXISTS wssnd_catalog_items (
+    id TEXT PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    tab TEXT NOT NULL,
+    hub_origin TEXT NOT NULL,
+    hub_label TEXT,
+    condition TEXT DEFAULT 'NEW',
+    condition_label TEXT,
+    title TEXT NOT NULL,
+    base_currency TEXT DEFAULT 'EUR' CHECK (base_currency IN ('EUR', 'USD', 'AED')),
+    supplier_ref TEXT,
+    supplier_net_price NUMERIC(14,2) DEFAULT 0,
+    commission_type TEXT DEFAULT 'PERCENT' CHECK (commission_type IN ('PERCENT', 'FIXED')),
+    commission_value NUMERIC(14,2) DEFAULT 5,
+    public_price NUMERIC(14,2) DEFAULT 0,
+    unit_label TEXT,
+    price_on_request BOOLEAN DEFAULT false,
+    price_label TEXT,
+    image TEXT,
+    specs JSONB DEFAULT '[]'::jsonb,
+    hidden BOOLEAN DEFAULT false
+);
+
+-- 6. Sincronización Dual-Layer KV (Respaldo Instantáneo)
+CREATE TABLE IF NOT EXISTS wssnd_portal_kv (
+    key TEXT PRIMARY KEY,
+    payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+    updated_at TIMESTAMPTZ DEFAULT now()
 );

@@ -47,8 +47,9 @@
     };
   </script>
 
-  <!-- Supabase JS SDK -->
+  <!-- Supabase JS SDK + WSSND B2B Core Engine v7 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="wssnd-core.js"></script>
 
   <style>
     :root {
@@ -143,8 +144,21 @@
           <option value="AED">AED د.إ</option>
         </select>
 
-        <button type="button" id="header-admin-pill" onclick="openAdminDashboard()" class="hidden items-center gap-1.5 px-3 py-2 rounded-xl gold-gradient text-navy-950 font-bold text-xs shadow-md whitespace-nowrap">
-          <span>Admin</span>
+        <a href="directorio.html" data-auth-only="master" data-display-flex="true" class="hidden items-center gap-1.5 px-3.5 py-2 rounded-xl bg-navy-950 hover:bg-navy-800 text-gold-400 border border-gold-500/60 font-display font-bold text-xs shadow-md whitespace-nowrap transition">
+          <span>Directorio</span>
+        </a>
+
+        <button type="button" id="header-admin-pill" data-auth-only="master" data-display-flex="true" onclick="openAdminDashboard()" class="hidden items-center gap-1.5 px-3 py-2 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs shadow-md whitespace-nowrap">
+          <span>Panel Productos</span>
+          <span data-pending-subs-badge class="hidden px-1.5 py-0.2 rounded-full bg-navy-950 text-gold-400 text-[10px] font-extrabold">0</span>
+        </button>
+
+        <button type="button" data-auth-only="supplier" onclick="window.WSSND.openSupplierPortal()" class="hidden px-3 py-2 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs shadow-md whitespace-nowrap">
+          Subir Catálogo
+        </button>
+
+        <button type="button" data-auth-only="guest" onclick="window.WSSND.openAuthModal('login')" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-navy-950 hover:bg-navy-800 text-slate-200 border border-slate-700 font-display font-bold text-xs whitespace-nowrap transition">
+          <span>Cuenta</span>
         </button>
 
         <!-- Opens Dedicated Separate Purchase/Order Page (cotizar.html) -->
@@ -206,12 +220,20 @@
           <a href="#grupo" onclick="toggleMobileDrawer()" class="py-2.5 px-3.5 rounded-xl hover:bg-navy-800 transition">El Grupo y Fundador</a>
           <a href="#divisiones" onclick="toggleMobileDrawer()" class="py-2.5 px-3.5 rounded-xl hover:bg-navy-800 transition">Divisiones de Negocio</a>
 
+          <!-- Exclusive Executive Buttons (Benja & David Only) -->
+          <a href="directorio.html" data-auth-only="master" class="hidden py-2.5 px-3.5 rounded-xl bg-gold-500/15 border border-gold-500/50 text-gold-300 font-display font-bold text-xs flex items-center justify-between">
+            <span>Directorio (Proveedores y Clientes)</span>
+            <span>&rarr;</span>
+          </a>
+          <button type="button" data-auth-only="master" onclick="toggleMobileDrawer(); openAdminDashboard();" class="hidden py-2.5 px-3.5 rounded-xl bg-navy-800 border border-gold-500/30 text-white font-display font-bold text-xs text-left">
+            Panel de Productos y Márgenes (+5%)
+          </button>
+          <button type="button" data-auth-only="supplier" onclick="toggleMobileDrawer(); window.WSSND.openSupplierPortal();" class="hidden py-2.5 px-3.5 rounded-xl bg-gold-500/15 border border-gold-500/50 text-gold-300 font-display font-bold text-xs text-left">
+            Subir Mi Catálogo a Revisión
+          </button>
+
           <div class="pt-2 pb-1 px-3.5 text-[10px] font-bold uppercase tracking-wider text-gold-400">Catálogo por Categorías</div>
-          <a href="#cat-VEHICLES" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">1. Coches Deportivos y 4x4</a>
-          <a href="#cat-MACHINERY" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">2. Tractores y Maquinaria</a>
-          <a href="#cat-COMMODITIES" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">3. Materias Primas</a>
-          <a href="#cat-REAL_ESTATE" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">4. Real Estate Dubái / España</a>
-          <a href="#cat-YACHTS" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">5. Venta de Yates y Barcos</a>
+          <div id="drawer-dynamic-categories" class="flex flex-col gap-1"></div>
 
           <a href="cotizar.html" class="mt-3 py-3 px-4 rounded-xl gold-gradient text-navy-950 font-display font-bold text-center shadow-lg">
             Comprar
@@ -227,9 +249,13 @@
             <p class="text-[11px] text-gold-400">Fundador &amp; CEO (Madrid &bull; Dubái)</p>
           </div>
         </div>
-        <button type="button" onclick="toggleMobileDrawer(); openAdminLoginModal();" class="w-full py-2 rounded-xl bg-navy-800 border border-gold-500/30 text-gold-400 font-semibold hover:bg-navy-700 transition">
-          Acceso Consola Admin
+        <button type="button" data-auth-only="guest" onclick="toggleMobileDrawer(); window.WSSND.openAuthModal('login');" class="w-full py-2.5 rounded-xl bg-navy-800 border border-gold-500/30 text-gold-400 font-semibold hover:bg-navy-700 transition">
+          Iniciar Sesión / Registrarse (Comprador o Proveedor)
         </button>
+        <div data-auth-only="logged" class="hidden p-2.5 rounded-xl bg-navy-950 border border-slate-800 flex items-center justify-between">
+          <span>Sesión: <strong data-auth-username class="text-gold-400"></strong></span>
+          <button type="button" onclick="window.WSSND.logoutUser()" class="text-red-400 font-bold hover:underline">Cerrar Sesión</button>
+        </div>
       </div>
     </div>
   </div>
@@ -670,7 +696,7 @@
         <div class="flex flex-wrap items-center gap-4">
           <span>&copy; 2026 WSSND SKYLINK.</span>
           <button type="button" onclick="openLegalModal()" class="hover:text-gold-400 underline">Aviso Legal</button>
-          <button type="button" onclick="openAdminLoginModal()" class="hover:text-gold-400 underline">Admin B2B</button>
+          <button type="button" onclick="handleFooterAccountClick()" class="hover:text-gold-400 underline">Acceso Usuarios / Proveedores</button>
         </div>
         <div>
           Developed by <span class="text-gold-400 font-semibold">Tecnoemprende</span>
@@ -711,649 +737,274 @@
     </div>
   </div>
 
-  <!-- MODAL: LOGIN DE ADMINISTRADOR -->
-  <div id="admin-login-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-navy-950/80 backdrop-blur-sm">
-    <div class="bg-navy-900 border border-gold-500/40 rounded-3xl max-w-sm w-full p-6 text-white shadow-2xl">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-        <h3 class="font-display font-bold text-base text-gold-400">Acceso Panel Administrador</h3>
-        <button type="button" onclick="closeAdminLoginModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
-      </div>
-      <form onsubmit="handleAdminLogin(event)" autocomplete="off" class="mt-4 space-y-3.5 text-xs">
-        <input type="email" id="admin-email" value="admin@wssndskylink.com" autocomplete="off" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-white" />
-        <input type="password" id="admin-pass" placeholder="Clave (admin / wssnd2026)" autocomplete="new-password" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-white" />
-        <button type="submit" class="w-full py-3 rounded-xl gold-gradient text-navy-950 font-display font-bold">
-          Desbloquear Consola B2B
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- DASHBOARD ADMINISTRADOR MÓVIL (5 PESTAÑAS) -->
+  <!-- =================================================================== -->
+  <!-- DASHBOARD EJECUTIVO DE TIENDA Y MÁRGENES (EXCLUSIVO BENJA & DAVID)  -->
+  <!-- =================================================================== -->
   <div id="admin-dashboard-modal" class="fixed inset-0 z-50 hidden bg-navy-950/95 backdrop-blur-md overflow-y-auto">
-    <div class="max-w-6xl mx-auto px-4 py-8 text-white">
-      <div class="flex items-center justify-between pb-5 border-b border-gold-500/30">
-        <h2 class="font-display font-extrabold text-xl">Panel de Control WSSND SKYLINK</h2>
-        <button type="button" onclick="closeAdminDashboard()" class="px-4 py-2 rounded-xl bg-navy-800 border border-slate-700 text-xs font-bold">
-          Cerrar &times;
+    <div class="max-w-6xl mx-auto px-4 py-7 text-white space-y-5">
+      <!-- Top Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-gold-500/30">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-widest text-gold-400 block">Consola Ejecutiva • Cero Datos Ficticios</span>
+          <h2 class="font-display font-extrabold text-lg sm:text-xl">Panel de Productos, Márgenes (+5%) y Aprobaciones</h2>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="directorio.html" class="px-4 py-2 rounded-xl bg-navy-800 hover:bg-navy-700 border border-gold-500/50 text-gold-400 font-display font-bold text-xs transition">
+            Abrir Directorio Privado &rarr;
+          </a>
+          <button type="button" onclick="closeAdminDashboard()" class="px-4 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 border border-slate-700 text-xs font-bold">
+            Cerrar &times;
+          </button>
+        </div>
+      </div>
+
+      <!-- Real Store Status Strip (Zero Invented Sales) -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div class="p-3.5 rounded-2xl bg-navy-900 border border-slate-800">
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">Productos en Tienda</span>
+          <strong id="adm-kpi-products" class="font-display font-extrabold text-xl text-white">0</strong>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-navy-900 border border-slate-800">
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">Categorías Activas</span>
+          <strong id="adm-kpi-cats" class="font-display font-extrabold text-xl text-gold-400">0</strong>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-navy-900 border border-slate-800">
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">Catálogos por Aprobar</span>
+          <strong id="adm-kpi-subs" class="font-display font-extrabold text-xl text-amber-400">0</strong>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-navy-900 border border-slate-800">
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">Proveedores en Biblioteca</span>
+          <strong id="adm-kpi-suppliers" class="font-display font-extrabold text-xl text-emerald-400">0</strong>
+        </div>
+      </div>
+
+      <!-- 5 Dashboard Tabs -->
+      <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-3 text-xs font-bold">
+        <button type="button" onclick="switchAdminTab(1)" id="adm-tab-btn-1" class="px-3.5 py-2 rounded-xl gold-gradient text-navy-950">1. Productos y Márgenes (+5%)</button>
+        <button type="button" onclick="switchAdminTab(2)" id="adm-tab-btn-2" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">
+          2. Aprobar Catálogos Proveedores <span data-pending-subs-badge class="hidden ml-1 px-1.5 py-0.2 rounded-full bg-amber-400 text-navy-950 text-[10px]">0</span>
         </button>
+        <button type="button" onclick="switchAdminTab(3)" id="adm-tab-btn-3" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">3. Categorías Dinámicas</button>
+        <button type="button" onclick="switchAdminTab(4)" id="adm-tab-btn-4" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">4. Anuncios</button>
+        <button type="button" onclick="switchAdminTab(5)" id="adm-tab-btn-5" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">5. Enlaces (?ref=), Supabase &amp; Backup</button>
       </div>
 
-      <div class="mt-5 flex flex-wrap gap-2 border-b border-slate-800 pb-4 text-xs font-bold">
-        <button type="button" onclick="switchAdminTab(1)" id="adm-tab-btn-1" class="px-3.5 py-2 rounded-xl gold-gradient text-navy-950">1. Catálogo (CRUD)</button>
-        <button type="button" onclick="switchAdminTab(2)" id="adm-tab-btn-2" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">2. Anuncios</button>
-        <button type="button" onclick="switchAdminTab(3)" id="adm-tab-btn-3" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">3. Categorías</button>
-        <button type="button" onclick="switchAdminTab(4)" id="adm-tab-btn-4" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">4. Solicitudes</button>
-        <button type="button" onclick="switchAdminTab(5)" id="adm-tab-btn-5" class="px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800">5. Supabase &amp; Backup</button>
-      </div>
+      <!-- TAB 1: PRODUCT CRUD + SUPPLIER NET PRICE + COMMISSION (% OR EXACT) -->
+      <div id="adm-tab-1" class="space-y-5">
+        <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-200">
+          <strong>Regla White-Label Activa:</strong> El <em>Proveedor Interno</em>, el <em>Precio Neto</em> y <em>Nuestra Comisión</em> son 100% confidenciales y solo los ven Benjamín y David. Nunca escribas marcas ni referencias del proveedor en el título o especificaciones públicas.
+        </div>
 
-      <div id="adm-tab-1" class="mt-5 space-y-5">
-        <form onsubmit="adminSaveCatalogItem(event)" autocomplete="off" class="p-5 rounded-2xl bg-navy-900 border border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <select id="adm-item-tab" required class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
-            <option value="VEHICLES">1. Vehículos y Flotas</option>
-            <option value="MACHINERY">2. Tractores y Maquinaria</option>
-            <option value="COMMODITIES">3. Materias Primas</option>
-            <option value="REAL_ESTATE">4. Inmobiliaria en Dubái</option>
-            <option value="YACHTS">5. Yates y Barcos</option>
-          </select>
-          <select id="adm-item-hub" required class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
-            <option value="DUBAI_IFZA">Stock Dubái Export</option>
-            <option value="MADRID_ES">Stock Madrid</option>
-          </select>
-          <select id="adm-item-cond" required class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
-            <option value="NEW">Nuevo 0 km / Spot</option>
-            <option value="USED">Ocasión / Reacondicionado</option>
-            <option value="CONTRACT">Por Lote / Contrato</option>
-          </select>
-          <input type="text" id="adm-item-title" required placeholder="Título del producto *" class="sm:col-span-2 rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
-          <input type="number" id="adm-item-price" value="0" placeholder="Precio EUR (0=A consultar)" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
-          <input type="text" id="adm-item-specs" required placeholder="Especificaciones separadas por |" class="sm:col-span-2 rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
-          <input type="file" accept="image/*" onchange="compressAdminPhoto(event)" class="text-xs text-slate-300" />
-          <input type="hidden" id="adm-item-img" value="assets/veh-landcruiser-300.png" />
-          <div class="sm:col-span-3 flex justify-end">
-            <button type="submit" class="px-5 py-2 rounded-xl gold-gradient text-navy-950 font-bold">Guardar Producto</button>
+        <form id="adm-product-form" onsubmit="adminSaveCatalogItem(event)" autocomplete="off" class="p-5 rounded-3xl bg-navy-900 border border-gold-500/30 space-y-4 text-xs">
+          <div class="flex items-center justify-between">
+            <h3 id="adm-form-heading" class="font-display font-bold text-sm text-gold-400">Crear Nuevo Producto / Editar Existente</h3>
+            <button type="button" id="adm-cancel-edit-btn" onclick="resetAdminProductForm()" class="hidden px-3 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white font-bold">
+              Cancelar Edición
+            </button>
+          </div>
+
+          <input type="hidden" id="adm-edit-id" value="" />
+          <input type="hidden" id="adm-from-submission-id" value="" />
+
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Categoría *</label>
+              <select id="adm-item-tab" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white"></select>
+            </div>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Sede / Hub *</label>
+              <select id="adm-item-hub" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
+                <option value="DUBAI_IFZA">🇦🇪 Sede Dubái / Export</option>
+                <option value="MADRID_ES">🇪🇸 Sede Madrid / Europa</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Condición *</label>
+              <select id="adm-item-cond" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
+                <option value="CONTRACT">Por Lote / Contrato</option>
+                <option value="NEW">Nuevo 0 km / 0 Horas</option>
+                <option value="USED">Revisado / Ocasión</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Etiqueta Superior Tarjeta</label>
+              <input type="text" id="adm-item-cond-label" placeholder="Ej. Pureza ≥ 99,95% • Granel" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="sm:col-span-2">
+              <label class="block text-slate-300 font-bold mb-1">Título Público del Producto (Sin marca ni nombre de proveedor) *</label>
+              <input type="text" id="adm-item-title" required placeholder="Ej. Aceite de Girasol Refinado Grado Alimenticio — Formato 20L" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-gold-400 font-bold mb-1">Proveedor Interno (Privado)</label>
+              <input type="text" id="adm-supplier-ref" placeholder="Solo visible para Benja y David" class="w-full rounded-xl bg-navy-950 border border-gold-500/40 px-3 py-2 text-gold-200" />
+            </div>
+          </div>
+
+          <!-- PRICING & COMMISSION ENGINE -->
+          <div class="p-4 rounded-2xl bg-navy-950 border border-slate-800 grid grid-cols-1 sm:grid-cols-6 gap-3 items-end">
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Moneda Base</label>
+              <select id="adm-base-curr" onchange="recalcAdminMarginLive()" class="w-full rounded-xl bg-navy-900 border border-slate-700 px-3 py-2 text-white font-bold">
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="AED">AED (د.إ)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-gold-400 font-bold mb-1">Precio Neto Proveedor</label>
+              <input type="number" step="0.01" min="0" id="adm-net-price" value="0" oninput="recalcAdminMarginLive()" class="w-full rounded-xl bg-navy-900 border border-gold-500/40 px-3 py-2 text-white font-mono" />
+            </div>
+
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Tipo Comisión</label>
+              <select id="adm-comm-type" onchange="recalcAdminMarginLive()" class="w-full rounded-xl bg-navy-900 border border-slate-700 px-2.5 py-2 text-white">
+                <option value="PERCENT">Porcentaje (%)</option>
+                <option value="FIXED">Monto Exacto</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-emerald-400 font-bold mb-1">Comisión (% o Monto)</label>
+              <input type="number" step="0.01" min="0" id="adm-comm-val" value="5" oninput="recalcAdminMarginLive()" class="w-full rounded-xl bg-navy-900 border border-emerald-500/40 px-3 py-2 text-emerald-300 font-mono font-bold" />
+            </div>
+
+            <div class="sm:col-span-2 p-2.5 rounded-xl bg-navy-900 border border-gold-500/30">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-slate-400">Nuestra Comisión:</span>
+                <strong id="adm-live-gain" class="text-emerald-400 font-mono">+0.00 USD</strong>
+              </div>
+              <div class="flex items-center justify-between text-xs mt-1">
+                <span class="text-gold-300 font-bold">Precio Público Web:</span>
+                <strong id="adm-live-public" class="text-white font-mono text-sm">0.00 USD</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Sufijo Unidad / Incoterm</label>
+              <input type="text" id="adm-unit-label" placeholder="Ej. / TM FOB o / Unidad" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+            </div>
+            <div class="flex items-center gap-2 pt-4">
+              <input type="checkbox" id="adm-price-on-request" onchange="recalcAdminMarginLive()" class="w-4 h-4 accent-gold-500" />
+              <label for="adm-price-on-request" class="text-slate-200 font-semibold">Mostrar como "Cotizar por Lote / A consultar"</label>
+            </div>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Subir Foto Limpia (Móvil / PC)</label>
+              <input type="file" accept="image/*" onchange="compressAdminPhoto(event)" class="text-[11px] text-slate-300" />
+              <input type="hidden" id="adm-item-img" value="assets/wl_sunflower_20l.jpg" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-slate-400 font-semibold mb-1">Especificaciones Técnicas (Separadas por | ) *</label>
+            <input type="text" id="adm-item-specs" required placeholder="Pureza o motorización | Formato de entrega e inspección SGS | Puerto o disponibilidad" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+
+          <div class="flex justify-end gap-2">
+            <button type="submit" class="px-6 py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-extrabold shadow-lg">
+              Guardar y Publicar en la Web
+            </button>
           </div>
         </form>
+
+        <!-- Search & Filter inside Admin Product List -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+          <h4 class="font-display font-bold text-sm text-white">Inventario Completo (Con Desglose Privado Neto + Comisión)</h4>
+          <input type="search" id="adm-catalog-filter" oninput="renderAdminCatalogList()" placeholder="Filtrar producto o proveedor interno..." class="w-full sm:w-80 rounded-xl bg-navy-900 border border-slate-700 px-3.5 py-2 text-xs text-white" />
+        </div>
         <div id="adm-catalog-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
       </div>
 
-      <div id="adm-tab-2" class="hidden mt-5 p-5 rounded-2xl bg-navy-900 border border-slate-800 space-y-3 text-xs">
+      <!-- TAB 2: SUPPLIER CATALOG APPROVAL QUEUE -->
+      <div id="adm-tab-2" class="hidden p-5 rounded-3xl bg-navy-900 border border-slate-800 space-y-4 text-xs">
+        <div>
+          <h3 class="font-display font-bold text-base text-gold-400">Solicitudes de Catálogo Enviadas por Proveedores</h3>
+          <p class="text-slate-400 mt-0.5">Revisa los productos subidos por proveedores externos. Al pulsar "Cargar en Editor (+5%)", podrás limpiar cualquier marca antes de publicarlo.</p>
+        </div>
+        <div id="adm-submissions-list" class="space-y-3"></div>
+      </div>
+
+      <!-- TAB 3: DYNAMIC CATEGORIES MANAGER -->
+      <div id="adm-tab-3" class="hidden p-5 rounded-3xl bg-navy-900 border border-slate-800 space-y-4 text-xs">
+        <form onsubmit="adminSaveCategory(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-3 pb-4 border-b border-slate-800">
+          <input type="text" id="cat-new-code" required placeholder="Código (Ej. QUIMICOS)" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white uppercase font-mono" />
+          <input type="text" id="cat-new-badge" required placeholder="Insignia (Ej. CATEGORÍA 07)" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          <input type="text" id="cat-new-title" required placeholder="Título de la Categoría *" class="rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          <button type="submit" class="rounded-xl gold-gradient text-navy-950 font-display font-extrabold py-2 px-4">+ Guardar Categoría</button>
+          <input type="text" id="cat-new-sub" placeholder="Subtítulo descriptivo de la categoría" class="sm:col-span-4 rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+        </form>
+        <div id="adm-categories-list" class="space-y-2"></div>
+      </div>
+
+      <!-- TAB 4: BANNER / PROMOS -->
+      <div id="adm-tab-4" class="hidden p-5 rounded-3xl bg-navy-900 border border-slate-800 space-y-3 text-xs">
+        <label class="block text-gold-400 font-bold">Texto Institucional Activo</label>
         <input type="text" id="adm-banner-input" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-white" value="WSSND SKYLINK — Sede Madrid y Sede Dubái" />
-        <button type="button" onclick="saveAdminBanner()" class="px-5 py-2 rounded-xl gold-gradient text-navy-950 font-bold">Actualizar</button>
+        <button type="button" onclick="saveAdminBanner()" class="px-5 py-2.5 rounded-xl gold-gradient text-navy-950 font-bold">Actualizar Aviso</button>
       </div>
 
-      <div id="adm-tab-3" class="hidden mt-5 p-5 rounded-2xl bg-navy-900 border border-slate-800 text-xs text-slate-300 space-y-2">
-        <p>1. Vehículos y Flotas &bull; 2. Tractores y Maquinaria &bull; 3. Materias Primas &bull; 4. Inversiones Inmobiliarias en Dubái &bull; 5. Venta de Yates y Barcos.</p>
-      </div>
+      <!-- TAB 5: REFERRAL LINKS, SUPABASE & JSON BACKUP -->
+      <div id="adm-tab-5" class="hidden p-5 rounded-3xl bg-navy-900 border border-slate-800 space-y-5 text-xs">
+        <div class="p-4 rounded-2xl bg-navy-950 border border-gold-500/30 space-y-2">
+          <h4 class="font-display font-bold text-gold-400">Enlaces Silenciosos para Captar Proveedores y Compradores</h4>
+          <p class="text-slate-400">Comparte tu enlace personalizado. Todo usuario o pedido entrante quedará asignado automáticamente a ti en el Directorio:</p>
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button type="button" onclick="copyAdminRefLink('benja')" class="px-4 py-2 rounded-xl bg-navy-900 border border-gold-500/40 text-gold-300 font-bold">Copiar Link de Benjamín (?ref=benja)</button>
+            <button type="button" onclick="copyAdminRefLink('david')" class="px-4 py-2 rounded-xl bg-navy-900 border border-gold-500/40 text-gold-300 font-bold">Copiar Link de David (?ref=david)</button>
+          </div>
+        </div>
 
-      <div id="adm-tab-4" class="hidden mt-5 p-5 rounded-2xl bg-navy-900 border border-slate-800 space-y-3 text-xs">
-        <span id="adm-leads-count" class="text-gold-400 font-bold">0 registros</span>
-        <div id="adm-leads-list" class="space-y-2"></div>
-      </div>
-
-      <div id="adm-tab-5" class="hidden mt-5 p-5 rounded-2xl bg-navy-900 border border-slate-800 space-y-4 text-xs">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <input type="text" id="supa-url-input" autocomplete="off" placeholder="Supabase Project URL" class="rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-white" />
-          <input type="text" id="supa-key-input" autocomplete="off" placeholder="Supabase Anon/Service Key" class="rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-white" />
+          <input type="text" id="supa-key-input" autocomplete="off" placeholder="Supabase Anon Key" class="rounded-xl bg-navy-950 border border-slate-700 px-3.5 py-2.5 text-white" />
         </div>
         <div class="flex flex-wrap gap-2.5">
-          <button type="button" onclick="saveSupabaseConfig()" class="px-4 py-2 rounded-xl gold-gradient text-navy-950 font-bold">Conectar Supabase</button>
-          <button type="button" onclick="exportBackupJson()" class="px-4 py-2 rounded-xl bg-navy-800 border border-gold-500/40 text-gold-400 font-bold">Backup JSON (1 Clic)</button>
-          <button type="button" onclick="copySqlSchema()" class="px-4 py-2 rounded-xl bg-navy-800 border border-slate-700 text-white font-bold">Copiar SQL (4 Tablas)</button>
+          <button type="button" onclick="saveSupabaseConfig()" class="px-4 py-2 rounded-xl gold-gradient text-navy-950 font-bold">Conectar Supabase Dual-Layer</button>
+          <button type="button" onclick="exportBackupJson()" class="px-4 py-2 rounded-xl bg-navy-800 border border-gold-500/40 text-gold-400 font-bold">Descargar Backup Completo JSON</button>
+          <label class="px-4 py-2 rounded-xl bg-navy-800 border border-slate-700 text-white font-bold cursor-pointer">
+            Restaurar JSON
+            <input type="file" accept=".json" onchange="restoreBackupJson(event)" class="hidden" />
+          </label>
+          <button type="button" onclick="copySqlSchema()" class="px-4 py-2 rounded-xl bg-navy-800 border border-slate-700 text-slate-300 font-bold">Copiar Esquema SQL</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- =================================================================== -->
-  <!-- JAVASCRIPT ENGINE                                                   -->
+  <!-- JAVASCRIPT STOREFRONT & EXECUTIVE DASHBOARD ENGINE v7               -->
   <!-- =================================================================== -->
   <script>
-    const STORAGE_KEY_CATALOG = 'wssnd_skylink_catalog_v6_re_dubai_spain';
-    const STORAGE_KEY_LEADS = 'wssnd_skylink_leads_v1';
-
     let currentCurrency = 'EUR';
-    const CURRENCY_RATES = { EUR: 1, USD: 1.08, AED: 3.97 };
 
-    const CATEGORY_META = [
-      {
-        code: 'VEHICLES',
-        badge: 'CATEGORÍA 01',
-        title: 'Coches Deportivos, 4x4 y Alta Gama (Por Encargo y Stock)',
-        subtitle: 'Ford Mustang, Dodge Challenger, Ford Raptor, Chevrolet Camaro, Jeep (todos los modelos), Toyota, Ferrari y deportivos de alta gama por encargo.'
-      },
-      {
-        code: 'MACHINERY',
-        badge: 'CATEGORÍA 02',
-        title: 'Tractores Agrícolas y Maquinaria Pesada',
-        subtitle: 'Tractores de alto rendimiento, cosechadoras, excavadoras de obra pública y manipuladores telescópicos.'
-      },
-      {
-        code: 'COMMODITIES',
-        badge: 'CATEGORÍA 03',
-        title: 'Materias Primas y Comercio Mayorista',
-        subtitle: 'Hidrocarburos, metales preciosos e industriales, materiales de construcción y agroalimentación.'
-      },
-      {
-        code: 'REAL_ESTATE',
-        badge: 'CATEGORÍA 04 • REAL ESTATE DUBÁI / ESPAÑA',
-        title: 'Inversiones Inmobiliarias en Dubái / España — Activos en Rentabilidad y Nuevos Proyectos',
-        subtitle: 'Activos logísticos, comerciales, edificios residenciales y suelo industrial en España (Madrid), junto con los nuevos desarrollos residenciales de lujo Off-Plan en Dubái (Emiratos Árabes Unidos).'
-      },
-      {
-        code: 'YACHTS',
-        badge: 'CATEGORÍA 05 • NÁUTICA DE LUJO Y COMERCIAL',
-        title: 'Venta de Yates, Superyates y Barcos (Dubái & Mediterráneo)',
-        subtitle: 'Superyates de gran eslora, yates deportivos Flybridge & Open, catamaranes oceánicos y embarcaciones por encargo con inspección naval certificada y entrega internacional.'
-      }
-    ];
-
-    // Catálogo Completo (Coches, Maquinaria, Materias Primas, Real Estate Dubái/España y Yates/Barcos)
-    const DEFAULT_CATALOG = [
-      // 1. COCHES DEPORTIVOS, 4X4 Y ALTA GAMA
-      {
-        id: 'veh-1',
-        tab: 'VEHICLES',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Sede Dubái & Madrid',
-        condition: 'NEW',
-        condition_label: 'Deportivo V8 • Bajo Pedido / Stock',
-        title: 'Ford Mustang (GT V8 / Dark Horse / Ediciones Especiales)',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        price_label: 'A cotizar con el cliente',
-        image: 'assets/veh-ford-mustang.jpg',
-        specs: ['Configuración a medida de versión, motorización V8 y acabado', 'Inspección certificada y gestión integral de importación/exportación', 'Entrega en España, Europa, Oriente Medio o destino internacional'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'veh-2',
-        tab: 'VEHICLES',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Sede Dubái & Madrid',
-        condition: 'NEW',
-        condition_label: 'Muscle Car • Bajo Pedido / Stock',
-        title: 'Dodge Challenger (SRT / Hellcat / R/T Scat Pack Widebody)',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        price_label: 'A cotizar con el cliente',
-        image: 'assets/veh-dodge-challenger.jpg',
-        specs: ['Versiones V8 HEMI, SRT Hellcat y ediciones Widebody por encargo', 'Verificación técnica completa e historial certificado', 'Logística puerta a puerta y despacho aduanero incluido'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'veh-3',
-        tab: 'VEHICLES',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Sede Dubái & Madrid',
-        condition: 'NEW',
-        condition_label: 'Pick-Up 4x4 High-Performance',
-        title: 'Ford Raptor (F-150 Raptor / Raptor R / Ranger Raptor 4x4)',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        price_label: 'A cotizar con el cliente',
-        image: 'assets/veh-ford-raptor.jpg',
-        specs: ['Suspensión FOX Racing Off-Road y tracción 4WD de alto rendimiento', 'Disponible por unidad o por lotes para flotas ejecutivas', 'Exportación directa desde Dubái o entrega en Madrid'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'veh-4',
-        tab: 'VEHICLES',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Sede Dubái & Madrid',
-        condition: 'NEW',
-        condition_label: 'Deportivo V8 • Bajo Pedido / Stock',
-        title: 'Chevrolet Camaro (SS V8 / ZL1 / Coupé & Cabrio)',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        price_label: 'A cotizar con el cliente',
-        image: 'assets/veh-chevrolet-camaro.jpg',
-        specs: ['Versiones deportivas SS y ZL1 Supercharged seleccionadas a la carta', 'Revisión mecánica y documental de 150 puntos', 'Cotización personalizada según año, kilometraje y equipamiento'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'veh-5',
-        tab: 'VEHICLES',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Sede Dubái & Madrid',
-        condition: 'NEW',
-        condition_label: 'Gama Completa 4x4 • Todos los Modelos',
-        title: 'Jeep — Todos los Modelos (Wrangler Rubicon, Grand Cherokee, Gladiator)',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        price_label: 'A cotizar con el cliente',
-        image: 'assets/veh-jeep-models.jpg',
-        specs: ['Disponibilidad de toda la gama Jeep (Nuevos 0 km y ocasión seleccionada)', 'Wrangler Rubicon 392, Grand Cherokee, Gladiator y versiones 4x4', 'Suministro individual o para flotas con envío internacional'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'veh-6',
-        tab: 'VEHICLES',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Sede Dubái & Madrid',
-        condition: 'NEW',
-        condition_label: 'SUVs, 4x4 y Pick-Ups • Gama Completa',
-        title: 'Toyota — Gama Completa (Land Cruiser 300, Prado, Hilux, Tundra)',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        price_label: 'A cotizar con el cliente',
-        image: 'assets/veh-toyota-lineup.jpg',
-        specs: ['Stock y pedido directo de toda la gama Toyota 4x4 y comercial', 'Unidades 0 km para exportación internacional y lotes corporativos', 'Trato directo y embarque marítimo Ro-Ro o contenedor cerrado'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'veh-7',
-        tab: 'VEHICLES',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Sede Madrid & Dubái',
-        condition: 'NEW',
-        condition_label: 'Superdeportivos de Élite',
-        title: 'Ferrari — Superdeportivos y Modelos de Alta Gama',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        price_label: 'A cotizar con el cliente',
-        image: 'assets/veh-ferrari-supercar.jpg',
-        specs: ['Localización y suministro exclusivo de modelos Ferrari en Dubái y Europa', 'Trazabilidad oficial, inspección en concesionario e historial certificado', 'Transporte cerrado VIP y gestión confidencial para coleccionistas'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'veh-8',
-        tab: 'VEHICLES',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Sede Madrid & Dubái',
-        condition: 'CONTRACT',
-        condition_label: 'Sourcing VIP a la Carta',
-        title: 'Coches por Encargo: Deportivos y Alta Gama a Medida',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        price_label: 'A cotizar con el cliente',
-        image: 'assets/veh-bespoke-luxury.jpg',
-        specs: ['Búsqueda por encargo de cualquier deportivo, SUV de lujo o edición limitada', 'Acceso directo al mercado de Dubái (EAU) y red oficial europea (Madrid)', 'Presupuesto cerrado llave en mano según las especificaciones del cliente'],
-        cta_label: 'Comprar'
-      },
-
-      // 2. TRACTORES Y MAQUINARIA
-      {
-        id: 'mach-1',
-        tab: 'MACHINERY',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Stock Madrid & Dubái',
-        condition: 'NEW',
-        condition_label: 'Agrícola • Nuevo',
-        title: 'Tractor Agrícola 4WD 250 HP Serie 6R Heavy-Duty',
-        year: 2026,
-        price_eur: 134000,
-        price_on_request: false,
-        image: 'assets/mach-johndeere-6r.png',
-        specs: ['Potencia: 250 HP • 0 Horas de uso', 'Transmisión AutoPowr IVT • Cabina suspendida', 'Disponibilidad de aperos y recambios'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'mach-2',
-        tab: 'MACHINERY',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Stock Dubái Export',
-        condition: 'USED',
-        condition_label: 'Obra Pública • Revisada',
-        title: 'Excavadora Hidráulica de Orugas 32 Toneladas',
-        year: 2023,
-        price_eur: 89000,
-        price_on_request: false,
-        image: 'assets/mach-cat-excavator.png',
-        specs: ['Potencia: 271 HP • 1.850 Horas', 'Instalación de martillo hidráulico incluida', 'Embarque internacional Ro-Ro'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'mach-3',
-        tab: 'MACHINERY',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Stock Madrid',
-        condition: 'USED',
-        condition_label: 'Agrícola • Reacondicionada',
-        title: 'Cosechadora de Cereales Alto Rendimiento + Cabezal 7.7m',
-        year: 2022,
-        price_eur: 162000,
-        price_on_request: false,
-        image: 'assets/mach-claas-harvester.png',
-        specs: ['Potencia: 408 HP • 920 Horas de trilla', 'Tolva de 11.000 L • Carro portacorte', 'Recambios originales garantizados'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'mach-4',
-        tab: 'MACHINERY',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Stock Madrid',
-        condition: 'NEW',
-        condition_label: 'Industrial • Nuevo',
-        title: 'Manipulador Telescópico Todoterreno 4.000 kg / 18m',
-        year: 2026,
-        price_eur: 72000,
-        price_on_request: false,
-        image: 'assets/mach-manitou-telehandler.png',
-        specs: ['Potencia: 115 HP • 0 Horas', 'Altura de elevación: 17,55 m • Estabilizadores', 'Incluye horquillas y cazo de áridos'],
-        cta_label: 'Comprar'
-      },
-
-      // 3. MATERIAS PRIMAS
-      {
-        id: 'comm-1',
-        tab: 'COMMODITIES',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Sede Dubái Export',
-        condition: 'CONTRACT',
-        condition_label: 'Hidrocarburos y Derivados',
-        title: 'Gasóleo de Automoción ULSD EN590 (10 ppm) & Lubricantes',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        image: 'assets/comm-en590-diesel.png',
-        specs: ['Pedido mínimo: 10.000 MT / Flexitanks', 'Modalidades: FOB / CIF', 'Certificación de calidad internacional'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'comm-2',
-        tab: 'COMMODITIES',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Sede Dubái Export',
-        condition: 'NEW',
-        condition_label: 'Metales Preciosos e Industriales',
-        title: 'Oro de Inversión (999.9) y Cátodos de Cobre Electrolítico',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        image: 'assets/comm-gold-copper.png',
-        specs: ['Suministro bajo contrato mercantil', 'Envío asegurado CIF', 'Trazabilidad y certificado de pureza'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'comm-3',
-        tab: 'COMMODITIES',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Sede Madrid & Dubái',
-        condition: 'CONTRACT',
-        condition_label: 'Materiales de Construcción',
-        title: 'Acero Corrugado B500S en Barras y Cemento Portland 42.5R',
-        year: 2026,
-        price_eur: 540,
-        price_on_request: false,
-        image: 'assets/comm-portland-steel.png',
-        specs: ['Pedido mínimo: 500 TM (Precio ref. por TM)', 'FOB Puerto Español o CIF Destino', 'Certificado de calidad europeo'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'comm-4',
-        tab: 'COMMODITIES',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Sede Madrid (Origen España)',
-        condition: 'NEW',
-        condition_label: 'Agroalimentación Mayorista',
-        title: 'Aceite de Oliva Virgen Extra Español y Cereales a Granel',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        image: 'assets/comm-olive-grain.png',
-        specs: ['Pedido mínimo: 1 Contenedor 20\' FCL / Flexitank', 'Formatos granel y canal HORECA', 'Certificado fitosanitario y de origen'],
-        cta_label: 'Comprar'
-      },
-
-      // 4. REAL ESTATE DUBÁI / ESPAÑA (4 ACTIVOS EN ESPAÑA + 6 PROYECTOS EN DUBÁI)
-      {
-        id: 're-es-1',
-        tab: 'REAL_ESTATE',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Madrid (Corredor del Henares)',
-        condition: 'NEW',
-        condition_label: 'Nave Logística • Venta / Alquiler',
-        title: 'Plataforma Logística Clase A con 6 Muelles de Carga en Torrejón de Ardoz',
-        year: 2026,
-        price_eur: 2850000,
-        price_on_request: false,
-        image: 'assets/re-logistic-madrid.png',
-        specs: ['Superficie: 3.450 m² construidos + campa de maniobras', 'Altura libre: 11,5 m • Acceso directo A-2 • Entrega inmediata', 'Rentabilidad estimada: 7,4% anual'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 're-es-2',
-        tab: 'REAL_ESTATE',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Madrid Capital (Zona Prime)',
-        condition: 'NEW',
-        condition_label: 'Local en Rentabilidad',
-        title: 'Local Comercial Esquinero Gran Fachada Acristalada',
-        year: 2026,
-        price_eur: 1490000,
-        price_on_request: false,
-        image: 'assets/re-retail-madrid.png',
-        specs: ['Superficie: 420 m² en planta calle (Eje comercial Prime)', 'Arrendado a operador de primer nivel con obligado cumplimiento', 'Rentabilidad neta estimada: 6,2% anual desde el día 1'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 're-es-3',
-        tab: 'REAL_ESTATE',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Madrid Residencial',
-        condition: 'NEW',
-        condition_label: 'Edificio en Bloque',
-        title: 'Edificio Residencial Contemporáneo de 18 Viviendas + Garajes',
-        year: 2026,
-        price_eur: 4600000,
-        price_on_request: false,
-        image: 'assets/re-residential-building.png',
-        specs: ['Superficie total: 2.180 m² (18 apartamentos + plazas de garaje)', '100% ocupado en explotación residencial • Llave en mano', 'Gestión integral para inversores'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 're-es-4',
-        tab: 'REAL_ESTATE',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Madrid Este (Polígono Industrial)',
-        condition: 'NEW',
-        condition_label: 'Suelo Industrial Finalista',
-        title: 'Solar Industrial Urbanizado para Nave o Campa de Flotas',
-        year: 2026,
-        price_eur: 1150000,
-        price_on_request: false,
-        image: 'assets/re-industrial-plot.png',
-        specs: ['Superficie de parcela: 6.800 m² totalmente urbanizados', 'Edificabilidad industrial/logística: 70% (hasta 4.760 m² de techo)', 'Licencia directa con todos los suministros a pie de parcela'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 're-dxb-1',
-        tab: 'REAL_ESTATE',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Dubái • Palm Jebel Ali (Nakheel)',
-        condition: 'NEW',
-        condition_label: 'Nuevo Mega-Proyecto en Dubái • Off-Plan',
-        title: 'Palm Jebel Ali Dubái — Villas y Mansiones Frente al Mar con Playa Privada',
-        year: 2026,
-        price_eur: 4500000,
-        price_on_request: false,
-        image: 'assets/re-dubai-palm-jebel-ali.jpg',
-        specs: ['El nuevo icono costero de Dubái (el doble de tamaño que Palm Jumeirah)', 'Villas de 5 a 7 dormitorios con acceso directo a playa privada', 'Plan de pago 80/20 directo con promotor • Elegible para Golden Visa 10 años'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 're-dxb-2',
-        tab: 'REAL_ESTATE',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Dubái • Dubai Creek Harbour (Emaar)',
-        condition: 'NEW',
-        condition_label: 'Nuevo Lanzamiento en Dubái • Waterfront',
-        title: 'Dubai Creek Harbour — Torres Residenciales Frente a la Marina y Skyline de Dubái',
-        year: 2026,
-        price_eur: 460000,
-        price_on_request: false,
-        image: 'assets/re-dubai-creek-harbour.jpg',
-        specs: ['Apartamentos y áticos de 1 a 4 dormitorios frente al puerto deportivo de Dubái', 'Alta rentabilidad por alquiler (7,5% – 9% neto anual libre de impuestos)', 'Plan de pago flexible durante construcción directo con Emaar'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 're-dxb-3',
-        tab: 'REAL_ESTATE',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Dubái • Downtown & Business Bay',
-        condition: 'NEW',
-        condition_label: 'Branded Residences en Dubái • Ultra-Lujo',
-        title: 'Downtown Dubái & Business Bay — Residencias de Marca (Mercedes-Benz Places / Bugatti / Binghatti)',
-        year: 2026,
-        price_eur: 2100000,
-        price_on_request: false,
-        image: 'assets/re-dubai-downtown-branded.jpg',
-        specs: ['Residencias y Sky Mansions con piscina privada en terraza y vistas al Burj Khalifa', 'Servicios de conserjería 5 estrellas y diseño arquitectónico icónico en el centro de Dubái', 'Alta revalorización de capital en el distrito financiero y de lujo de Dubái'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 're-dxb-4',
-        tab: 'REAL_ESTATE',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Dubái • The Oasis & Sobha Hartland II',
-        condition: 'NEW',
-        condition_label: 'Comunidad de Lagunas en Dubái • Off-Plan',
-        title: 'The Oasis by Emaar & Sobha Hartland II — Mansiones con Lagunas Cristalinas en Dubái',
-        year: 2026,
-        price_eur: 1950000,
-        price_on_request: false,
-        image: 'assets/re-dubai-oasis-lagoons.jpg',
-        specs: ['Villas y mansiones rodeadas de lagunas navegables y playas de arena blanca en Dubái', 'A solo 15 minutos de Downtown Dubái y del Aeropuerto Internacional DXB', 'Exención del 100% de impuesto sobre el patrimonio y renta residencial en Dubái'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 're-dxb-5',
-        tab: 'REAL_ESTATE',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Dubái • Emaar South & Dubai South',
-        condition: 'NEW',
-        condition_label: 'Nuevo Polo de Crecimiento en Dubái',
-        title: 'Dubai South & Emaar South — Residencias Junto al Nuevo Aeropuerto Al Maktoum y Expo City',
-        year: 2026,
-        price_eur: 310000,
-        price_on_request: false,
-        image: 'assets/re-dubai-south-emaar.jpg',
-        specs: ['Apartamentos y adosados frente a campo de golf de 18 hoyos en el nuevo corredor sur de Dubái', 'Zona de mayor proyección de plusvalía por la ampliación del mega-aeropuerto Al Maktoum', 'Entrada accesible y cuotas fraccionadas sin intereses durante la obra'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 're-dxb-6',
-        tab: 'REAL_ESTATE',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Dubái • Dubai Islands & Maritime City',
-        condition: 'NEW',
-        condition_label: 'Isla Residencial en Dubái • Beachfront',
-        title: 'Dubai Islands & Dubai Maritime City — Complejos Frente al Mar con Marina de Superyates',
-        year: 2026,
-        price_eur: 580000,
-        price_on_request: false,
-        image: 'assets/re-dubai-islands-marina.jpg',
-        specs: ['Nuevos complejos residenciales en primera línea de playa en el archipiélago Dubai Islands', 'Terrazas panorámicas al Golfo Pérsico, clubes de playa y marinas privadas', 'Gestión integral de compra y explotación turística desde nuestra sede en Dubái'],
-        cta_label: 'Comprar'
-      },
-
-      // 5. VENTA DE YATES, SUPERYATES Y BARCOS
-      {
-        id: 'yacht-1',
-        tab: 'YACHTS',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Marinas Dubái & Mediterráneo',
-        condition: 'NEW',
-        condition_label: 'Superyates • 30m a +60m',
-        title: 'Superyates de Gran Eslora (30m a +60m) — Nuevos y de Ocasión Certificada',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        price_label: 'A cotizar con el cliente',
-        image: 'assets/yacht-superyacht-luxury.jpg',
-        specs: ['Superyates tri-deck con cubiertas de teca, jacuzzi, beach club y camarotes VIP', 'Acceso directo a unidades off-market en Dubai Harbour y marinas de España/Europa', 'Inspección naval completa (Survey), abanderamiento y gestión integral de compra'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'yacht-2',
-        tab: 'YACHTS',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Mediterráneo (España) & Dubái',
-        condition: 'NEW',
-        condition_label: 'Yates a Motor • Flybridge & Open',
-        title: 'Yates Deportivos Open & Flybridge de Alta Velocidad (15m a 28m)',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        price_label: 'A cotizar con el cliente',
-        image: 'assets/yacht-sport-flybridge.jpg',
-        specs: ['Principales astilleros europeos e internacionales (nuevos y seminuevos revisados)', 'Estabilizadores giroscópicos, plataforma hidráulica y diseño interior de lujo', 'Entrega en cualquier puerto del Mediterráneo, Dubái o transporte marítimo internacional'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'yacht-3',
-        tab: 'YACHTS',
-        hub_origin: 'DUBAI_IFZA',
-        hub_label: 'Sede Dubái & Puertos España',
-        condition: 'NEW',
-        condition_label: 'Catamaranes de Lujo • Motor y Vela',
-        title: 'Catamaranes de Lujo a Motor y Vela — Cruceros Oceánicos',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        price_label: 'A cotizar con el cliente',
-        image: 'assets/yacht-luxury-catamaran.jpg',
-        specs: ['Gran manga y estabilidad oceánica con salón panorámico 360° y flybridge', 'Configuración para uso privado de recreo o inversión en chárter de alto rendimiento', 'Asesoramiento técnico, fiscal y logístico desde nuestras sedes de Madrid y Dubái'],
-        cta_label: 'Comprar'
-      },
-      {
-        id: 'yacht-4',
-        tab: 'YACHTS',
-        hub_origin: 'MADRID_ES',
-        hub_label: 'Sede Madrid & Dubái',
-        condition: 'CONTRACT',
-        condition_label: 'Por Encargo • Tenders y Barcos Comerciales',
-        title: 'Barcos por Encargo, Lanchas Ejecutivas (Tenders) y Embarcaciones Comerciales',
-        year: 2026,
-        price_eur: 0,
-        price_on_request: true,
-        price_label: 'A cotizar con el cliente',
-        image: 'assets/yacht-custom-tender-boat.jpg',
-        specs: ['Búsqueda a la carta de lanchas rápidas, tenders de apoyo, pesqueros y buques de trabajo', 'Auditoría mecánica de motores marinos, casco y certificaciones internacionales', 'Despacho aduanero marítimo y traslado internacional llave en mano'],
-        cta_label: 'Comprar'
-      }
-    ];
-
-    function getCatalogData() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY_CATALOG);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-        }
-      } catch (e) {}
-      localStorage.setItem(STORAGE_KEY_CATALOG, JSON.stringify(DEFAULT_CATALOG));
-      return DEFAULT_CATALOG;
+    function escHtml(str) {
+      return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
     }
 
-    function formatPrice(priceEur, priceOnRequest, priceLabel) {
-      if (priceOnRequest || !priceEur || Number(priceEur) <= 0) {
-        return priceLabel || 'Cotizar por lote';
+    function handleFooterAccountClick() {
+      if (window.WSSND && window.WSSND.isMasterAdmin()) {
+        openAdminDashboard();
+      } else {
+        window.WSSND.openAuthModal('login');
       }
-      const converted = Math.round(Number(priceEur) * CURRENCY_RATES[currentCurrency]);
-      const formatted = converted.toLocaleString('es-ES');
-      if (currentCurrency === 'EUR') return `${formatted} €`;
-      if (currentCurrency === 'USD') return `$${formatted} USD`;
-      return `${formatted} AED`;
     }
 
     function setGlobalHub(hub) {
       ['ALL', 'MADRID_ES', 'DUBAI_IFZA'].forEach(h => {
         const btn = document.getElementById(`hub-btn-${h}`);
         if (!btn) return;
-        if (h === hub) {
-          btn.className = 'px-3 py-1 rounded-full font-semibold transition bg-gold-500 text-navy-950 whitespace-nowrap';
-        } else {
-          btn.className = 'px-3 py-1 rounded-full font-medium text-slate-300 hover:text-white transition whitespace-nowrap';
-        }
+        btn.className = h === hub
+          ? 'px-3 py-1 rounded-full font-semibold transition bg-gold-500 text-navy-950 whitespace-nowrap'
+          : 'px-3 py-1 rounded-full font-medium text-slate-300 hover:text-white transition whitespace-nowrap';
       });
       const filterHub = document.getElementById('filter-hub');
       if (filterHub) filterHub.value = hub;
@@ -1369,24 +1020,41 @@
       renderAllCategoriesCatalog();
     }
 
-    // Render all 5 Categories and all Products separated by Category on the page
+    function renderDrawerCategories() {
+      const box = document.getElementById('drawer-dynamic-categories');
+      if (!box || !window.WSSND) return;
+      const cats = window.WSSND.getCategories();
+      box.innerHTML = cats.map((c, idx) => `
+        <a href="#cat-${escHtml(c.code)}" onclick="toggleMobileDrawer()" class="py-2 px-3.5 rounded-xl hover:bg-navy-800 text-xs text-slate-300 transition">
+          ${idx + 1}. ${escHtml(c.title.split('—')[0].trim())}
+        </a>
+      `).join('');
+
+      const admCatSel = document.getElementById('adm-item-tab');
+      if (admCatSel) {
+        const cur = admCatSel.value;
+        admCatSel.innerHTML = cats.map((c, idx) => `<option value="${escHtml(c.code)}">${idx + 1}. ${escHtml(c.title.split('—')[0].trim())}</option>`).join('');
+        if (cur && cats.some(c => c.code === cur)) admCatSel.value = cur;
+      }
+    }
+
+    // Render Public Storefront (100% White-Label — Zero Supplier Refs Exposed)
     function renderAllCategoriesCatalog() {
-      const items = getCatalogData();
+      if (!window.WSSND) return;
+      renderDrawerCategories();
+      const categories = window.WSSND.getCategories();
+      const items = window.WSSND.getPublicCatalog();
       const hubFilter = document.getElementById('filter-hub')?.value || 'ALL';
       const searchEl = document.getElementById('catalog-search');
-      if (searchEl) {
-        const rawVal = (searchEl.value || '').trim().toLowerCase();
-        // Prevent browser password-manager autofill ('admin' / 'admin@wssndskylink.com') from ever filtering the catalog
-        if (!window._userTypedCatalogSearch || rawVal === 'admin' || rawVal.includes('wssndskylink')) {
-          searchEl.value = '';
-        }
+      if (searchEl && !window._userTypedCatalogSearch) {
+        searchEl.value = '';
       }
       const query = (searchEl?.value || '').trim().toLowerCase();
 
       const container = document.getElementById('catalog-all-sections');
       if (!container) return;
 
-      const htmlSections = CATEGORY_META.map(cat => {
+      const htmlSections = categories.map(cat => {
         const catItems = items.filter(item => {
           if (item.tab !== cat.code) return false;
           if (hubFilter !== 'ALL' && item.hub_origin !== hubFilter) return false;
@@ -1399,39 +1067,52 @@
 
         if (catItems.length === 0) return '';
 
-        const cardsHtml = catItems.map(item => {
-          const priceStr = formatPrice(item.price_eur, item.price_on_request, item.price_label || ((item.tab === 'VEHICLES' || item.tab === 'YACHTS') ? 'A cotizar con el cliente' : 'Cotizar por lote'));
+        const cardsHtml = catItems.map((item, idx) => {
+          const priceStr = window.WSSND.formatItemPublicPrice(item, currentCurrency);
           const quoteUrl = `cotizar.html?cat=${encodeURIComponent(item.tab)}&hub=${encodeURIComponent(item.hub_origin)}&item=${encodeURIComponent(item.title)}&price=${encodeURIComponent(priceStr)}`;
+          const specsArr = Array.isArray(item.specs) ? item.specs : [];
+          const leadSpec = specsArr[0] || '';
+          const moreSpecs = specsArr.slice(1);
+
           return `
-            <article class="rounded-3xl bg-platinum dark:bg-navy-900 border border-slate-200 dark:border-slate-800 overflow-hidden shadow hover:shadow-xl transition flex flex-col justify-between group">
+            <article class="rounded-3xl bg-platinum dark:bg-navy-900 border border-slate-200 dark:border-slate-800 overflow-hidden shadow hover:shadow-xl transition flex flex-col justify-between group self-start">
               <div>
                 <div class="relative aspect-[16/10] bg-navy-950 overflow-hidden">
-                  <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                  <img src="${escHtml(item.image)}" alt="${escHtml(item.title)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
                   <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-navy-950/90 text-gold-400">
-                    ${item.hub_origin === 'DUBAI_IFZA' ? '🇦🇪 ' : '🇪🇸 '}${item.hub_label}
+                    ${item.hub_origin === 'DUBAI_IFZA' ? '🇦🇪 ' : '🇪🇸 '}${escHtml(item.hub_label || '')}
                   </span>
                   <span class="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-white/95 text-navy-950 shadow">
-                    ${item.condition_label}
+                    ${escHtml(item.condition_label || '')}
                   </span>
                 </div>
                 <div class="p-5">
                   <h4 class="font-display font-bold text-sm sm:text-base text-navy-900 dark:text-white leading-snug">
-                    ${item.title}
+                    ${escHtml(item.title)}
                   </h4>
-                  <ul class="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
-                    ${(item.specs || []).map(s => `<li class="flex items-start gap-1.5"><span class="text-gold-500 font-bold">&bull;</span><span>${s}</span></li>`).join('')}
-                  </ul>
+                  ${leadSpec ? `<p class="mt-2 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">&bull; ${escHtml(leadSpec)}</p>` : ''}
+                  ${moreSpecs.length > 0 ? `
+                    <details data-exclusive-group="prod-${escHtml(cat.code)}" class="mt-2.5 rounded-xl bg-white dark:bg-navy-950 border border-slate-200/80 dark:border-slate-800 px-3 py-2 text-xs">
+                      <summary class="font-bold text-navy-900 dark:text-gold-400 cursor-pointer flex items-center justify-between">
+                        <span>Ver ficha técnica</span>
+                        <svg class="w-3.5 h-3.5 chevron-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                      </summary>
+                      <ul class="mt-2 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5 text-[11px] text-slate-600 dark:text-slate-300">
+                        ${moreSpecs.map(s => `<li class="flex items-start gap-1.5"><span class="text-gold-500 font-bold">&bull;</span><span>${escHtml(s)}</span></li>`).join('')}
+                      </ul>
+                    </details>
+                  ` : ''}
                 </div>
               </div>
               <div class="px-5 pb-5 pt-3 border-t border-slate-200/70 dark:border-slate-800">
-                <div class="flex items-baseline justify-between mb-3">
-                  <span class="text-[11px] text-slate-500 dark:text-slate-400">${item.tab === 'REAL_ESTATE' ? 'Precio desde:' : 'Precio / Condición:'}</span>
-                  <span class="font-display font-extrabold text-sm sm:text-base text-navy-900 dark:text-gold-400">
-                    ${priceStr}
+                <div class="flex items-baseline justify-between gap-2 mb-3">
+                  <span class="text-[11px] text-slate-500 dark:text-slate-400 shrink-0">${item.tab === 'REAL_ESTATE' ? 'Precio desde:' : 'Precio:'}</span>
+                  <span class="font-display font-extrabold text-xs sm:text-sm text-navy-900 dark:text-gold-400 text-right">
+                    ${escHtml(priceStr)}
                   </span>
                 </div>
                 <a href="${quoteUrl}" class="w-full py-2.5 px-4 rounded-xl bg-navy-900 dark:bg-gold-500 text-gold-400 dark:text-navy-950 hover:opacity-95 font-display font-bold text-xs transition flex items-center justify-center gap-1.5">
-                  <span>${item.cta_label || 'Comprar'}</span>
+                  <span>Comprar</span>
                   <span>&rarr;</span>
                 </a>
               </div>
@@ -1440,16 +1121,16 @@
         }).join('');
 
         return `
-          <div id="cat-${cat.code}" class="scroll-mt-24">
+          <div id="cat-${escHtml(cat.code)}" class="scroll-mt-24">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
               <div>
-                <span class="text-[11px] font-display font-bold uppercase tracking-widest text-gold-600 dark:text-gold-400">${cat.badge}</span>
-                <h3 class="font-display font-extrabold text-xl sm:text-2xl text-navy-900 dark:text-white mt-0.5">${cat.title}</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${cat.subtitle}</p>
+                <span class="text-[11px] font-display font-bold uppercase tracking-widest text-gold-600 dark:text-gold-400">${escHtml(cat.badge)}</span>
+                <h3 class="font-display font-extrabold text-xl sm:text-2xl text-navy-900 dark:text-white mt-0.5">${escHtml(cat.title)}</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${escHtml(cat.subtitle || '')}</p>
               </div>
-              <span class="text-xs font-bold text-slate-500 dark:text-gold-400 shrink-0">${catItems.length} activos disponibles</span>
+              <span class="text-xs font-bold text-slate-500 dark:text-gold-400 shrink-0">${catItems.length} productos disponibles</span>
             </div>
-            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
               ${cardsHtml}
             </div>
           </div>
@@ -1464,19 +1145,18 @@
           </a>
         </div>
       `;
+      setupExclusiveCollapsibles();
     }
 
-    // Exclusive Collapsible Handler: Opening one <details> automatically closes any other in the same group
     function setupExclusiveCollapsibles() {
-      const allDetails = document.querySelectorAll('details[data-exclusive-group]');
-      allDetails.forEach(targetDetail => {
+      document.querySelectorAll('details[data-exclusive-group]').forEach(targetDetail => {
+        if (targetDetail.dataset.boundExclusive) return;
+        targetDetail.dataset.boundExclusive = '1';
         targetDetail.addEventListener('toggle', () => {
           if (targetDetail.open) {
             const group = targetDetail.getAttribute('data-exclusive-group');
             document.querySelectorAll(`details[data-exclusive-group="${group}"]`).forEach(d => {
-              if (d !== targetDetail && d.open) {
-                d.open = false;
-              }
+              if (d !== targetDetail && d.open) d.open = false;
             });
           }
         });
@@ -1548,28 +1228,23 @@
       document.getElementById('legal-modal').classList.add('hidden');
     }
 
-    function openAdminLoginModal() {
-      document.getElementById('admin-login-modal').classList.remove('hidden');
-    }
-    function closeAdminLoginModal() {
-      document.getElementById('admin-login-modal').classList.add('hidden');
-    }
-    function handleAdminLogin(e) {
-      e.preventDefault();
-      closeAdminLoginModal();
-      const pill = document.getElementById('header-admin-pill');
-      pill.classList.remove('hidden');
-      pill.classList.add('inline-flex');
-      openAdminDashboard();
-    }
+    // =========================================================================
+    // EXECUTIVE ADMIN MARGIN DASHBOARD (BENJA & DAVID ONLY)
+    // =========================================================================
     function openAdminDashboard() {
+      if (!window.WSSND || !window.WSSND.isMasterAdmin()) {
+        return window.WSSND.openAuthModal('login');
+      }
       document.getElementById('admin-dashboard-modal').classList.remove('hidden');
-      renderAdminCatalogList();
-      renderAdminLeadsList();
+      renderDrawerCategories();
+      recalcAdminMarginLive();
+      refreshAdminDashboardData();
     }
+
     function closeAdminDashboard() {
       document.getElementById('admin-dashboard-modal').classList.add('hidden');
     }
+
     function switchAdminTab(num) {
       [1, 2, 3, 4, 5].forEach(n => {
         document.getElementById(`adm-tab-${n}`).classList.toggle('hidden', n !== num);
@@ -1578,101 +1253,351 @@
           ? 'px-3.5 py-2 rounded-xl gold-gradient text-navy-950'
           : 'px-3.5 py-2 rounded-xl bg-navy-900 text-slate-300 border border-slate-800';
       });
+      refreshAdminDashboardData();
     }
 
-    function compressAdminPhoto(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const img = new Image();
-        img.onload = function () {
-          const canvas = document.createElement('canvas');
-          const MAX = 800;
-          let w = img.width, h = img.height;
-          if (w > h && w > MAX) { h = Math.round((h * MAX) / w); w = MAX; }
-          else if (h > MAX) { w = Math.round((w * MAX) / h); h = MAX; }
-          canvas.width = w; canvas.height = h;
-          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          document.getElementById('adm-item-img').value = canvas.toDataURL('image/webp', 0.78);
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
+    function refreshAdminDashboardData() {
+      if (!window.WSSND || !window.WSSND.isMasterAdmin()) return;
+      const items = window.WSSND.getAdminCatalog();
+      const cats = window.WSSND.getCategories();
+      const subs = window.WSSND.getSubmissions();
+      const sups = window.WSSND.getSuppliers();
+
+      document.getElementById('adm-kpi-products').textContent = String(items.length);
+      document.getElementById('adm-kpi-cats').textContent = String(cats.length);
+      document.getElementById('adm-kpi-subs').textContent = String(subs.filter(x => x.review_status === 'PENDING_REVIEW').length);
+      document.getElementById('adm-kpi-suppliers').textContent = String(sups.length);
+
+      renderAdminCatalogList();
+      renderAdminSubmissionsList();
+      renderAdminCategoriesList();
+    }
+
+    function recalcAdminMarginLive() {
+      const curr = document.getElementById('adm-base-curr').value;
+      const net = Number(document.getElementById('adm-net-price').value || 0);
+      const cType = document.getElementById('adm-comm-type').value;
+      const cVal = Number(document.getElementById('adm-comm-val').value || 0);
+      const onReq = document.getElementById('adm-price-on-request').checked;
+
+      const calc = window.WSSND.calculatePublicPrice(net, cType, cVal);
+      document.getElementById('adm-live-gain').textContent = onReq
+        ? 'Bajo cotización'
+        : `+${calc.gain.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${curr}`;
+      document.getElementById('adm-live-public').textContent = onReq
+        ? 'Cotizar por Lote'
+        : `${calc.publicPrice.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${curr}`;
+    }
+
+    async function compressAdminPhoto(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file || !window.WSSND) return;
+      try {
+        const dataUrl = await window.WSSND.compressImageFile(file);
+        document.getElementById('adm-item-img').value = dataUrl;
+      } catch (e) {}
+    }
+
+    function resetAdminProductForm() {
+      document.getElementById('adm-product-form').reset();
+      document.getElementById('adm-edit-id').value = '';
+      document.getElementById('adm-from-submission-id').value = '';
+      document.getElementById('adm-comm-val').value = '5';
+      document.getElementById('adm-comm-type').value = 'PERCENT';
+      document.getElementById('adm-item-img').value = 'assets/wl_sunflower_20l.jpg';
+      document.getElementById('adm-form-heading').textContent = 'Crear Nuevo Producto / Editar Existente';
+      document.getElementById('adm-cancel-edit-btn').classList.add('hidden');
+      recalcAdminMarginLive();
+    }
+
+    function adminEditCatalogItem(id) {
+      const item = window.WSSND.getAdminCatalog().find(x => String(x.id) === String(id));
+      if (!item) return;
+      document.getElementById('adm-edit-id').value = item.id;
+      document.getElementById('adm-item-tab').value = item.tab;
+      document.getElementById('adm-item-hub').value = item.hub_origin || 'DUBAI_IFZA';
+      document.getElementById('adm-item-cond').value = item.condition || 'CONTRACT';
+      document.getElementById('adm-item-cond-label').value = item.condition_label || '';
+      document.getElementById('adm-item-title').value = item.title || '';
+      document.getElementById('adm-supplier-ref').value = item.supplier_ref || '';
+      document.getElementById('adm-base-curr').value = item.base_currency || 'EUR';
+      document.getElementById('adm-net-price').value = Number(item.supplier_net_price || 0);
+      document.getElementById('adm-comm-type').value = item.commission_type || 'PERCENT';
+      document.getElementById('adm-comm-val').value = Number(item.commission_value != null ? item.commission_value : 5);
+      document.getElementById('adm-unit-label').value = item.unit_label || '';
+      document.getElementById('adm-price-on-request').checked = Boolean(item.price_on_request);
+      document.getElementById('adm-item-img').value = item.image || '';
+      document.getElementById('adm-item-specs').value = (item.specs || []).join(' | ');
+      document.getElementById('adm-form-heading').textContent = 'Editando Producto: ' + item.title;
+      document.getElementById('adm-cancel-edit-btn').classList.remove('hidden');
+      recalcAdminMarginLive();
+      document.getElementById('adm-product-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function adminSaveCatalogItem(e) {
       e.preventDefault();
-      const items = getCatalogData();
+      const items = window.WSSND.getAdminCatalog();
+      const editId = document.getElementById('adm-edit-id').value;
+      const fromSubId = document.getElementById('adm-from-submission-id').value;
+
       const hub = document.getElementById('adm-item-hub').value;
       const cond = document.getElementById('adm-item-cond').value;
-      const price = Number(document.getElementById('adm-item-price').value || 0);
-      items.unshift({
-        id: 'item_' + Date.now(),
+      const baseCurr = document.getElementById('adm-base-curr').value;
+      const netPrice = Number(document.getElementById('adm-net-price').value || 0);
+      const commType = document.getElementById('adm-comm-type').value;
+      const commVal = Number(document.getElementById('adm-comm-val').value || 0);
+      const onReq = document.getElementById('adm-price-on-request').checked;
+
+      const calc = window.WSSND.calculatePublicPrice(netPrice, commType, commVal);
+      const pubPrice = onReq ? 0 : calc.publicPrice;
+      const eurEquiv = onReq ? 0 : Math.round(window.WSSND.convertCurrency(pubPrice, baseCurr, 'EUR') * 100) / 100;
+
+      const record = {
+        id: editId || ('wl_' + Date.now()),
         tab: document.getElementById('adm-item-tab').value,
         hub_origin: hub,
-        hub_label: hub === 'DUBAI_IFZA' ? 'Stock Dubái Export' : 'Stock Madrid',
+        hub_label: hub === 'DUBAI_IFZA' ? 'Hub EAU Export' : 'Sede Madrid & Europa',
         condition: cond,
-        condition_label: cond === 'NEW' ? 'Nuevo 0 km' : cond === 'USED' ? 'Ocasión' : 'Por Lote',
-        title: document.getElementById('adm-item-title').value,
+        condition_label: document.getElementById('adm-item-cond-label').value.trim() || (cond === 'NEW' ? 'Nuevo 0 Horas' : cond === 'USED' ? 'Revisado' : 'Por Lote / Contrato'),
+        title: document.getElementById('adm-item-title').value.trim(),
         year: 2026,
-        price_eur: price,
-        price_on_request: price <= 0,
-        image: document.getElementById('adm-item-img').value || 'assets/veh-landcruiser-300.png',
-        specs: document.getElementById('adm-item-specs').value.split('|').map(s => s.trim()),
-        cta_label: 'Solicitar Cotización'
-      });
-      localStorage.setItem(STORAGE_KEY_CATALOG, JSON.stringify(items));
+        base_currency: baseCurr,
+        supplier_ref: document.getElementById('adm-supplier-ref').value.trim(),
+        supplier_net_price: netPrice,
+        commission_type: commType,
+        commission_value: commVal,
+        public_price: pubPrice,
+        price_eur: eurEquiv,
+        unit_label: document.getElementById('adm-unit-label').value.trim(),
+        price_on_request: onReq || pubPrice <= 0,
+        price_label: onReq ? 'Cotizar por Lote' : '',
+        image: document.getElementById('adm-item-img').value || 'assets/wl_sunflower_20l.jpg',
+        specs: document.getElementById('adm-item-specs').value.split('|').map(s => s.trim()).filter(Boolean),
+        cta_label: 'Comprar'
+      };
+
+      const idx = items.findIndex(x => String(x.id) === String(editId));
+      if (idx >= 0) items[idx] = Object.assign({}, items[idx], record);
+      else items.unshift(record);
+
+      window.WSSND.saveAdminCatalog(items);
+
+      if (fromSubId) {
+        const subs = window.WSSND.getSubmissions();
+        const foundSub = subs.find(s => String(s.id) === String(fromSubId));
+        if (foundSub) {
+          foundSub.review_status = 'APPROVED';
+          window.WSSND.saveSubmissions(subs);
+        }
+      }
+
+      resetAdminProductForm();
       renderAllCategoriesCatalog();
-      renderAdminCatalogList();
-      e.target.reset();
+      refreshAdminDashboardData();
+      window.WSSND.updateGlobalAuthUI();
     }
 
     function adminDeleteCatalogItem(id) {
-      const items = getCatalogData().filter(i => String(i.id) !== String(id));
-      localStorage.setItem(STORAGE_KEY_CATALOG, JSON.stringify(items));
+      if (!confirm('¿Eliminar este producto del catálogo?')) return;
+      const next = window.WSSND.getAdminCatalog().filter(i => String(i.id) !== String(id));
+      window.WSSND.saveAdminCatalog(next);
       renderAllCategoriesCatalog();
-      renderAdminCatalogList();
+      refreshAdminDashboardData();
     }
 
     function renderAdminCatalogList() {
       const list = document.getElementById('adm-catalog-list');
-      if (!list) return;
-      list.innerHTML = getCatalogData().map(item => `
-        <div class="p-3 rounded-xl bg-navy-900 border border-slate-800 flex items-center justify-between gap-2">
-          <span class="font-bold text-white truncate">${item.title}</span>
-          <button type="button" onclick="adminDeleteCatalogItem('${String(item.id)}')" class="px-2.5 py-1 rounded bg-red-500/20 text-red-300 font-bold">Eliminar</button>
+      if (!list || !window.WSSND) return;
+      const q = (document.getElementById('adm-catalog-filter')?.value || '').trim().toLowerCase();
+      const items = window.WSSND.getAdminCatalog().filter(i => {
+        if (!q) return true;
+        return `${i.title} ${i.supplier_ref || ''} ${i.tab}`.toLowerCase().includes(q);
+      });
+
+      list.innerHTML = items.map(item => {
+        const curr = item.base_currency || 'EUR';
+        const net = Number(item.supplier_net_price || 0);
+        const calc = window.WSSND.calculatePublicPrice(net, item.commission_type || 'PERCENT', item.commission_value != null ? item.commission_value : 5);
+        const commBadge = item.commission_type === 'FIXED' ? `+${item.commission_value} ${curr}` : `+${item.commission_value != null ? item.commission_value : 5}% (+${calc.gain} ${curr})`;
+
+        return `
+          <div class="p-3.5 rounded-2xl bg-navy-900 border border-slate-800 flex flex-col justify-between gap-2.5">
+            <div class="flex items-start gap-3">
+              <img src="${escHtml(item.image)}" alt="" class="w-16 h-12 rounded-xl object-cover shrink-0 bg-navy-950 border border-slate-800" />
+              <div class="min-w-0 flex-1">
+                <span class="text-[10px] font-bold uppercase text-gold-400">${escHtml(item.tab)}</span>
+                <p class="font-bold text-white truncate">${escHtml(item.title)}</p>
+                <p class="text-[11px] text-slate-400 truncate">Proveedor Interno: <strong class="text-slate-200">${escHtml(item.supplier_ref || 'No asignado')}</strong></p>
+              </div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-navy-950 border border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
+              <span>Neto: <strong class="text-gold-300">${net > 0 ? net.toLocaleString('es-ES') + ' ' + curr : 'S/P'}</strong></span>
+              <span>Comisión: <strong class="text-emerald-400">${net > 0 ? commBadge : (item.commission_value || 5) + '%'}</strong></span>
+              <span>Público: <strong class="text-white">${item.price_on_request ? 'Cotizar por Lote' : (Number(item.public_price || item.price_eur || 0).toLocaleString('es-ES') + ' ' + curr)}</strong></span>
+            </div>
+            <div class="flex justify-end gap-2">
+              <button type="button" onclick="adminEditCatalogItem('${escHtml(item.id)}')" class="px-3 py-1 rounded-lg bg-navy-800 hover:bg-navy-700 border border-gold-500/40 text-gold-300 font-bold">Editar Precio / Datos</button>
+              <button type="button" onclick="adminDeleteCatalogItem('${escHtml(item.id)}')" class="px-3 py-1 rounded-lg bg-red-500/15 hover:bg-red-500/30 text-red-300 font-bold">Eliminar</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderAdminSubmissionsList() {
+      const box = document.getElementById('adm-submissions-list');
+      if (!box || !window.WSSND) return;
+      const subs = window.WSSND.getSubmissions();
+      if (subs.length === 0) {
+        box.innerHTML = '<p class="text-slate-400">No hay catálogos pendientes enviados por proveedores externos.</p>';
+        return;
+      }
+      box.innerHTML = subs.map(sub => {
+        const calc = window.WSSND.calculatePublicPrice(sub.net_price, 'PERCENT', 5);
+        return `
+          <div class="p-4 rounded-2xl bg-navy-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="space-y-1">
+              <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-gold-500/15 text-gold-400">${escHtml(sub.review_status)} • Captado por: ${escHtml(sub.captured_by || 'Se registró solo')}</span>
+              <p class="font-bold text-white text-sm">${escHtml(sub.product_title)}</p>
+              <p class="text-slate-300">Proveedor: <strong>${escHtml(sub.company_name)}</strong> (${escHtml(sub.contact_person)} • ${escHtml(sub.phone)})</p>
+              <p class="text-gold-300 font-mono">Neto proveedor: ${sub.net_price} ${escHtml(sub.currency)} ${escHtml(sub.unit_label)} &rarr; Público +5%: <strong>${calc.publicPrice} ${escHtml(sub.currency)}</strong></p>
+              <p class="text-slate-400 text-[11px]">${escHtml(sub.specs)}</p>
+            </div>
+            <div class="flex flex-wrap gap-2 shrink-0">
+              <button type="button" onclick="loadSubmissionIntoEditor('${escHtml(sub.id)}')" class="px-3.5 py-2 rounded-xl gold-gradient text-navy-950 font-bold">Cargar en Editor (+5%)</button>
+              <button type="button" onclick="rejectSupplierSubmission('${escHtml(sub.id)}')" class="px-3 py-2 rounded-xl bg-red-500/20 text-red-300 font-bold">Rechazar</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function loadSubmissionIntoEditor(subId) {
+      const sub = window.WSSND.getSubmissions().find(s => String(s.id) === String(subId));
+      if (!sub) return;
+      switchAdminTab(1);
+      resetAdminProductForm();
+      document.getElementById('adm-from-submission-id').value = sub.id;
+      document.getElementById('adm-item-tab').value = sub.category || 'COMMODITIES';
+      document.getElementById('adm-item-hub').value = sub.hub_origin || 'DUBAI_IFZA';
+      document.getElementById('adm-item-title').value = sub.product_title || '';
+      document.getElementById('adm-supplier-ref').value = `${sub.company_name} (${sub.contact_person} | ${sub.phone})`;
+      document.getElementById('adm-base-curr').value = sub.currency || 'USD';
+      document.getElementById('adm-net-price').value = Number(sub.net_price || 0);
+      document.getElementById('adm-comm-type').value = 'PERCENT';
+      document.getElementById('adm-comm-val').value = 5;
+      document.getElementById('adm-unit-label').value = sub.unit_label || '';
+      document.getElementById('adm-item-specs').value = sub.specs || '';
+      if (sub.image_data) document.getElementById('adm-item-img').value = sub.image_data;
+      document.getElementById('adm-form-heading').textContent = 'Aprobando Solicitud de Proveedor (+5% preaplicado)';
+      document.getElementById('adm-cancel-edit-btn').classList.remove('hidden');
+      recalcAdminMarginLive();
+    }
+
+    function rejectSupplierSubmission(subId) {
+      const subs = window.WSSND.getSubmissions();
+      const s = subs.find(x => String(x.id) === String(subId));
+      if (!s) return;
+      s.review_status = 'REJECTED';
+      window.WSSND.saveSubmissions(subs);
+      refreshAdminDashboardData();
+      window.WSSND.updateGlobalAuthUI();
+    }
+
+    function renderAdminCategoriesList() {
+      const box = document.getElementById('adm-categories-list');
+      if (!box || !window.WSSND) return;
+      const cats = window.WSSND.getCategories();
+      box.innerHTML = cats.map(c => `
+        <div class="p-3 rounded-xl bg-navy-950 border border-slate-800 flex items-center justify-between gap-2">
+          <div>
+            <span class="font-mono text-[10px] text-gold-400">${escHtml(c.code)} • ${escHtml(c.badge)}</span>
+            <p class="font-bold text-white">${escHtml(c.title)}</p>
+          </div>
+          <button type="button" onclick="adminDeleteCategory('${escHtml(c.code)}')" class="px-2.5 py-1 rounded bg-red-500/20 text-red-300 font-bold">Borrar</button>
         </div>
       `).join('');
     }
 
-    function renderAdminLeadsList() {
-      const leads = JSON.parse(localStorage.getItem(STORAGE_KEY_LEADS) || '[]');
-      document.getElementById('adm-leads-count').textContent = `${leads.length} registros`;
-      const container = document.getElementById('adm-leads-list');
-      container.innerHTML = leads.map(l => `
-        <div class="p-3 rounded-xl bg-navy-950 border border-slate-800">
-          <strong class="text-gold-400">${l.client_full_name}</strong> — <span class="font-mono">${l.phone_e164}</span> (${l.preferred_hub})
-        </div>
-      `).join('');
+    function adminSaveCategory(e) {
+      e.preventDefault();
+      const code = document.getElementById('cat-new-code').value.trim().toUpperCase().replace(/[^A-Z0-9_]/g, '_');
+      const badge = document.getElementById('cat-new-badge').value.trim();
+      const title = document.getElementById('cat-new-title').value.trim();
+      const subtitle = document.getElementById('cat-new-sub').value.trim();
+      if (!code || !title) return;
+      const cats = window.WSSND.getCategories();
+      const idx = cats.findIndex(c => c.code === code);
+      if (idx >= 0) cats[idx] = { code, badge, title, subtitle };
+      else cats.push({ code, badge, title, subtitle });
+      window.WSSND.saveCategories(cats);
+      e.target.reset();
+      renderAllCategoriesCatalog();
+      refreshAdminDashboardData();
+    }
+
+    function adminDeleteCategory(code) {
+      if (!confirm('¿Eliminar esta categoría?')) return;
+      const cats = window.WSSND.getCategories().filter(c => c.code !== code);
+      window.WSSND.saveCategories(cats);
+      renderAllCategoriesCatalog();
+      refreshAdminDashboardData();
     }
 
     function saveAdminBanner() {
-      alert('Configuración actualizada.');
+      const v = document.getElementById('adm-banner-input').value.trim();
+      localStorage.setItem(window.WSSND.KEYS.BANNER, v);
+      window.WSSND.pushAdminStateToServer();
+      alert('Texto institucional actualizado.');
+    }
+
+    function copyAdminRefLink(code) {
+      const link = `${window.location.origin}${window.location.pathname}?ref=${code}`;
+      navigator.clipboard.writeText(link).then(() => alert('Enlace copiado:\n' + link));
     }
 
     function exportBackupJson() {
-      const blob = new Blob([JSON.stringify({ catalog: getCatalogData(), leads: JSON.parse(localStorage.getItem(STORAGE_KEY_LEADS) || '[]') }, null, 2)], { type: 'application/json' });
+      const payload = {
+        exported_at: new Date().toISOString(),
+        categories: window.WSSND.getCategories(),
+        catalog: window.WSSND.getAdminCatalog(),
+        suppliers: window.WSSND.getSuppliers(),
+        buyers: window.WSSND.getBuyers(),
+        submissions: window.WSSND.getSubmissions()
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'wssnd-skylink-backup.json';
+      a.download = 'wssnd-skylink-backup-completo.json';
       a.click();
+    }
+
+    function restoreBackupJson(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (Array.isArray(data.categories)) window.WSSND.saveCategories(data.categories);
+          if (Array.isArray(data.catalog)) window.WSSND.saveAdminCatalog(data.catalog);
+          if (Array.isArray(data.suppliers)) window.WSSND.saveSuppliers(data.suppliers);
+          if (Array.isArray(data.buyers)) window.WSSND.saveBuyers(data.buyers);
+          if (Array.isArray(data.submissions)) window.WSSND.saveSubmissions(data.submissions);
+          renderAllCategoriesCatalog();
+          refreshAdminDashboardData();
+          alert('Copia de seguridad restaurada correctamente.');
+        } catch (err) {
+          alert('Archivo JSON inválido.');
+        }
+      };
+      reader.readAsText(file);
     }
 
     async function copySqlSchema() {
       const res = await fetch('supabase_schema.sql');
       await navigator.clipboard.writeText(await res.text());
-      alert('SQL copiado al portapapeles.');
+      alert('Esquema SQL v7 copiado al portapapeles.');
     }
 
     function saveSupabaseConfig() {
@@ -1681,13 +1606,30 @@
       if (url && key) {
         localStorage.setItem('wssnd_supa_url', url);
         localStorage.setItem('wssnd_supa_key', key);
-        alert('Conectado.');
+        window.WSSND.pushAdminStateToServer();
+        alert('Supabase Dual-Layer conectado.');
       }
     }
+
+    window.addEventListener('wssnd:state-synced', () => {
+      renderAllCategoriesCatalog();
+    });
+    window.addEventListener('wssnd:auth-changed', () => {
+      renderAllCategoriesCatalog();
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       renderAllCategoriesCatalog();
       setupExclusiveCollapsibles();
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('openAdmin') === '1' && window.WSSND && window.WSSND.isMasterAdmin()) {
+        openAdminDashboard();
+      }
+      if (params.get('approveSub') && window.WSSND && window.WSSND.isMasterAdmin()) {
+        openAdminDashboard();
+        loadSubmissionIntoEditor(params.get('approveSub'));
+      }
     });
   </script>
 

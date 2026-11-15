@@ -39,6 +39,8 @@
       }
     };
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="wssnd-core.js"></script>
   <style>
     .gold-gradient {
       background: linear-gradient(135deg, #C5A059 0%, #DFBE7B 50%, #A6823C 100%);
@@ -50,9 +52,9 @@
 </head>
 <body class="bg-platinum text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
-  <!-- Minimal Header with Back to Main Page Button -->
+  <!-- Minimal Header with Back to Main Page + Auth / Directorio -->
   <header class="bg-navy-900 border-b border-gold-500/30 shadow-md">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-3">
       <a href="index.html" class="flex items-center gap-3 group">
         <div class="w-11 h-11 rounded-xl bg-white p-0.5 border-2 border-gold-500/70 flex items-center justify-center overflow-hidden">
           <img src="assets/logo-wssnd-skylink.jpg?v=3" alt="WSSND SKYLINK Logo" class="w-full h-full object-contain rounded-lg" />
@@ -63,9 +65,17 @@
         </div>
       </a>
 
-      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-navy-800 hover:bg-navy-700 text-gold-400 border border-gold-500/40 font-display font-bold text-xs transition">
-        <span>&larr; Volver al Catálogo Principal</span>
-      </a>
+      <div class="flex items-center gap-2">
+        <a href="directorio.html" data-auth-only="master" class="hidden px-3.5 py-2 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs shadow">
+          Directorio
+        </a>
+        <button type="button" data-auth-only="guest" onclick="window.WSSND.openAuthModal('login')" class="px-3.5 py-2 rounded-xl bg-navy-950 text-slate-200 border border-slate-700 font-bold text-xs">
+          Cuenta
+        </button>
+        <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-navy-800 hover:bg-navy-700 text-gold-400 border border-gold-500/40 font-display font-bold text-xs transition">
+          <span>&larr; Catálogo Principal</span>
+        </a>
+      </div>
     </div>
   </header>
 
@@ -105,10 +115,11 @@
             <div>
               <label for="rfq-area" class="block font-bold text-navy-900 mb-1.5">1. Categoría de Operación *</label>
               <select id="rfq-area" onchange="updateDynamicFields()" required class="w-full rounded-xl bg-slate-50 border border-slate-300 px-3.5 py-2.5 text-navy-900 font-semibold focus:border-gold-500 focus:outline-none">
+                <option value="COMMODITIES">Materias Primas y Suministros Mayoristas</option>
+                <option value="MACHINERY">Tractores Agrícolas y Maquinaria Pesada</option>
+                <option value="AUTOPARTS">Recambios, Cajas de Cambio y Motores</option>
                 <option value="VEHICLES">Vehículos y Flotas (Deportivos, 4x4 y Por Encargo)</option>
                 <option value="YACHTS">Venta de Yates, Superyates y Barcos</option>
-                <option value="MACHINERY">Tractores Agrícolas y Maquinaria Pesada</option>
-                <option value="COMMODITIES">Materias Primas y Suministros Mayoristas</option>
                 <option value="LOGISTICS">Logística Internacional y Sourcing a Medida</option>
                 <option value="REAL_ESTATE">Real Estate Dubái / España (Proyectos y Activos)</option>
               </select>
@@ -131,21 +142,20 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="sm:col-span-2">
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Producto, Modelo, Materia Prima o Activo Requerido *</label>
-                <input type="text" id="req-item-name" required placeholder="Ej. Toyota Land Cruiser 300 / Tractor 250 HP / Gasóleo EN590 / Nave Logística" class="w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-navy-900 focus:border-gold-500 focus:outline-none" />
+                <input type="text" id="req-item-name" required placeholder="Ej. Aceite de Girasol Refinado / Azufre 99.95% / Tractor 85 HP / Caja 6AT" class="w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-navy-900 focus:border-gold-500 focus:outline-none" />
               </div>
 
               <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Cantidad / Volumen / Modalidad *</label>
-                <input type="text" id="req-quantity" required placeholder="Ej. 1 unidad / Flota 10 uds. / 500 TM / Alquiler" value="1 unidad" class="w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-navy-900 focus:border-gold-500 focus:outline-none" />
+                <input type="text" id="req-quantity" required placeholder="Ej. 1 unidad / 2.000 TM / 25.000 TM" value="1 unidad" class="w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-navy-900 focus:border-gold-500 focus:outline-none" />
               </div>
 
               <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">País o Puerto de Destino Final *</label>
-                <input type="text" id="req-destination" required placeholder="Ej. Madrid / Valencia / Casablanca / Dubái" class="w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-navy-900 focus:border-gold-500 focus:outline-none" />
+                <input type="text" id="req-destination" required placeholder="Ej. Madrid / Djibouti / Mersin / Dubái" class="w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-navy-900 focus:border-gold-500 focus:outline-none" />
               </div>
 
-              <!-- Optional LOI / File attachment -->
-              <div id="loi-upload-box" class="sm:col-span-2 hidden pt-1">
+              <div id="loi-upload-box" class="sm:col-span-2 pt-1">
                 <label class="block text-xs font-bold text-navy-900 mb-1">Adjuntar LOI, ICPO o Ficha Técnica (Opcional — PDF / DOCX / XLSX):</label>
                 <input type="file" id="req-file" accept=".pdf,.doc,.docx,.xls,.xlsx" class="block w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-navy-900 file:text-gold-400 file:font-bold cursor-pointer" />
               </div>
@@ -154,7 +164,7 @@
 
           <!-- 3. Datos de Contacto -->
           <div class="space-y-4">
-            <h2 class="font-display font-bold text-navy-900 text-sm">Datos de Contacto del Solicitante</h2>
+            <h2 class="font-display font-bold text-navy-900 text-sm">Datos de Contacto del Comprador</h2>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -182,6 +192,8 @@
                     <option value="+212">🇲🇦 +212</option>
                     <option value="+44">🇬🇧 +44</option>
                     <option value="+1">🇺🇸 +1</option>
+                    <option value="+90">🇹🇷 +90</option>
+                    <option value="+251">🇪🇹 +251</option>
                   </select>
                   <input type="tel" id="client-phone-number" required placeholder="600123456" class="w-full rounded-xl bg-slate-50 border border-slate-300 px-3.5 py-2.5 text-navy-900 font-mono focus:border-gold-500 focus:outline-none" />
                 </div>
@@ -249,45 +261,87 @@
       document.getElementById('req-item-name').value = '';
     }
 
-    function submitPageRfq(e) {
+    async function submitPageRfq(e) {
       e.preventDefault();
       const prefix = document.getElementById('client-phone-prefix').value;
       const rawPhone = document.getElementById('client-phone-number').value.replace(/\D/g, '');
-      const phoneE164 = `${prefix}${rawPhone}`;
+      const phoneE164 = rawPhone.startsWith('+') ? rawPhone : `${prefix}${rawPhone}`;
 
       if (!/^\+[1-9]\d{6,14}$/.test(phoneE164)) {
         alert('Por favor introduzca un número de teléfono válido.');
         return;
       }
 
+      const session = window.WSSND ? window.WSSND.getSession() : null;
+      const capturedBy = window.WSSND ? window.WSSND.getCapturedBy() : 'Se registró solo';
+
+      const payload = {
+        user_id: session ? session.id : '',
+        name: document.getElementById('client-name').value.trim(),
+        company: document.getElementById('client-company').value.trim(),
+        email: document.getElementById('client-email').value.trim(),
+        phone: phoneE164,
+        destination: document.getElementById('req-destination').value.trim(),
+        item: document.getElementById('req-item-name').value.trim(),
+        quantity: document.getElementById('req-quantity').value.trim(),
+        notes: document.getElementById('client-notes').value.trim(),
+        captured_by: capturedBy
+      };
+
+      try {
+        await fetch('/api/public/rfq', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {}
+
+      // Also save locally for legacy & instant admin visibility
       const leadRecord = {
         id: 'rfq_' + Date.now(),
         created_at: new Date().toISOString(),
         preferred_hub: document.getElementById('rfq-hub').value,
         division: document.getElementById('rfq-area').value,
-        request_type: 'CATALOG_INQUIRY',
-        client_full_name: document.getElementById('client-name').value,
-        company_name: document.getElementById('client-company').value,
-        email: document.getElementById('client-email').value,
+        client_full_name: payload.name,
+        company_name: payload.company,
+        email: payload.email,
         phone_e164: phoneE164,
-        country: document.getElementById('req-destination').value,
+        country: payload.destination,
+        captured_by: capturedBy,
         request_details_json: {
-          item: document.getElementById('req-item-name').value,
-          quantity: document.getElementById('req-quantity').value,
-          notes: document.getElementById('client-notes').value
+          item: payload.item,
+          quantity: payload.quantity,
+          notes: payload.notes
         },
         lead_status: 'NEW'
       };
-
       const existing = JSON.parse(localStorage.getItem(STORAGE_KEY_LEADS) || '[]');
       existing.unshift(leadRecord);
       localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(existing));
 
+      if (window.WSSND && window.WSSND.isMasterAdmin()) {
+        const buyers = window.WSSND.getBuyers();
+        buyers.unshift({
+          id: 'buy_' + Date.now(),
+          name: payload.name,
+          company: payload.company || 'Particular / Empresa',
+          contact: `${phoneE164} | ${payload.email}`,
+          product_required: `${payload.item} (${payload.quantity} -> ${payload.destination})`,
+          request_date: new Date().toISOString().slice(0, 10),
+          status: 'Abierto',
+          close_date: '',
+          total_amount: 0,
+          profit_amount: 0,
+          captured_by: capturedBy
+        });
+        window.WSSND.saveBuyers(buyers);
+      }
+
       const box = document.getElementById('rfq-success-box');
       box.classList.remove('hidden');
       box.innerHTML = `
-        <p class="font-display font-bold text-emerald-950 text-base">✓ Solicitud enviada correctamente</p>
-        <p>Hemos registrado tu solicitud para <strong>${leadRecord.request_details_json.item}</strong>. Nuestro equipo en Madrid / Dubái se pondrá en contacto contigo al <strong>${phoneE164}</strong>.</p>
+        <p class="font-display font-bold text-emerald-950 text-base">✓ Solicitud registrada correctamente</p>
+        <p>Hemos registrado tu requerimiento de <strong>${payload.item}</strong>. Nuestro equipo ejecutivo en Madrid / Dubái te contactará al <strong>${phoneE164}</strong>.</p>
       `;
     }
 
@@ -310,6 +364,15 @@
         document.getElementById('prefill-title').textContent = item;
         document.getElementById('prefill-hub').textContent = price ? `Referencia: ${price}` : '';
         document.getElementById('prefill-box').classList.remove('hidden');
+      }
+
+      // Pre-fill logged-in buyer info if available
+      const s = window.WSSND ? window.WSSND.getSession() : null;
+      if (s && s.role !== 'MASTER_ADMIN') {
+        if (s.displayName) document.getElementById('client-name').value = s.displayName;
+        if (s.company_name) document.getElementById('client-company').value = s.company_name;
+        if (s.email) document.getElementById('client-email').value = s.email;
+        if (s.phone) document.getElementById('client-phone-number').value = s.phone.replace(/^\+\d{1,3}/, '');
       }
     });
   </script>

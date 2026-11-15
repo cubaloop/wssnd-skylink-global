@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>Directorio Ejecutivo | WSSND SKYLINK</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            navy: { 950: '#050D1A', 900: '#0A192F', 800: '#112240', 700: '#1D3557' },
+            gold: { 300: '#E2C785', 400: '#D4B26A', 500: '#C5A059', 600: '#A6823C' },
+            platinum: '#F8FAFC'
+          },
+          fontFamily: {
+            display: ['Montserrat', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="wssnd-core.js"></script>
+  <style>
+    .gold-gradient { background: linear-gradient(135deg, #C5A059 0%, #DFBE7B 50%, #A6823C 100%); }
+    .navy-gradient { background: linear-gradient(135deg, #0A192F 0%, #112240 60%, #050D1A 100%); }
+  </style>
+</head>
+<body class="bg-navy-950 text-slate-200 antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- TOP EXECUTIVE HEADER -->
+  <header class="sticky top-0 z-40 bg-navy-900/95 backdrop-blur-md border-b border-gold-500/30 shadow-lg">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 h-18 py-3 flex flex-wrap items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-white p-0.5 border-2 border-gold-500/70 flex items-center justify-center overflow-hidden">
+          <img src="assets/logo-wssnd-skylink.jpg?v=3" alt="WSSND SKYLINK" class="w-full h-full object-contain rounded-lg" />
+        </div>
+        <div>
+          <span class="font-display font-extrabold text-white text-sm sm:text-base tracking-wider block">DIRECTORIO PRIVADO • WSSND SKYLINK</span>
+          <span class="text-[11px] text-gold-400">Biblioteca Confidencial de Proveedores y Compradores</span>
+        </div>
+      </a>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="index.html" class="px-3.5 py-2 rounded-xl bg-navy-800 hover:bg-navy-700 text-slate-200 border border-slate-700 text-xs font-bold transition">
+          &larr; Catálogo Público
+        </a>
+        <a href="index.html?openAdmin=1" data-auth-only="master" class="hidden px-3.5 py-2 rounded-xl gold-gradient text-navy-950 font-display font-bold text-xs shadow transition">
+          Editor de Productos (+5%)
+        </a>
+        <div data-auth-only="logged" class="hidden items-center gap-2 px-3 py-1.5 rounded-xl bg-navy-950 border border-gold-500/40 text-xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <strong data-auth-username class="text-gold-400"></strong>
+          <button type="button" onclick="window.WSSND.logoutUser()" class="ml-1 text-slate-400 hover:text-red-400 underline">Salir</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- LOCK SCREEN FOR UNAUTHORIZED VISITORS (ZERO DATA RENDERED UNTIL BENJA OR DAVID LOGS IN) -->
+  <section id="dir-lock-view" class="flex-1 flex items-center justify-center p-6">
+    <div class="max-w-md w-full rounded-3xl bg-navy-900 border border-gold-500/40 p-8 text-center space-y-4 shadow-2xl">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-gold-500/15 border border-gold-500/40 flex items-center justify-center text-gold-400">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      </div>
+      <h1 class="font-display font-extrabold text-xl text-white">Área Restringida de Dirección</h1>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        El Directorio de Proveedores y Compradores es de acceso exclusivo para la dirección ejecutiva de <strong>WSSND SKYLINK</strong>.
+      </p>
+      <button type="button" onclick="window.WSSND.openAuthModal('login')" class="w-full py-3 rounded-xl gold-gradient text-navy-950 font-display font-extrabold text-xs shadow-lg">
+        Iniciar Sesión Ejecutiva
+      </button>
+    </div>
+  </section>
+
+  <!-- AUTHENTICATED DIRECTORY WORKSPACE (LEFT SIDEBAR + MAIN TABLE) -->
+  <main id="dir-main-view" class="hidden flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 py-6">
+    <!-- Top Real Metrics Bar (100% Real Data - Zero Invented Numbers) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <div class="p-4 rounded-2xl bg-navy-900 border border-slate-800">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Proveedores Registrados</span>
+        <strong id="kpi-suppliers-count" class="font-display font-extrabold text-2xl text-gold-400 mt-0.5 block">0</strong>
+      </div>
+      <div class="p-4 rounded-2xl bg-navy-900 border border-slate-800">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Solicitudes de Compradores</span>
+        <strong id="kpi-buyers-count" class="font-display font-extrabold text-2xl text-white mt-0.5 block">0</strong>
+      </div>
+      <div class="p-4 rounded-2xl bg-navy-900 border border-slate-800">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Negocios Cerrados Reales</span>
+        <strong id="kpi-closed-count" class="font-display font-extrabold text-2xl text-emerald-400 mt-0.5 block">0</strong>
+      </div>
+      <div class="p-4 rounded-2xl bg-navy-900 border border-slate-800">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Ganancia Cerrada Acumulada</span>
+        <strong id="kpi-profit-total" class="font-display font-extrabold text-2xl text-gold-400 mt-0.5 block">0 €</strong>
+      </div>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-6 items-start">
+      <!-- =============================================================== -->
+      <!-- LEFT SIDEBAR COLUMN: CHOOSE SUPPLIERS OR BUYERS DIRECTORY       -->
+      <!-- =============================================================== -->
+      <aside class="w-full lg:w-72 shrink-0 space-y-4 lg:sticky lg:top-24">
+        <div class="rounded-3xl bg-navy-900 border border-gold-500/30 p-4 space-y-2 shadow-xl">
+          <span class="text-[10px] font-display font-bold uppercase tracking-widest text-gold-400 px-2 block">
+            Seleccionar Directorio
+          </span>
+
+          <button type="button" id="side-btn-suppliers" onclick="switchDirectoryCategory('SUPPLIERS')" class="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl gold-gradient text-navy-950 font-display font-extrabold text-xs shadow transition">
+            <span class="flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+              <span>Proveedores</span>
+            </span>
+            <span id="badge-suppliers" class="px-2 py-0.5 rounded-full bg-navy-950/20 text-[11px] font-extrabold">0</span>
+          </button>
+
+          <button type="button" id="side-btn-buyers" onclick="switchDirectoryCategory('BUYERS')" class="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl bg-navy-950 text-slate-200 hover:bg-navy-800 border border-slate-800 font-display font-bold text-xs transition">
+            <span class="flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+              <span>Compradores</span>
+            </span>
+            <span id="badge-buyers" class="px-2 py-0.5 rounded-full bg-slate-800 text-gold-400 text-[11px] font-extrabold">0</span>
+          </button>
+
+          <button type="button" id="side-btn-submissions" onclick="switchDirectoryCategory('SUBMISSIONS')" class="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-navy-950 text-slate-300 hover:bg-navy-800 border border-slate-800 font-display font-bold text-xs transition">
+            <span>Catálogos por Aprobar</span>
+            <span id="badge-submissions" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-extrabold">0</span>
+          </button>
+        </div>
+
+        <!-- Attribution Filter (Captado por: Benjamín | David | Se registró solo) -->
+        <div class="rounded-3xl bg-navy-900 border border-slate-800 p-4 space-y-2.5">
+          <span class="text-[10px] font-display font-bold uppercase tracking-widest text-gold-400 block">
+            Filtrar por Captación
+          </span>
+          <select id="dir-filter-captured" onchange="renderActiveDirectory()" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-xs text-white font-semibold">
+            <option value="ALL">Todos los registros</option>
+            <option value="Benjamín">Captado por: Benjamín</option>
+            <option value="David">Captado por: David</option>
+            <option value="Se registró solo">Se registró solo</option>
+          </select>
+
+          <input type="search" id="dir-search" oninput="renderActiveDirectory()" placeholder="Buscar empresa, contacto, producto..." class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-xs text-white focus:border-gold-500 focus:outline-none" />
+        </div>
+
+        <!-- Silent Referral Invite Links Box -->
+        <div class="rounded-3xl bg-navy-900 border border-slate-800 p-4 space-y-2.5 text-xs">
+          <span class="text-[10px] font-display font-bold uppercase tracking-widest text-gold-400 block">
+            Enlaces Silenciosos de Captación
+          </span>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            Quien entre con estos enlaces quedará asignado automáticamente a quien lo invitó:
+          </p>
+          <button type="button" onclick="copyRefLink('benja')" class="w-full py-2 px-3 rounded-xl bg-navy-950 hover:bg-navy-800 border border-gold-500/30 text-gold-300 font-semibold text-left flex items-center justify-between">
+            <span>Enlace de Benjamín (`?ref=benja`)</span>
+            <span class="text-[10px] uppercase font-bold">Copiar</span>
+          </button>
+          <button type="button" onclick="copyRefLink('david')" class="w-full py-2 px-3 rounded-xl bg-navy-950 hover:bg-navy-800 border border-gold-500/30 text-gold-300 font-semibold text-left flex items-center justify-between">
+            <span>Enlace de David (`?ref=david`)</span>
+            <span class="text-[10px] uppercase font-bold">Copiar</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- =============================================================== -->
+      <!-- RIGHT MAIN CONTENT AREA                                         -->
+      <!-- =============================================================== -->
+      <section class="flex-1 min-w-0 w-full space-y-4">
+        <div class="rounded-3xl bg-navy-900 border border-slate-800 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 id="dir-view-title" class="font-display font-extrabold text-lg sm:text-xl text-white">Directorio de Proveedores</h2>
+            <p id="dir-view-subtitle" class="text-xs text-slate-400 mt-0.5">Contactos directos, precios netos de origen, cierres reales y responsable de captación.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" id="btn-new-supplier" onclick="openSupplierModal()" class="px-4 py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-extrabold text-xs shadow">
+              + Nuevo Proveedor
+            </button>
+            <button type="button" id="btn-new-buyer" onclick="openBuyerModal()" class="hidden px-4 py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-extrabold text-xs shadow">
+              + Nuevo Comprador
+            </button>
+          </div>
+        </div>
+
+        <!-- TABLE CONTAINER -->
+        <div id="dir-table-wrapper" class="rounded-3xl bg-navy-900 border border-slate-800 overflow-hidden shadow-xl">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead id="dir-thead" class="bg-navy-950 text-gold-400 uppercase text-[10px] tracking-wider border-b border-slate-800"></thead>
+              <tbody id="dir-tbody" class="divide-y divide-slate-800/80"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- MODAL: ADD / EDIT SUPPLIER -->
+  <div id="modal-edit-supplier" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-navy-950/85 backdrop-blur-sm">
+    <div class="bg-navy-900 border border-gold-500/40 rounded-3xl max-w-lg w-full p-6 text-white shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 id="sup-modal-title" class="font-display font-bold text-base text-gold-400">Ficha de Proveedor</h3>
+        <button type="button" onclick="closeSupplierModal()" class="text-slate-400 hover:text-white text-2xl">&times;</button>
+      </div>
+      <form onsubmit="saveSupplierForm(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="sup-edit-id" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Nombre de Empresa *</label>
+            <input type="text" id="sup-edit-company" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Persona de Contacto *</label>
+            <input type="text" id="sup-edit-contact" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Número / Correo *</label>
+            <input type="text" id="sup-edit-phone" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Quién lo Captó *</label>
+            <select id="sup-edit-captured" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
+              <option value="Benjamín">Benjamín</option>
+              <option value="David">David</option>
+              <option value="Se registró solo">Se registró solo</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Productos Disponibles *</label>
+          <input type="text" id="sup-edit-products" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="sm:col-span-2">
+            <label class="block text-slate-300 font-semibold mb-1">Precios Netos Cotizados *</label>
+            <input type="text" id="sup-edit-prices" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Negocios Cerrados</label>
+            <input type="number" min="0" id="sup-edit-deals" value="0" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeSupplierModal()" class="px-4 py-2 rounded-xl bg-navy-800 text-slate-300 font-bold">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl gold-gradient text-navy-950 font-display font-extrabold">Guardar Proveedor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT BUYER -->
+  <div id="modal-edit-buyer" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-navy-950/85 backdrop-blur-sm">
+    <div class="bg-navy-900 border border-gold-500/40 rounded-3xl max-w-lg w-full p-6 text-white shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="font-display font-bold text-base text-gold-400">Ficha de Comprador / Operación</h3>
+        <button type="button" onclick="closeBuyerModal()" class="text-slate-400 hover:text-white text-2xl">&times;</button>
+      </div>
+      <form onsubmit="saveBuyerForm(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="buy-edit-id" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Nombre *</label>
+            <input type="text" id="buy-edit-name" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Empresa</label>
+            <input type="text" id="buy-edit-company" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Contacto (Tel / Email) *</label>
+            <input type="text" id="buy-edit-contact" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Quién lo Captó *</label>
+            <select id="buy-edit-captured" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
+              <option value="Benjamín">Benjamín</option>
+              <option value="David">David</option>
+              <option value="Se registró solo">Se registró solo</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Producto Requerido *</label>
+          <input type="text" id="buy-edit-product" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Fecha Solicitud *</label>
+            <input type="date" id="buy-edit-reqdate" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Estado *</label>
+            <select id="buy-edit-status" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
+              <option value="Abierto">Abierto</option>
+              <option value="Cerrado">Cerrado</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Fecha de Cierre</label>
+            <input type="date" id="buy-edit-closedate" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Monto Total (€ / USD)</label>
+            <input type="number" step="0.01" min="0" id="buy-edit-total" value="0" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Nuestra Ganancia (€ / USD)</label>
+            <input type="number" step="0.01" min="0" id="buy-edit-profit" value="0" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeBuyerModal()" class="px-4 py-2 rounded-xl bg-navy-800 text-slate-300 font-bold">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl gold-gradient text-navy-950 font-display font-extrabold">Guardar Comprador</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="bg-navy-950 text-slate-400 py-6 text-xs border-t border-gold-500/20">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <span>&copy; 2026 WSSND SKYLINK Group (Madrid &bull; Dubái). Directorio Confidencial de Dirección.</span>
+      <span>Developed by <strong class="text-gold-400">Tecnoemprende</strong></span>
+    </div>
+  </footer>
+
+  <script>
+    let activeDirTab = 'SUPPLIERS';
+
+    function escHtml(str) {
+      return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function extractWaDigits(contactStr) {
+      const m = String(contactStr || '').match(/\+?\d[\d\s]{7,16}/);
+      if (!m) return '';
+      return m[0].replace(/\D/g, '');
+    }
+
+    function checkDirectoryAccess() {
+      const allowed = window.WSSND && window.WSSND.isMasterAdmin();
+      document.getElementById('dir-lock-view').classList.toggle('hidden', allowed);
+      document.getElementById('dir-main-view').classList.toggle('hidden', !allowed);
+      if (allowed) {
+        renderActiveDirectory();
+      }
+    }
+
+    function switchDirectoryCategory(cat) {
+      activeDirTab = cat;
+      const map = {
+        SUPPLIERS: {
+          btn: 'side-btn-suppliers',
+          title: 'Directorio de Proveedores',
+          sub: 'Nombre de empresa, persona de contacto, número, productos disponibles, precios netos, negocios cerrados y quién lo captó.'
+        },
+        BUYERS: {
+          btn: 'side-btn-buyers',
+          title: 'Directorio de Compradores',
+          sub: 'Nombre, empresa, contacto, producto requerido, fechas de solicitud y cierre, estado, monto total, ganancia y quién lo captó.'
+        },
+        SUBMISSIONS: {
+          btn: 'side-btn-submissions',
+          title: 'Solicitudes de Catálogo de Proveedores',
+          sub: 'Productos subidos por proveedores registrados pendientes de revisión y aprobación por Benjamín o David.'
+        }
+      };
+
+      ['SUPPLIERS', 'BUYERS', 'SUBMISSIONS'].forEach(k => {
+        const el = document.getElementById(map[k].btn);
+        if (!el) return;
+        el.className = k === cat
+          ? 'w-full flex items-center justify-between px-4 py-3.5 rounded-2xl gold-gradient text-navy-950 font-display font-extrabold text-xs shadow transition'
+          : 'w-full flex items-center justify-between px-4 py-3.5 rounded-2xl bg-navy-950 text-slate-200 hover:bg-navy-800 border border-slate-800 font-display font-bold text-xs transition';
+      });
+
+      document.getElementById('dir-view-title').textContent = map[cat].title;
+      document.getElementById('dir-view-subtitle').textContent = map[cat].sub;
+      document.getElementById('btn-new-supplier').classList.toggle('hidden', cat !== 'SUPPLIERS');
+      document.getElementById('btn-new-buyer').classList.toggle('hidden', cat !== 'BUYERS');
+      renderActiveDirectory();
+    }
+
+    function renderActiveDirectory() {
+      if (!window.WSSND || !window.WSSND.isMasterAdmin()) return;
+
+      const suppliers = window.WSSND.getSuppliers();
+      const buyers = window.WSSND.getBuyers();
+      const subs = window.WSSND.getSubmissions();
+
+      const closedFromSuppliers = suppliers.reduce((acc, s) => acc + Number(s.closed_deals || 0), 0);
+      const closedBuyers = buyers.filter(b => b.status === 'Cerrado');
+      const totalClosed = Math.max(closedFromSuppliers, closedBuyers.length);
+      const totalProfit = buyers.reduce((acc, b) => acc + (b.status === 'Cerrado' ? Number(b.profit_amount || 0) : 0), 0);
+
+      document.getElementById('kpi-suppliers-count').textContent = String(suppliers.length);
+      document.getElementById('kpi-buyers-count').textContent = String(buyers.length);
+      document.getElementById('kpi-closed-count').textContent = String(totalClosed);
+      document.getElementById('kpi-profit-total').textContent = totalProfit.toLocaleString('es-ES') + ' €';
+
+      document.getElementById('badge-suppliers').textContent = String(suppliers.length);
+      document.getElementById('badge-buyers').textContent = String(buyers.length);
+      document.getElementById('badge-submissions').textContent = String(subs.filter(x => x.review_status === 'PENDING_REVIEW').length);
+
+      const capFilter = document.getElementById('dir-filter-captured').value;
+      const q = (document.getElementById('dir-search').value || '').trim().toLowerCase();
+
+      const thead = document.getElementById('dir-thead');
+      const tbody = document.getElementById('dir-tbody');
+
+      if (activeDirTab === 'SUPPLIERS') {
+        thead.innerHTML = `
+          <tr>
+            <th class="px-4 py-3.5">Nombre de Empresa</th>
+            <th class="px-4 py-3.5">Persona de Contacto</th>
+            <th class="px-4 py-3.5">Número / Contacto</th>
+            <th class="px-4 py-3.5">Productos Disponibles</th>
+            <th class="px-4 py-3.5">Precios (Neto)</th>
+            <th class="px-4 py-3.5 text-center">Negocios Cerrados</th>
+            <th class="px-4 py-3.5">Quién lo Captó</th>
+            <th class="px-4 py-3.5 text-right">Acciones</th>
+          </tr>
+        `;
+        const filtered = suppliers.filter(s => {
+          if (capFilter !== 'ALL' && s.captured_by !== capFilter) return false;
+          if (q) {
+            const hay = `${s.company_name} ${s.contact_person} ${s.phone} ${s.products} ${s.prices}`.toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        });
+
+        tbody.innerHTML = filtered.map(s => {
+          const waDigits = extractWaDigits(s.phone);
+          const waBtn = waDigits ? `
+            <a href="https://wa.me/${waDigits}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="w-7 h-7 rounded-full bg-[#25D366] text-white inline-flex items-center justify-center shrink-0 hover:scale-105 transition">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771z"/></svg>
+            </a>` : '';
+          return `
+            <tr class="hover:bg-navy-800/50 transition align-top">
+              <td class="px-4 py-3.5 font-bold text-white min-w-[200px]">
+                ${escHtml(s.company_name)}
+                ${s.status ? `<span class="block mt-1 text-[10px] font-semibold text-gold-400">${escHtml(s.status)}</span>` : ''}
+              </td>
+              <td class="px-4 py-3.5 text-slate-300 min-w-[140px]">${escHtml(s.contact_person || '—')}</td>
+              <td class="px-4 py-3.5 font-mono text-[11px] text-slate-200 min-w-[165px]">
+                <div class="flex items-center gap-2">${waBtn}<span>${escHtml(s.phone || '—')}</span></div>
+              </td>
+              <td class="px-4 py-3.5 text-slate-200 min-w-[220px]">${escHtml(s.products)}</td>
+              <td class="px-4 py-3.5 font-semibold text-gold-300 min-w-[190px]">${escHtml(s.prices)}</td>
+              <td class="px-4 py-3.5 text-center">
+                <span class="inline-flex items-center gap-1.5 bg-navy-950 border border-slate-800 rounded-lg px-2 py-1">
+                  <button type="button" onclick="adjustSupplierDeals('${escHtml(s.id)}', -1)" class="text-slate-400 hover:text-white px-1">-</button>
+                  <strong class="text-white font-mono">${Number(s.closed_deals || 0)}</strong>
+                  <button type="button" onclick="adjustSupplierDeals('${escHtml(s.id)}', 1)" class="text-gold-400 hover:text-white px-1">+</button>
+                </span>
+              </td>
+              <td class="px-4 py-3.5 min-w-[145px]">
+                <select onchange="updateSupplierCaptured('${escHtml(s.id)}', this.value)" class="rounded-lg bg-navy-950 border border-slate-700 px-2 py-1 text-[11px] text-gold-300 font-semibold">
+                  <option value="Benjamín" ${s.captured_by === 'Benjamín' ? 'selected' : ''}>Benjamín</option>
+                  <option value="David" ${s.captured_by === 'David' ? 'selected' : ''}>David</option>
+                  <option value="Se registró solo" ${s.captured_by === 'Se registró solo' ? 'selected' : ''}>Se registró solo</option>
+                </select>
+              </td>
+              <td class="px-4 py-3.5 text-right whitespace-nowrap space-x-1">
+                <button type="button" onclick="openSupplierModal('${escHtml(s.id)}')" class="px-2.5 py-1 rounded-lg bg-navy-800 hover:bg-navy-700 text-gold-400 font-bold">Editar</button>
+                <button type="button" onclick="deleteSupplier('${escHtml(s.id)}')" class="px-2.5 py-1 rounded-lg bg-red-500/15 hover:bg-red-500/30 text-red-300 font-bold">Borrar</button>
+              </td>
+            </tr>
+          `;
+        }).join('') || `<tr><td colspan="8" class="p-8 text-center text-slate-400">No hay proveedores con ese criterio.</td></tr>`;
+
+      } else if (activeDirTab === 'BUYERS') {
+        thead.innerHTML = `
+          <tr>
+            <th class="px-4 py-3.5">Nombre</th>
+            <th class="px-4 py-3.5">Empresa</th>
+            <th class="px-4 py-3.5">Contacto</th>
+            <th class="px-4 py-3.5">Producto Requerido</th>
+            <th class="px-4 py-3.5">Fecha Solicitud</th>
+            <th class="px-4 py-3.5">Estado</th>
+            <th class="px-4 py-3.5">Fecha Cierre</th>
+            <th class="px-4 py-3.5">Monto Total</th>
+            <th class="px-4 py-3.5">Ganancia</th>
+            <th class="px-4 py-3.5">Quién lo Captó</th>
+            <th class="px-4 py-3.5 text-right">Acciones</th>
+          </tr>
+        `;
+        const filteredB = buyers.filter(b => {
+          if (capFilter !== 'ALL' && b.captured_by !== capFilter) return false;
+          if (q) {
+            const hay = `${b.name} ${b.company} ${b.contact} ${b.product_required}`.toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        });
+
+        tbody.innerHTML = filteredB.map(b => {
+          const isClosed = b.status === 'Cerrado';
+          const badgeClass = isClosed
+            ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+            : 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+          return `
+            <tr class="hover:bg-navy-800/50 transition align-top">
+              <td class="px-4 py-3.5 font-bold text-white min-w-[140px]">${escHtml(b.name)}</td>
+              <td class="px-4 py-3.5 text-slate-300 min-w-[150px]">${escHtml(b.company || '—')}</td>
+              <td class="px-4 py-3.5 font-mono text-[11px] text-slate-200 min-w-[150px]">${escHtml(b.contact || '—')}</td>
+              <td class="px-4 py-3.5 text-slate-200 min-w-[220px]">${escHtml(b.product_required)}</td>
+              <td class="px-4 py-3.5 font-mono text-slate-300 whitespace-nowrap">${escHtml(b.request_date || '—')}</td>
+              <td class="px-4 py-3.5">
+                <button type="button" onclick="toggleBuyerStatus('${escHtml(b.id)}')" class="px-2.5 py-1 rounded-full border text-[11px] font-bold ${badgeClass}">
+                  ${escHtml(b.status || 'Abierto')}
+                </button>
+              </td>
+              <td class="px-4 py-3.5 font-mono text-slate-300 whitespace-nowrap">${escHtml(b.close_date || '—')}</td>
+              <td class="px-4 py-3.5 font-mono font-bold text-white whitespace-nowrap">${Number(b.total_amount || 0) > 0 ? Number(b.total_amount).toLocaleString('es-ES') + ' €' : '0 €'}</td>
+              <td class="px-4 py-3.5 font-mono font-bold text-emerald-400 whitespace-nowrap">${Number(b.profit_amount || 0) > 0 ? '+' + Number(b.profit_amount).toLocaleString('es-ES') + ' €' : '0 €'}</td>
+              <td class="px-4 py-3.5 min-w-[145px]">
+                <select onchange="updateBuyerCaptured('${escHtml(b.id)}', this.value)" class="rounded-lg bg-navy-950 border border-slate-700 px-2 py-1 text-[11px] text-gold-300 font-semibold">
+                  <option value="Benjamín" ${b.captured_by === 'Benjamín' ? 'selected' : ''}>Benjamín</option>
+                  <option value="David" ${b.captured_by === 'David' ? 'selected' : ''}>David</option>
+                  <option value="Se registró solo" ${b.captured_by === 'Se registró solo' ? 'selected' : ''}>Se registró solo</option>
+                </select>
+              </td>
+              <td class="px-4 py-3.5 text-right whitespace-nowrap space-x-1">
+                <button type="button" onclick="openBuyerModal('${escHtml(b.id)}')" class="px-2.5 py-1 rounded-lg bg-navy-800 hover:bg-navy-700 text-gold-400 font-bold">Editar</button>
+                <button type="button" onclick="deleteBuyer('${escHtml(b.id)}')" class="px-2.5 py-1 rounded-lg bg-red-500/15 hover:bg-red-500/30 text-red-300 font-bold">Borrar</button>
+              </td>
+            </tr>
+          `;
+        }).join('') || `<tr><td colspan="11" class="p-8 text-center text-slate-400">No hay compradores registrados con ese filtro.</td></tr>`;
+
+      } else {
+        thead.innerHTML = `
+          <tr>
+            <th class="px-4 py-3.5">Proveedor</th>
+            <th class="px-4 py-3.5">Contacto</th>
+            <th class="px-4 py-3.5">Producto Propuesto</th>
+            <th class="px-4 py-3.5">Precio Neto Proveedor</th>
+            <th class="px-4 py-3.5">Público Sugerido (+5%)</th>
+            <th class="px-4 py-3.5">Captado por</th>
+            <th class="px-4 py-3.5">Estado</th>
+            <th class="px-4 py-3.5 text-right">Revisión</th>
+          </tr>
+        `;
+        tbody.innerHTML = subs.map(sub => {
+          const calc = window.WSSND.calculatePublicPrice(sub.net_price, 'PERCENT', 5);
+          return `
+            <tr class="hover:bg-navy-800/50 transition align-top">
+              <td class="px-4 py-3.5 font-bold text-white">${escHtml(sub.company_name)}</td>
+              <td class="px-4 py-3.5 text-slate-300">${escHtml(sub.contact_person)}<br/><span class="font-mono text-[11px]">${escHtml(sub.phone)}</span></td>
+              <td class="px-4 py-3.5 text-slate-200">
+                <strong>${escHtml(sub.product_title)}</strong>
+                <p class="text-[11px] text-slate-400 mt-0.5">${escHtml(sub.specs)}</p>
+                ${sub.catalog_doc_name ? `<span class="inline-block mt-1 text-[10px] text-gold-400">Adjunto: ${escHtml(sub.catalog_doc_name)}</span>` : ''}
+              </td>
+              <td class="px-4 py-3.5 font-mono text-gold-300">${Number(sub.net_price).toLocaleString('es-ES')} ${escHtml(sub.currency)} ${escHtml(sub.unit_label)}</td>
+              <td class="px-4 py-3.5 font-mono text-emerald-400 font-bold">${calc.publicPrice.toLocaleString('es-ES')} ${escHtml(sub.currency)} (+5%)</td>
+              <td class="px-4 py-3.5 text-gold-300">${escHtml(sub.captured_by || 'Se registró solo')}</td>
+              <td class="px-4 py-3.5">${escHtml(sub.review_status)}</td>
+              <td class="px-4 py-3.5 text-right whitespace-nowrap space-x-1">
+                <a href="index.html?approveSub=${encodeURIComponent(sub.id)}" class="px-3 py-1.5 rounded-lg gold-gradient text-navy-950 font-bold inline-block">Revisar y Publicar (+5%)</a>
+                <button type="button" onclick="rejectSubmissionDir('${escHtml(sub.id)}')" class="px-2.5 py-1.5 rounded-lg bg-red-500/20 text-red-300 font-bold">Rechazar</button>
+              </td>
+            </tr>
+          `;
+        }).join('') || `<tr><td colspan="8" class="p-8 text-center text-slate-400">No hay solicitudes de catálogo pendientes de proveedores externos.</td></tr>`;
+      }
+    }
+
+    function adjustSupplierDeals(id, delta) {
+      const list = window.WSSND.getSuppliers();
+      const item = list.find(x => String(x.id) === String(id));
+      if (!item) return;
+      item.closed_deals = Math.max(0, Number(item.closed_deals || 0) + delta);
+      window.WSSND.saveSuppliers(list);
+      renderActiveDirectory();
+    }
+
+    function updateSupplierCaptured(id, val) {
+      const list = window.WSSND.getSuppliers();
+      const item = list.find(x => String(x.id) === String(id));
+      if (!item) return;
+      item.captured_by = val;
+      window.WSSND.saveSuppliers(list);
+      renderActiveDirectory();
+    }
+
+    function openSupplierModal(id = '') {
+      const m = document.getElementById('modal-edit-supplier');
+      m.classList.remove('hidden');
+      if (!id) {
+        document.getElementById('sup-edit-id').value = '';
+        document.getElementById('sup-edit-company').value = '';
+        document.getElementById('sup-edit-contact').value = '';
+        document.getElementById('sup-edit-phone').value = '';
+        document.getElementById('sup-edit-products').value = '';
+        document.getElementById('sup-edit-prices').value = '';
+        document.getElementById('sup-edit-deals').value = '0';
+        const s = window.WSSND.getSession();
+        document.getElementById('sup-edit-captured').value = (s && s.attributionName) || 'David';
+        return;
+      }
+      const item = window.WSSND.getSuppliers().find(x => String(x.id) === String(id));
+      if (!item) return;
+      document.getElementById('sup-edit-id').value = item.id;
+      document.getElementById('sup-edit-company').value = item.company_name || '';
+      document.getElementById('sup-edit-contact').value = item.contact_person || '';
+      document.getElementById('sup-edit-phone').value = item.phone || '';
+      document.getElementById('sup-edit-products').value = item.products || '';
+      document.getElementById('sup-edit-prices').value = item.prices || '';
+      document.getElementById('sup-edit-deals').value = Number(item.closed_deals || 0);
+      document.getElementById('sup-edit-captured').value = item.captured_by || 'David';
+    }
+
+    function closeSupplierModal() {
+      document.getElementById('modal-edit-supplier').classList.add('hidden');
+    }
+
+    function saveSupplierForm(e) {
+      e.preventDefault();
+      const list = window.WSSND.getSuppliers();
+      const id = document.getElementById('sup-edit-id').value;
+      const obj = {
+        id: id || ('sup_' + Date.now()),
+        company_name: document.getElementById('sup-edit-company').value.trim(),
+        contact_person: document.getElementById('sup-edit-contact').value.trim(),
+        phone: document.getElementById('sup-edit-phone').value.trim(),
+        products: document.getElementById('sup-edit-products').value.trim(),
+        prices: document.getElementById('sup-edit-prices').value.trim(),
+        closed_deals: Number(document.getElementById('sup-edit-deals').value || 0),
+        captured_by: document.getElementById('sup-edit-captured').value,
+        status: 'Activo'
+      };
+      const idx = list.findIndex(x => String(x.id) === String(id));
+      if (idx >= 0) list[idx] = Object.assign({}, list[idx], obj);
+      else list.unshift(obj);
+      window.WSSND.saveSuppliers(list);
+      closeSupplierModal();
+      renderActiveDirectory();
+    }
+
+    function deleteSupplier(id) {
+      if (!confirm('¿Eliminar este proveedor del directorio privado?')) return;
+      window.WSSND.saveSuppliers(window.WSSND.getSuppliers().filter(x => String(x.id) !== String(id)));
+      renderActiveDirectory();
+    }
+
+    function toggleBuyerStatus(id) {
+      const list = window.WSSND.getBuyers();
+      const item = list.find(x => String(x.id) === String(id));
+      if (!item) return;
+      if (item.status === 'Cerrado') {
+        item.status = 'Abierto';
+        item.close_date = '';
+      } else {
+        item.status = 'Cerrado';
+        item.close_date = item.close_date || new Date().toISOString().slice(0, 10);
+      }
+      window.WSSND.saveBuyers(list);
+      renderActiveDirectory();
+    }
+
+    function updateBuyerCaptured(id, val) {
+      const list = window.WSSND.getBuyers();
+      const item = list.find(x => String(x.id) === String(id));
+      if (!item) return;
+      item.captured_by = val;
+      window.WSSND.saveBuyers(list);
+      renderActiveDirectory();
+    }
+
+    function openBuyerModal(id = '') {
+      document.getElementById('modal-edit-buyer').classList.remove('hidden');
+      if (!id) {
+        document.getElementById('buy-edit-id').value = '';
+        document.getElementById('buy-edit-name').value = '';
+        document.getElementById('buy-edit-company').value = '';
+        document.getElementById('buy-edit-contact').value = '';
+        document.getElementById('buy-edit-product').value = '';
+        document.getElementById('buy-edit-reqdate').value = new Date().toISOString().slice(0, 10);
+        document.getElementById('buy-edit-status').value = 'Abierto';
+        document.getElementById('buy-edit-closedate').value = '';
+        document.getElementById('buy-edit-total').value = '0';
+        document.getElementById('buy-edit-profit').value = '0';
+        const s = window.WSSND.getSession();
+        document.getElementById('buy-edit-captured').value = (s && s.attributionName) || 'Benjamín';
+        return;
+      }
+      const b = window.WSSND.getBuyers().find(x => String(x.id) === String(id));
+      if (!b) return;
+      document.getElementById('buy-edit-id').value = b.id;
+      document.getElementById('buy-edit-name').value = b.name || '';
+      document.getElementById('buy-edit-company').value = b.company || '';
+      document.getElementById('buy-edit-contact').value = b.contact || '';
+      document.getElementById('buy-edit-product').value = b.product_required || '';
+      document.getElementById('buy-edit-reqdate').value = b.request_date || '';
+      document.getElementById('buy-edit-status').value = b.status || 'Abierto';
+      document.getElementById('buy-edit-closedate').value = b.close_date || '';
+      document.getElementById('buy-edit-total').value = Number(b.total_amount || 0);
+      document.getElementById('buy-edit-profit').value = Number(b.profit_amount || 0);
+      document.getElementById('buy-edit-captured').value = b.captured_by || 'Benjamín';
+    }
+
+    function closeBuyerModal() {
+      document.getElementById('modal-edit-buyer').classList.add('hidden');
+    }
+
+    function saveBuyerForm(e) {
+      e.preventDefault();
+      const list = window.WSSND.getBuyers();
+      const id = document.getElementById('buy-edit-id').value;
+      const obj = {
+        id: id || ('buy_' + Date.now()),
+        name: document.getElementById('buy-edit-name').value.trim(),
+        company: document.getElementById('buy-edit-company').value.trim(),
+        contact: document.getElementById('buy-edit-contact').value.trim(),
+        product_required: document.getElementById('buy-edit-product').value.trim(),
+        request_date: document.getElementById('buy-edit-reqdate').value,
+        status: document.getElementById('buy-edit-status').value,
+        close_date: document.getElementById('buy-edit-closedate').value,
+        total_amount: Number(document.getElementById('buy-edit-total').value || 0),
+        profit_amount: Number(document.getElementById('buy-edit-profit').value || 0),
+        captured_by: document.getElementById('buy-edit-captured').value
+      };
+      const idx = list.findIndex(x => String(x.id) === String(id));
+      if (idx >= 0) list[idx] = Object.assign({}, list[idx], obj);
+      else list.unshift(obj);
+      window.WSSND.saveBuyers(list);
+      closeBuyerModal();
+      renderActiveDirectory();
+    }
+
+    function deleteBuyer(id) {
+      if (!confirm('¿Eliminar este registro de comprador?')) return;
+      window.WSSND.saveBuyers(window.WSSND.getBuyers().filter(x => String(x.id) !== String(id)));
+      renderActiveDirectory();
+    }
+
+    function rejectSubmissionDir(id) {
+      const subs = window.WSSND.getSubmissions();
+      const item = subs.find(x => String(x.id) === String(id));
+      if (!item) return;
+      item.review_status = 'REJECTED';
+      window.WSSND.saveSubmissions(subs);
+      renderActiveDirectory();
+    }
+
+    function copyRefLink(code) {
+      const base = window.location.origin + window.location.pathname.replace(/directorio\.html.*$/, 'index.html');
+      const link = `${base}?ref=${code}`;
+      navigator.clipboard.writeText(link).then(() => {
+        alert('Enlace copiado al portapapeles:\n' + link);
+      });
+    }
+
+    window.addEventListener('wssnd:auth-changed', checkDirectoryAccess);
+    window.addEventListener('wssnd:state-synced', checkDirectoryAccess);
+    document.addEventListener('DOMContentLoaded', checkDirectoryAccess);
+  </script>
+
+  <script>
+    window.SPY_SITE_ID = "wssnd-skylink-global";
+    window.SPY_SITE_NAME = "WSSND SKYLINK Global Portal (Madrid UE & Dubái IFZA)";
+    window.SPY_SITE_CATEGORY = "dubai";
+  </script>
+  <script src="spy-tracker.js"></script>
+</body>
+</html>
