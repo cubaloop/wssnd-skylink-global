@@ -174,7 +174,7 @@
 
           <div>
             <label for="dir-filter-sector" class="block text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Categoría / Sector</label>
-            <select id="dir-filter-sector" onchange="renderActiveDirectory()" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-xs text-white font-semibold">
+            <select id="dir-filter-sector" onchange="onSectorFilterChange()" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-xs text-white font-semibold">
               <option value="ALL">Todas las categorías</option>
               <option value="COMMODITIES">Materias Primas y Agro</option>
               <option value="MACHINERY">Maquinaria y Tractores</option>
@@ -182,6 +182,13 @@
               <option value="VEHICLES">Automoción y Flotas</option>
               <option value="REAL_ESTATE">Real Estate</option>
               <option value="YACHTS">Náutica y Yates</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="dir-filter-product" class="block text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Producto Específico</label>
+            <select id="dir-filter-product" onchange="renderActiveDirectory()" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-xs text-white font-semibold">
+              <option value="ALL">Todos los productos</option>
             </select>
           </div>
 
@@ -490,12 +497,84 @@
       renderActiveDirectory();
     }
 
+    function onSectorFilterChange() {
+      const prodSel = document.getElementById('dir-filter-product');
+      if (prodSel) prodSel.value = 'ALL';
+      renderActiveDirectory();
+    }
+
+    function setProductQuickFilter(prodName) {
+      const prodSel = document.getElementById('dir-filter-product');
+      if (prodSel) {
+        let exists = false;
+        for (let i = 0; i < prodSel.options.length; i++) {
+          if (prodSel.options[i].value.toLowerCase() === String(prodName).toLowerCase()) {
+            prodSel.selectedIndex = i;
+            exists = true;
+            break;
+          }
+        }
+        if (!exists) {
+          const opt = document.createElement('option');
+          opt.value = prodName;
+          opt.textContent = prodName;
+          opt.selected = true;
+          prodSel.appendChild(opt);
+        }
+      }
+      renderActiveDirectory();
+    }
+
     function resetDirectoryFilters() {
       document.getElementById('dir-filter-country').value = 'ALL';
       document.getElementById('dir-filter-sector').value = 'ALL';
+      const prodSel = document.getElementById('dir-filter-product');
+      if (prodSel) prodSel.value = 'ALL';
       document.getElementById('dir-filter-captured').value = 'ALL';
       document.getElementById('dir-search').value = '';
       renderActiveDirectory();
+    }
+
+    function populateProductFilterOptions(activeDataset) {
+      const prodSel = document.getElementById('dir-filter-product');
+      if (!prodSel) return;
+      const currentVal = prodSel.value || 'ALL';
+      const sectorVal = document.getElementById('dir-filter-sector').value;
+
+      const productCounts = new Map();
+      activeDataset.forEach(item => {
+        const itemSector = inferSector(item);
+        if (sectorVal !== 'ALL' && itemSector !== sectorVal) return;
+
+        const raw = item.products || item.product_required || item.product_title || '';
+        const parts = String(raw).split(/[•,;|/]/).map(p => p.trim()).filter(p => p.length >= 3);
+        if (parts.length === 0 && raw.trim().length >= 3) parts.push(raw.trim());
+
+        parts.forEach(p => {
+          let clean = p.replace(/\s*\([^)]*\)/g, '').trim();
+          if (clean.length > 35) clean = clean.substring(0, 35) + '...';
+          if (clean.length >= 3) {
+            productCounts.set(clean, (productCounts.get(clean) || 0) + 1);
+          }
+        });
+      });
+
+      const sortedProds = Array.from(productCounts.entries()).sort((a, b) => b[1] - a[1]);
+      prodSel.innerHTML = '<option value="ALL">Todos los productos (' + sortedProds.length + ' detectados)</option>';
+      sortedProds.forEach(([name, count]) => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = `${name} (${count})`;
+        if (name === currentVal) opt.selected = true;
+        prodSel.appendChild(opt);
+      });
+      if (currentVal !== 'ALL' && !productCounts.has(currentVal)) {
+        const opt = document.createElement('option');
+        opt.value = currentVal;
+        opt.textContent = `${currentVal} (1)`;
+        opt.selected = true;
+        prodSel.appendChild(opt);
+      }
     }
 
     function syncQuickPillsAndCounts(activeDataset, defaultFallbackCountry) {
@@ -600,16 +679,24 @@
       document.getElementById('badge-buyers').textContent = String(buyers.length);
       document.getElementById('badge-submissions').textContent = String(subs.filter(x => x.review_status === 'PENDING_REVIEW').length);
 
-      if (activeDirTab === 'SUPPLIERS') syncQuickPillsAndCounts(suppliers, 'EAU');
-      else if (activeDirTab === 'BUYERS') syncQuickPillsAndCounts(buyers, 'España');
-      else syncQuickPillsAndCounts(subs, 'EAU');
+      if (activeDirTab === 'SUPPLIERS') {
+        populateProductFilterOptions(suppliers);
+        syncQuickPillsAndCounts(suppliers, 'EAU');
+      } else if (activeDirTab === 'BUYERS') {
+        populateProductFilterOptions(buyers);
+        syncQuickPillsAndCounts(buyers, 'España');
+      } else {
+        populateProductFilterOptions(subs);
+        syncQuickPillsAndCounts(subs, 'EAU');
+      }
 
       const countryFilter = document.getElementById('dir-filter-country').value;
       const sectorFilter = document.getElementById('dir-filter-sector').value;
+      const prodFilter = (document.getElementById('dir-filter-product')?.value || 'ALL').trim().toLowerCase();
       const capFilter = document.getElementById('dir-filter-captured').value;
       const q = (document.getElementById('dir-search').value || '').trim().toLowerCase();
 
-      const anyActiveFilter = countryFilter !== 'ALL' || sectorFilter !== 'ALL' || capFilter !== 'ALL' || Boolean(q);
+      const anyActiveFilter = countryFilter !== 'ALL' || sectorFilter !== 'ALL' || prodFilter !== 'all' || capFilter !== 'ALL' || Boolean(q);
       document.getElementById('btn-reset-filters').classList.toggle('hidden', !anyActiveFilter);
 
       const thead = document.getElementById('dir-thead');
@@ -623,7 +710,7 @@
             <th class="px-4 py-3.5">País / Categoría</th>
             <th class="px-4 py-3.5">Persona de Contacto</th>
             <th class="px-4 py-3.5">Número / Contacto</th>
-            <th class="px-4 py-3.5">Productos Disponibles</th>
+            <th class="px-4 py-3.5">Productos Disponibles (1-Clic)</th>
             <th class="px-4 py-3.5">Precios (Neto)</th>
             <th class="px-4 py-3.5 text-center">Negocios Cerrados</th>
             <th class="px-4 py-3.5">Quién lo Captó</th>
@@ -641,6 +728,10 @@
             }
           }
           if (sectorFilter !== 'ALL' && sSector !== sectorFilter) return false;
+          if (prodFilter !== 'all') {
+            const hayProd = String(s.products || '').toLowerCase();
+            if (!hayProd.includes(prodFilter)) return false;
+          }
           if (capFilter !== 'ALL' && s.captured_by !== capFilter) return false;
           if (q) {
             const hay = `${s.company_name} ${sCountry} ${SECTOR_LABELS[sSector] || sSector} ${s.contact_person} ${s.phone} ${s.products} ${s.prices}`.toLowerCase();
@@ -659,6 +750,16 @@
             <a href="https://wa.me/${waDigits}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="w-7 h-7 rounded-full bg-[#25D366] text-white inline-flex items-center justify-center shrink-0 hover:scale-105 transition">
               <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771z"/></svg>
             </a>` : '';
+
+          // Format products with 1-click filter pills
+          const rawProds = String(s.products || '').split(/[•,;|]/).map(p => p.trim()).filter(Boolean);
+          const prodPills = (rawProds.length > 0 ? rawProds : [s.products]).map(p => {
+            const clean = p.replace(/\s*\([^)]*\)/g, '').trim();
+            return `<button type="button" onclick="setProductQuickFilter('${escHtml(clean)}')" title="Filtrar por este producto" class="inline-block text-left text-xs text-slate-200 hover:text-gold-300 hover:underline mr-1.5 mb-1 font-medium bg-navy-950/80 px-2 py-0.5 rounded-lg border border-slate-800 transition">
+              ${escHtml(p)}
+            </button>`;
+          }).join('');
+
           return `
             <tr class="hover:bg-navy-800/50 transition align-top">
               <td class="px-4 py-3.5 font-bold text-white min-w-[200px]">
@@ -673,7 +774,7 @@
               <td class="px-4 py-3.5 font-mono text-[11px] text-slate-200 min-w-[165px]">
                 <div class="flex items-center gap-2">${waBtn}<span>${escHtml(s.phone || '—')}</span></div>
               </td>
-              <td class="px-4 py-3.5 text-slate-200 min-w-[220px]">${escHtml(s.products)}</td>
+              <td class="px-4 py-3.5 min-w-[240px]">${prodPills}</td>
               <td class="px-4 py-3.5 font-semibold text-gold-300 min-w-[190px]">${escHtml(s.prices)}</td>
               <td class="px-4 py-3.5 text-center">
                 <span class="inline-flex items-center gap-1.5 bg-navy-950 border border-slate-800 rounded-lg px-2 py-1">
@@ -695,7 +796,7 @@
               </td>
             </tr>
           `;
-        }).join('') || `<tr><td colspan="9" class="p-8 text-center text-slate-400">No hay proveedores con ese filtro de país o categoría.</td></tr>`;
+        }).join('') || `<tr><td colspan="9" class="p-8 text-center text-slate-400">No hay proveedores con ese filtro de país, categoría o producto.</td></tr>`;
 
       } else if (activeDirTab === 'BUYERS') {
         thead.innerHTML = `
@@ -704,7 +805,7 @@
             <th class="px-4 py-3.5">País / Categoría</th>
             <th class="px-4 py-3.5">Empresa</th>
             <th class="px-4 py-3.5">Contacto</th>
-            <th class="px-4 py-3.5">Producto Requerido</th>
+            <th class="px-4 py-3.5">Producto Requerido (1-Clic)</th>
             <th class="px-4 py-3.5">Fecha Solicitud</th>
             <th class="px-4 py-3.5">Estado</th>
             <th class="px-4 py-3.5">Fecha Cierre</th>
@@ -725,6 +826,10 @@
             }
           }
           if (sectorFilter !== 'ALL' && bSector !== sectorFilter) return false;
+          if (prodFilter !== 'all') {
+            const hayProd = String(b.product_required || '').toLowerCase();
+            if (!hayProd.includes(prodFilter)) return false;
+          }
           if (capFilter !== 'ALL' && b.captured_by !== capFilter) return false;
           if (q) {
             const hay = `${b.name} ${bCountry} ${SECTOR_LABELS[bSector] || bSector} ${b.company} ${b.contact} ${b.product_required}`.toLowerCase();
@@ -742,6 +847,9 @@
           const badgeClass = isClosed
             ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
             : 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+
+          const cleanReq = String(b.product_required || '').replace(/\s*\([^)]*\)/g, '').trim();
+
           return `
             <tr class="hover:bg-navy-800/50 transition align-top">
               <td class="px-4 py-3.5 font-bold text-white min-w-[140px]">${escHtml(b.name)}</td>
@@ -751,7 +859,11 @@
               </td>
               <td class="px-4 py-3.5 text-slate-300 min-w-[150px]">${escHtml(b.company || '—')}</td>
               <td class="px-4 py-3.5 font-mono text-[11px] text-slate-200 min-w-[150px]">${escHtml(b.contact || '—')}</td>
-              <td class="px-4 py-3.5 text-slate-200 min-w-[220px]">${escHtml(b.product_required)}</td>
+              <td class="px-4 py-3.5 min-w-[220px]">
+                <button type="button" onclick="setProductQuickFilter('${escHtml(cleanReq)}')" title="Filtrar por este producto requerido" class="text-left text-xs text-slate-200 hover:text-gold-300 hover:underline font-medium bg-navy-950/80 px-2.5 py-1 rounded-xl border border-slate-800 transition">
+                  ${escHtml(b.product_required)}
+                </button>
+              </td>
               <td class="px-4 py-3.5 font-mono text-slate-300 whitespace-nowrap">${escHtml(b.request_date || '—')}</td>
               <td class="px-4 py-3.5">
                 <button type="button" onclick="toggleBuyerStatus('${escHtml(b.id)}')" class="px-2.5 py-1 rounded-full border text-[11px] font-bold ${badgeClass}">
@@ -774,7 +886,7 @@
               </td>
             </tr>
           `;
-        }).join('') || `<tr><td colspan="12" class="p-8 text-center text-slate-400">No hay compradores registrados con ese filtro de país o categoría.</td></tr>`;
+        }).join('') || `<tr><td colspan="12" class="p-8 text-center text-slate-400">No hay compradores registrados con ese filtro de país, categoría o producto.</td></tr>`;
 
       } else {
         thead.innerHTML = `
@@ -801,6 +913,10 @@
             }
           }
           if (sectorFilter !== 'ALL' && subSector !== sectorFilter) return false;
+          if (prodFilter !== 'all') {
+            const hayProd = `${sub.product_title || ''} ${sub.specs || ''}`.toLowerCase();
+            if (!hayProd.includes(prodFilter)) return false;
+          }
           if (capFilter !== 'ALL' && (sub.captured_by || 'Se registró solo') !== capFilter) return false;
           if (q) {
             const hay = `${sub.company_name} ${subCountry} ${sub.product_title} ${sub.specs}`.toLowerCase();
@@ -824,7 +940,9 @@
               </td>
               <td class="px-4 py-3.5 text-slate-300">${escHtml(sub.contact_person)}<br/><span class="font-mono text-[11px]">${escHtml(sub.phone)}</span></td>
               <td class="px-4 py-3.5 text-slate-200">
-                <strong>${escHtml(sub.product_title)}</strong>
+                <button type="button" onclick="setProductQuickFilter('${escHtml(sub.product_title)}')" class="text-left font-bold text-white hover:text-gold-300 hover:underline">
+                  ${escHtml(sub.product_title)}
+                </button>
                 <p class="text-[11px] text-slate-400 mt-0.5">${escHtml(sub.specs)}</p>
                 ${sub.catalog_doc_name ? `<span class="inline-block mt-1 text-[10px] text-gold-400">Adjunto: ${escHtml(sub.catalog_doc_name)}</span>` : ''}
               </td>
