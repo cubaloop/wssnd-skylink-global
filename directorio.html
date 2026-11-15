@@ -31,7 +31,7 @@
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-  <script src="wssnd-core.js?v=7.2"></script>
+  <script src="wssnd-core.js?v=7.3"></script>
   <style>
     .gold-gradient { background: linear-gradient(135deg, #C5A059 0%, #DFBE7B 50%, #A6823C 100%); }
     .navy-gradient { background: linear-gradient(135deg, #0A192F 0%, #112240 60%, #050D1A 100%); }
@@ -138,19 +138,64 @@
           </button>
         </div>
 
-        <!-- Attribution Filter (Captado por: Benjamín | David | Se registró solo) -->
-        <div class="rounded-3xl bg-navy-900 border border-slate-800 p-4 space-y-2.5">
-          <span class="text-[10px] font-display font-bold uppercase tracking-widest text-gold-400 block">
-            Filtrar por Captación
-          </span>
-          <select id="dir-filter-captured" onchange="renderActiveDirectory()" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-xs text-white font-semibold">
-            <option value="ALL">Todos los registros</option>
-            <option value="Benjamín">Captado por: Benjamín</option>
-            <option value="David">Captado por: David</option>
-            <option value="Se registró solo">Se registró solo</option>
-          </select>
+        <!-- Country + Category + Attribution Filters (Clientes y Proveedores) -->
+        <div class="rounded-3xl bg-navy-900 border border-slate-800 p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-display font-bold uppercase tracking-widest text-gold-400">
+              Filtros de Categoría y País
+            </span>
+            <button type="button" id="btn-reset-filters" onclick="resetDirectoryFilters()" class="hidden text-[10px] font-bold text-gold-300 hover:text-white underline">
+              Limpiar
+            </button>
+          </div>
 
-          <input type="search" id="dir-search" oninput="renderActiveDirectory()" placeholder="Buscar empresa, contacto, producto..." class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-xs text-white focus:border-gold-500 focus:outline-none" />
+          <!-- Quick 1-Tap Country Pills -->
+          <div class="grid grid-cols-3 gap-1.5" role="group" aria-label="Filtro rápido por país">
+            <button type="button" id="pill-country-ALL" onclick="setCountryQuickFilter('ALL')" class="px-2 py-1.5 rounded-xl gold-gradient text-navy-950 font-display font-extrabold text-[11px] text-center transition">
+              Todos
+            </button>
+            <button type="button" id="pill-country-ES" onclick="setCountryQuickFilter('España')" class="px-2 py-1.5 rounded-xl bg-navy-950 hover:bg-navy-800 border border-slate-700 text-slate-200 font-display font-bold text-[11px] text-center transition">
+              🇪🇸 España
+            </button>
+            <button type="button" id="pill-country-UAE" onclick="setCountryQuickFilter('EAU')" class="px-2 py-1.5 rounded-xl bg-navy-950 hover:bg-navy-800 border border-slate-700 text-slate-200 font-display font-bold text-[11px] text-center transition">
+              🇦🇪 EAU
+            </button>
+          </div>
+
+          <div>
+            <label for="dir-filter-country" class="block text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">País</label>
+            <select id="dir-filter-country" onchange="renderActiveDirectory()" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-xs text-white font-semibold">
+              <option value="ALL">Todos los países</option>
+              <option value="España">🇪🇸 España</option>
+              <option value="EAU">🇦🇪 EAU (Emiratos)</option>
+              <option value="Internacional">🌐 Internacional</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="dir-filter-sector" class="block text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Categoría / Sector</label>
+            <select id="dir-filter-sector" onchange="renderActiveDirectory()" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-xs text-white font-semibold">
+              <option value="ALL">Todas las categorías</option>
+              <option value="COMMODITIES">Materias Primas y Agro</option>
+              <option value="MACHINERY">Maquinaria y Tractores</option>
+              <option value="AUTOPARTS">Recambios y Transmisiones</option>
+              <option value="VEHICLES">Automoción y Flotas</option>
+              <option value="REAL_ESTATE">Real Estate</option>
+              <option value="YACHTS">Náutica y Yates</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="dir-filter-captured" class="block text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Captación</label>
+            <select id="dir-filter-captured" onchange="renderActiveDirectory()" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-xs text-white font-semibold">
+              <option value="ALL">Todos los registros</option>
+              <option value="Benjamín">Captado por: Benjamín</option>
+              <option value="David">Captado por: David</option>
+              <option value="Se registró solo">Se registró solo</option>
+            </select>
+          </div>
+
+          <input type="search" id="dir-search" oninput="renderActiveDirectory()" placeholder="Buscar empresa, país, producto..." class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-xs text-white focus:border-gold-500 focus:outline-none" />
         </div>
 
         <!-- Silent Referral Invite Links Box -->
@@ -178,8 +223,11 @@
       <section class="flex-1 min-w-0 w-full space-y-4">
         <div class="rounded-3xl bg-navy-900 border border-slate-800 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 id="dir-view-title" class="font-display font-extrabold text-lg sm:text-xl text-white">Directorio de Proveedores</h2>
-            <p id="dir-view-subtitle" class="text-xs text-slate-400 mt-0.5">Contactos directos, precios netos de origen, cierres reales y responsable de captación.</p>
+            <div class="flex flex-wrap items-center gap-2">
+              <h2 id="dir-view-title" class="font-display font-extrabold text-lg sm:text-xl text-white">Directorio de Proveedores</h2>
+              <span id="dir-filtered-counter" class="px-2.5 py-0.5 rounded-full bg-navy-950 border border-gold-500/40 text-gold-300 text-[11px] font-bold"></span>
+            </div>
+            <p id="dir-view-subtitle" class="text-xs text-slate-400 mt-0.5">Contactos directos, país de origen, categoría, precios netos, cierres reales y responsable de captación.</p>
           </div>
           <div class="flex items-center gap-2">
             <button type="button" id="btn-new-supplier" onclick="openSupplierModal()" class="px-4 py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-extrabold text-xs shadow">
@@ -221,6 +269,27 @@
           <div>
             <label class="block text-slate-300 font-semibold mb-1">Persona de Contacto *</label>
             <input type="text" id="sup-edit-contact" required class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">País *</label>
+            <select id="sup-edit-country" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
+              <option value="EAU">EAU (Emiratos Árabes Unidos)</option>
+              <option value="España">España</option>
+              <option value="Internacional">Internacional / Otro</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Categoría *</label>
+            <select id="sup-edit-sector" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
+              <option value="COMMODITIES">Materias Primas y Agro</option>
+              <option value="MACHINERY">Maquinaria y Tractores</option>
+              <option value="AUTOPARTS">Recambios y Transmisiones</option>
+              <option value="VEHICLES">Automoción y Flotas</option>
+              <option value="REAL_ESTATE">Real Estate</option>
+              <option value="YACHTS">Náutica y Yates</option>
+            </select>
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -276,6 +345,27 @@
           <div>
             <label class="block text-slate-300 font-semibold mb-1">Empresa</label>
             <input type="text" id="buy-edit-company" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">País *</label>
+            <select id="buy-edit-country" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
+              <option value="España">España</option>
+              <option value="EAU">EAU (Emiratos Árabes Unidos)</option>
+              <option value="Internacional">Internacional / Otro</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Categoría *</label>
+            <select id="buy-edit-sector" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
+              <option value="COMMODITIES">Materias Primas y Agro</option>
+              <option value="MACHINERY">Maquinaria y Tractores</option>
+              <option value="AUTOPARTS">Recambios y Transmisiones</option>
+              <option value="VEHICLES">Automoción y Flotas</option>
+              <option value="REAL_ESTATE">Real Estate</option>
+              <option value="YACHTS">Náutica y Yates</option>
+            </select>
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -341,12 +431,102 @@
   <script>
     let activeDirTab = 'SUPPLIERS';
 
+    const SECTOR_LABELS = {
+      COMMODITIES: 'Materias Primas',
+      MACHINERY: 'Maquinaria y Tractores',
+      AUTOPARTS: 'Recambios y Transmisiones',
+      VEHICLES: 'Automoción y Flotas',
+      REAL_ESTATE: 'Real Estate',
+      YACHTS: 'Náutica y Yates'
+    };
+
     function escHtml(str) {
       return String(str == null ? '' : str)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
+    }
+
+    function inferCountry(item, fallbackCountry) {
+      if (item && item.country && String(item.country).trim()) {
+        const raw = String(item.country).trim();
+        if (/^espa[ñn]a$/i.test(raw) || raw === 'ES') return 'España';
+        if (/^(eau|uae|emiratos|dub[aá]i)/i.test(raw)) return 'EAU';
+        return raw;
+      }
+      const probe = `${(item && (item.company_name || item.company || ''))} ${(item && (item.phone || item.contact || ''))} ${(item && item.id) || ''}`;
+      if (/\+34\b|espa[ñn]a|-es\b|\.es\b|madrid|alicante|teruel|granada|zamora/i.test(probe)) return 'España';
+      if (/\+971\b|dubai|dub[aá]i|sharjah|ajman|jebel ali|\.ae\b|uae|eau/i.test(probe)) return 'EAU';
+      return fallbackCountry || 'EAU';
+    }
+
+    function inferSector(item) {
+      if (item && (item.sector || item.category)) {
+        return String(item.sector || item.category).trim();
+      }
+      const txt = `${(item && (item.products || item.product_required || item.product_title || ''))}`.toLowerCase();
+      if (/caja|cambio|6at|recambio|desguace|motor|transmisi|part/i.test(txt)) return 'AUTOPARTS';
+      if (/tractor|massey|maquinaria|implemento|excavadora|agr[íi]cola/i.test(txt)) return 'MACHINERY';
+      if (/coche|veh[íi]culo|4x4|suv|flota/i.test(txt)) return 'VEHICLES';
+      if (/inmueble|real estate|propiedad/i.test(txt)) return 'REAL_ESTATE';
+      if (/yate|barco|n[áa]utica/i.test(txt)) return 'YACHTS';
+      return 'COMMODITIES';
+    }
+
+    function renderCountryBadge(country) {
+      if (country === 'España') {
+        return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-500/15 border border-red-400/30 text-amber-200 text-[11px] font-bold whitespace-nowrap">🇪🇸 España</span>';
+      }
+      if (country === 'EAU') {
+        return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-[11px] font-bold whitespace-nowrap">🇦🇪 EAU</span>';
+      }
+      return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-500/15 border border-sky-400/30 text-sky-300 text-[11px] font-bold whitespace-nowrap">🌐 ${escHtml(country)}</span>`;
+    }
+
+    function setCountryQuickFilter(val) {
+      const sel = document.getElementById('dir-filter-country');
+      if (sel) sel.value = val;
+      renderActiveDirectory();
+    }
+
+    function resetDirectoryFilters() {
+      document.getElementById('dir-filter-country').value = 'ALL';
+      document.getElementById('dir-filter-sector').value = 'ALL';
+      document.getElementById('dir-filter-captured').value = 'ALL';
+      document.getElementById('dir-search').value = '';
+      renderActiveDirectory();
+    }
+
+    function syncQuickPillsAndCounts(activeDataset, defaultFallbackCountry) {
+      const countrySel = document.getElementById('dir-filter-country');
+      const currentVal = countrySel.value || 'ALL';
+
+      const countES = activeDataset.filter(x => inferCountry(x, defaultFallbackCountry) === 'España').length;
+      const countUAE = activeDataset.filter(x => inferCountry(x, defaultFallbackCountry) === 'EAU').length;
+      const countIntl = activeDataset.filter(x => {
+        const c = inferCountry(x, defaultFallbackCountry);
+        return c !== 'España' && c !== 'EAU';
+      }).length;
+
+      countrySel.options[0].textContent = `Todos los países (${activeDataset.length})`;
+      countrySel.options[1].textContent = `🇪🇸 España (${countES})`;
+      countrySel.options[2].textContent = `🇦🇪 EAU (${countUAE})`;
+      countrySel.options[3].textContent = `🌐 Internacional (${countIntl})`;
+
+      const pillMap = [
+        { id: 'pill-country-ALL', val: 'ALL', label: `Todos (${activeDataset.length})` },
+        { id: 'pill-country-ES', val: 'España', label: `🇪🇸 ES (${countES})` },
+        { id: 'pill-country-UAE', val: 'EAU', label: `🇦🇪 EAU (${countUAE})` }
+      ];
+      pillMap.forEach(p => {
+        const btn = document.getElementById(p.id);
+        if (!btn) return;
+        btn.textContent = p.label;
+        btn.className = currentVal === p.val
+          ? 'px-2 py-1.5 rounded-xl gold-gradient text-navy-950 font-display font-extrabold text-[11px] text-center shadow transition'
+          : 'px-2 py-1.5 rounded-xl bg-navy-950 hover:bg-navy-800 border border-slate-700 text-slate-200 font-display font-bold text-[11px] text-center transition';
+      });
     }
 
     function extractWaDigits(contactStr) {
@@ -370,12 +550,12 @@
         SUPPLIERS: {
           btn: 'side-btn-suppliers',
           title: 'Directorio de Proveedores',
-          sub: 'Nombre de empresa, persona de contacto, número, productos disponibles, precios netos, negocios cerrados y quién lo captó.'
+          sub: 'Proveedores verificados en España y EAU: contacto directo, productos, precios netos, negocios cerrados y quién lo captó.'
         },
         BUYERS: {
           btn: 'side-btn-buyers',
           title: 'Directorio de Compradores',
-          sub: 'Nombre, empresa, contacto, producto requerido, fechas de solicitud y cierre, estado, monto total, ganancia y quién lo captó.'
+          sub: 'Compradores interesados por país y categoría, producto requerido, fechas, estado, monto, ganancia y quién lo captó.'
         },
         SUBMISSIONS: {
           btn: 'side-btn-submissions',
@@ -420,16 +600,27 @@
       document.getElementById('badge-buyers').textContent = String(buyers.length);
       document.getElementById('badge-submissions').textContent = String(subs.filter(x => x.review_status === 'PENDING_REVIEW').length);
 
+      if (activeDirTab === 'SUPPLIERS') syncQuickPillsAndCounts(suppliers, 'EAU');
+      else if (activeDirTab === 'BUYERS') syncQuickPillsAndCounts(buyers, 'España');
+      else syncQuickPillsAndCounts(subs, 'EAU');
+
+      const countryFilter = document.getElementById('dir-filter-country').value;
+      const sectorFilter = document.getElementById('dir-filter-sector').value;
       const capFilter = document.getElementById('dir-filter-captured').value;
       const q = (document.getElementById('dir-search').value || '').trim().toLowerCase();
 
+      const anyActiveFilter = countryFilter !== 'ALL' || sectorFilter !== 'ALL' || capFilter !== 'ALL' || Boolean(q);
+      document.getElementById('btn-reset-filters').classList.toggle('hidden', !anyActiveFilter);
+
       const thead = document.getElementById('dir-thead');
       const tbody = document.getElementById('dir-tbody');
+      const counterEl = document.getElementById('dir-filtered-counter');
 
       if (activeDirTab === 'SUPPLIERS') {
         thead.innerHTML = `
           <tr>
             <th class="px-4 py-3.5">Nombre de Empresa</th>
+            <th class="px-4 py-3.5">País / Categoría</th>
             <th class="px-4 py-3.5">Persona de Contacto</th>
             <th class="px-4 py-3.5">Número / Contacto</th>
             <th class="px-4 py-3.5">Productos Disponibles</th>
@@ -440,15 +631,29 @@
           </tr>
         `;
         const filtered = suppliers.filter(s => {
+          const sCountry = inferCountry(s, 'EAU');
+          const sSector = inferSector(s);
+          if (countryFilter !== 'ALL') {
+            if (countryFilter === 'Internacional') {
+              if (sCountry === 'España' || sCountry === 'EAU') return false;
+            } else if (sCountry !== countryFilter) {
+              return false;
+            }
+          }
+          if (sectorFilter !== 'ALL' && sSector !== sectorFilter) return false;
           if (capFilter !== 'ALL' && s.captured_by !== capFilter) return false;
           if (q) {
-            const hay = `${s.company_name} ${s.contact_person} ${s.phone} ${s.products} ${s.prices}`.toLowerCase();
+            const hay = `${s.company_name} ${sCountry} ${SECTOR_LABELS[sSector] || sSector} ${s.contact_person} ${s.phone} ${s.products} ${s.prices}`.toLowerCase();
             if (!hay.includes(q)) return false;
           }
           return true;
         });
 
+        counterEl.textContent = `${filtered.length} de ${suppliers.length} proveedores`;
+
         tbody.innerHTML = filtered.map(s => {
+          const sCountry = inferCountry(s, 'EAU');
+          const sSector = inferSector(s);
           const waDigits = extractWaDigits(s.phone);
           const waBtn = waDigits ? `
             <a href="https://wa.me/${waDigits}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="w-7 h-7 rounded-full bg-[#25D366] text-white inline-flex items-center justify-center shrink-0 hover:scale-105 transition">
@@ -460,7 +665,11 @@
                 ${escHtml(s.company_name)}
                 ${s.status ? `<span class="block mt-1 text-[10px] font-semibold text-gold-400">${escHtml(s.status)}</span>` : ''}
               </td>
-              <td class="px-4 py-3.5 text-slate-300 min-w-[140px]">${escHtml(s.contact_person || '—')}</td>
+              <td class="px-4 py-3.5 min-w-[140px]">
+                ${renderCountryBadge(sCountry)}
+                <span class="block mt-1 text-[10px] text-slate-400 font-semibold">${escHtml(SECTOR_LABELS[sSector] || sSector)}</span>
+              </td>
+              <td class="px-4 py-3.5 text-slate-300 min-w-[135px]">${escHtml(s.contact_person || '—')}</td>
               <td class="px-4 py-3.5 font-mono text-[11px] text-slate-200 min-w-[165px]">
                 <div class="flex items-center gap-2">${waBtn}<span>${escHtml(s.phone || '—')}</span></div>
               </td>
@@ -486,12 +695,13 @@
               </td>
             </tr>
           `;
-        }).join('') || `<tr><td colspan="8" class="p-8 text-center text-slate-400">No hay proveedores con ese criterio.</td></tr>`;
+        }).join('') || `<tr><td colspan="9" class="p-8 text-center text-slate-400">No hay proveedores con ese filtro de país o categoría.</td></tr>`;
 
       } else if (activeDirTab === 'BUYERS') {
         thead.innerHTML = `
           <tr>
             <th class="px-4 py-3.5">Nombre</th>
+            <th class="px-4 py-3.5">País / Categoría</th>
             <th class="px-4 py-3.5">Empresa</th>
             <th class="px-4 py-3.5">Contacto</th>
             <th class="px-4 py-3.5">Producto Requerido</th>
@@ -505,15 +715,29 @@
           </tr>
         `;
         const filteredB = buyers.filter(b => {
+          const bCountry = inferCountry(b, 'España');
+          const bSector = inferSector(b);
+          if (countryFilter !== 'ALL') {
+            if (countryFilter === 'Internacional') {
+              if (bCountry === 'España' || bCountry === 'EAU') return false;
+            } else if (bCountry !== countryFilter) {
+              return false;
+            }
+          }
+          if (sectorFilter !== 'ALL' && bSector !== sectorFilter) return false;
           if (capFilter !== 'ALL' && b.captured_by !== capFilter) return false;
           if (q) {
-            const hay = `${b.name} ${b.company} ${b.contact} ${b.product_required}`.toLowerCase();
+            const hay = `${b.name} ${bCountry} ${SECTOR_LABELS[bSector] || bSector} ${b.company} ${b.contact} ${b.product_required}`.toLowerCase();
             if (!hay.includes(q)) return false;
           }
           return true;
         });
 
+        counterEl.textContent = `${filteredB.length} de ${buyers.length} compradores`;
+
         tbody.innerHTML = filteredB.map(b => {
+          const bCountry = inferCountry(b, 'España');
+          const bSector = inferSector(b);
           const isClosed = b.status === 'Cerrado';
           const badgeClass = isClosed
             ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
@@ -521,6 +745,10 @@
           return `
             <tr class="hover:bg-navy-800/50 transition align-top">
               <td class="px-4 py-3.5 font-bold text-white min-w-[140px]">${escHtml(b.name)}</td>
+              <td class="px-4 py-3.5 min-w-[135px]">
+                ${renderCountryBadge(bCountry)}
+                <span class="block mt-1 text-[10px] text-slate-400 font-semibold">${escHtml(SECTOR_LABELS[bSector] || bSector)}</span>
+              </td>
               <td class="px-4 py-3.5 text-slate-300 min-w-[150px]">${escHtml(b.company || '—')}</td>
               <td class="px-4 py-3.5 font-mono text-[11px] text-slate-200 min-w-[150px]">${escHtml(b.contact || '—')}</td>
               <td class="px-4 py-3.5 text-slate-200 min-w-[220px]">${escHtml(b.product_required)}</td>
@@ -546,12 +774,13 @@
               </td>
             </tr>
           `;
-        }).join('') || `<tr><td colspan="11" class="p-8 text-center text-slate-400">No hay compradores registrados con ese filtro.</td></tr>`;
+        }).join('') || `<tr><td colspan="12" class="p-8 text-center text-slate-400">No hay compradores registrados con ese filtro de país o categoría.</td></tr>`;
 
       } else {
         thead.innerHTML = `
           <tr>
             <th class="px-4 py-3.5">Proveedor</th>
+            <th class="px-4 py-3.5">País / Categoría</th>
             <th class="px-4 py-3.5">Contacto</th>
             <th class="px-4 py-3.5">Producto Propuesto</th>
             <th class="px-4 py-3.5">Precio Neto Proveedor</th>
@@ -561,11 +790,38 @@
             <th class="px-4 py-3.5 text-right">Revisión</th>
           </tr>
         `;
-        tbody.innerHTML = subs.map(sub => {
+        const filteredSubs = subs.filter(sub => {
+          const subCountry = inferCountry(sub, sub.hub_origin === 'MADRID_ES' ? 'España' : 'EAU');
+          const subSector = inferSector(sub);
+          if (countryFilter !== 'ALL') {
+            if (countryFilter === 'Internacional') {
+              if (subCountry === 'España' || subCountry === 'EAU') return false;
+            } else if (subCountry !== countryFilter) {
+              return false;
+            }
+          }
+          if (sectorFilter !== 'ALL' && subSector !== sectorFilter) return false;
+          if (capFilter !== 'ALL' && (sub.captured_by || 'Se registró solo') !== capFilter) return false;
+          if (q) {
+            const hay = `${sub.company_name} ${subCountry} ${sub.product_title} ${sub.specs}`.toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        });
+
+        counterEl.textContent = `${filteredSubs.length} de ${subs.length} solicitudes`;
+
+        tbody.innerHTML = filteredSubs.map(sub => {
+          const subCountry = inferCountry(sub, sub.hub_origin === 'MADRID_ES' ? 'España' : 'EAU');
+          const subSector = inferSector(sub);
           const calc = window.WSSND.calculatePublicPrice(sub.net_price, 'PERCENT', 5);
           return `
             <tr class="hover:bg-navy-800/50 transition align-top">
               <td class="px-4 py-3.5 font-bold text-white">${escHtml(sub.company_name)}</td>
+              <td class="px-4 py-3.5 min-w-[130px]">
+                ${renderCountryBadge(subCountry)}
+                <span class="block mt-1 text-[10px] text-slate-400 font-semibold">${escHtml(SECTOR_LABELS[subSector] || subSector)}</span>
+              </td>
               <td class="px-4 py-3.5 text-slate-300">${escHtml(sub.contact_person)}<br/><span class="font-mono text-[11px]">${escHtml(sub.phone)}</span></td>
               <td class="px-4 py-3.5 text-slate-200">
                 <strong>${escHtml(sub.product_title)}</strong>
@@ -582,7 +838,7 @@
               </td>
             </tr>
           `;
-        }).join('') || `<tr><td colspan="8" class="p-8 text-center text-slate-400">No hay solicitudes de catálogo pendientes de proveedores externos.</td></tr>`;
+        }).join('') || `<tr><td colspan="9" class="p-8 text-center text-slate-400">No hay solicitudes de catálogo pendientes con ese filtro.</td></tr>`;
       }
     }
 
@@ -611,6 +867,8 @@
         document.getElementById('sup-edit-id').value = '';
         document.getElementById('sup-edit-company').value = '';
         document.getElementById('sup-edit-contact').value = '';
+        document.getElementById('sup-edit-country').value = 'EAU';
+        document.getElementById('sup-edit-sector').value = 'COMMODITIES';
         document.getElementById('sup-edit-phone').value = '';
         document.getElementById('sup-edit-products').value = '';
         document.getElementById('sup-edit-prices').value = '';
@@ -624,6 +882,8 @@
       document.getElementById('sup-edit-id').value = item.id;
       document.getElementById('sup-edit-company').value = item.company_name || '';
       document.getElementById('sup-edit-contact').value = item.contact_person || '';
+      document.getElementById('sup-edit-country').value = inferCountry(item, 'EAU');
+      document.getElementById('sup-edit-sector').value = inferSector(item);
       document.getElementById('sup-edit-phone').value = item.phone || '';
       document.getElementById('sup-edit-products').value = item.products || '';
       document.getElementById('sup-edit-prices').value = item.prices || '';
@@ -643,6 +903,8 @@
         id: id || ('sup_' + Date.now()),
         company_name: document.getElementById('sup-edit-company').value.trim(),
         contact_person: document.getElementById('sup-edit-contact').value.trim(),
+        country: document.getElementById('sup-edit-country').value,
+        sector: document.getElementById('sup-edit-sector').value,
         phone: document.getElementById('sup-edit-phone').value.trim(),
         products: document.getElementById('sup-edit-products').value.trim(),
         prices: document.getElementById('sup-edit-prices').value.trim(),
@@ -694,6 +956,8 @@
         document.getElementById('buy-edit-id').value = '';
         document.getElementById('buy-edit-name').value = '';
         document.getElementById('buy-edit-company').value = '';
+        document.getElementById('buy-edit-country').value = 'España';
+        document.getElementById('buy-edit-sector').value = 'COMMODITIES';
         document.getElementById('buy-edit-contact').value = '';
         document.getElementById('buy-edit-product').value = '';
         document.getElementById('buy-edit-reqdate').value = new Date().toISOString().slice(0, 10);
@@ -710,6 +974,8 @@
       document.getElementById('buy-edit-id').value = b.id;
       document.getElementById('buy-edit-name').value = b.name || '';
       document.getElementById('buy-edit-company').value = b.company || '';
+      document.getElementById('buy-edit-country').value = inferCountry(b, 'España');
+      document.getElementById('buy-edit-sector').value = inferSector(b);
       document.getElementById('buy-edit-contact').value = b.contact || '';
       document.getElementById('buy-edit-product').value = b.product_required || '';
       document.getElementById('buy-edit-reqdate').value = b.request_date || '';
@@ -732,6 +998,8 @@
         id: id || ('buy_' + Date.now()),
         name: document.getElementById('buy-edit-name').value.trim(),
         company: document.getElementById('buy-edit-company').value.trim(),
+        country: document.getElementById('buy-edit-country').value,
+        sector: document.getElementById('buy-edit-sector').value,
         contact: document.getElementById('buy-edit-contact').value.trim(),
         product_required: document.getElementById('buy-edit-product').value.trim(),
         request_date: document.getElementById('buy-edit-reqdate').value,

@@ -40,7 +40,7 @@
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-  <script src="wssnd-core.js?v=7.2"></script>
+  <script src="wssnd-core.js?v=7.3"></script>
   <style>
     .gold-gradient {
       background: linear-gradient(135deg, #C5A059 0%, #DFBE7B 50%, #A6823C 100%);
@@ -275,12 +275,17 @@
       const session = window.WSSND ? window.WSSND.getSession() : null;
       const capturedBy = window.WSSND ? window.WSSND.getCapturedBy() : 'Se registró solo';
 
+      const buyerCountry = prefix === '+971' ? 'EAU' : (prefix === '+34' ? 'España' : 'Internacional');
+      const selectedSector = document.getElementById('rfq-area').value;
+
       const payload = {
         user_id: session ? session.id : '',
         name: document.getElementById('client-name').value.trim(),
         company: document.getElementById('client-company').value.trim(),
         email: document.getElementById('client-email').value.trim(),
         phone: phoneE164,
+        country: buyerCountry,
+        sector: selectedSector,
         destination: document.getElementById('req-destination').value.trim(),
         item: document.getElementById('req-item-name').value.trim(),
         quantity: document.getElementById('req-quantity').value.trim(),
@@ -305,12 +310,12 @@
         id: 'rfq_' + Date.now(),
         created_at: new Date().toISOString(),
         preferred_hub: document.getElementById('rfq-hub').value,
-        division: document.getElementById('rfq-area').value,
+        division: selectedSector,
         client_full_name: payload.name,
         company_name: payload.company,
         email: payload.email,
         phone_e164: phoneE164,
-        country: payload.destination,
+        country: buyerCountry,
         captured_by: capturedBy,
         request_details_json: {
           item: payload.item,
@@ -330,6 +335,8 @@
           name: payload.name,
           company: payload.company || 'Particular / Empresa',
           contact: `${phoneE164} | ${payload.email}`,
+          country: buyerCountry,
+          sector: selectedSector,
           product_required: `${payload.item} (${payload.quantity} -> ${payload.destination})`,
           request_date: new Date().toISOString().slice(0, 10),
           status: 'Abierto',
