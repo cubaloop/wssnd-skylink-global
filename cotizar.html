@@ -296,6 +296,10 @@
         });
       } catch (err) {}
 
+      if (window.WSSND && window.WSSND.pushBuyerRfqCloud) {
+        try { await window.WSSND.pushBuyerRfqCloud(payload); } catch (err) {}
+      }
+
       // Also save locally for legacy & instant admin visibility
       const leadRecord = {
         id: 'rfq_' + Date.now(),

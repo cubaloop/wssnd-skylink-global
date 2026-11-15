@@ -89,25 +89,102 @@
     return sha256Hex(SALT + String(pass || ''));
   }
 
-  function decryptVault(pass) {
+  const CLOUD_URL = 'https://jyrqzjctkmzdvmraqrcv.supabase.co/rest/v1/legacy_system_records';
+  const CLOUD_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp5cnF6amN0a216ZHZtcmFxcmN2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NjI4MTU3NCwiZXhwIjoyMTAxODU3NTc0fQ.jpzy38i_JqhKiLZwNFXESJo62kk4vWvwCVPLpFIyLjc';
+
+  async function cloudUpsertRecord(id, status, campaign, fullName, notesObj) {
     try {
-      const binStr = atob(ENCRYPTED_VAULT_B64);
+      const r = await fetch(CLOUD_URL + '?on_conflict=id', {
+        method: 'POST',
+        headers: {
+          apikey: CLOUD_KEY,
+          Authorization: 'Bearer ' + CLOUD_KEY,
+          'Content-Type': 'application/json',
+          Prefer: 'resolution=merge-duplicates,return=minimal'
+        },
+        body: JSON.stringify({
+          id: String(id),
+          lead_status: String(status),
+          campaign_name: String(campaign),
+          full_name: String(fullName || ''),
+          notes: notesObj || {}
+        })
+      });
+      return r.ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async function cloudFetchRecords(queryStr) {
+    try {
+      const r = await fetch(CLOUD_URL + '?' + queryStr, {
+        headers: {
+          apikey: CLOUD_KEY,
+          Authorization: 'Bearer ' + CLOUD_KEY,
+          Accept: 'application/json'
+        },
+        cache: 'no-store'
+      });
+      if (!r.ok) return [];
+      return await r.json();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  async function cloudDeleteRecord(id) {
+    try {
+      await fetch(CLOUD_URL + '?id=eq.' + encodeURIComponent(String(id)), {
+        method: 'DELETE',
+        headers: { apikey: CLOUD_KEY, Authorization: 'Bearer ' + CLOUD_KEY }
+      });
+    } catch (e) {}
+  }
+
+  function xorKeystreamBytes(inputBytes, pass) {
+    const out = new Uint8Array(inputBytes.length);
+    let blockIdx = 0, pos = 0;
+    const te = new TextEncoder();
+    while (pos < inputBytes.length) {
+      const ks = sha256Bytes(te.encode('wssnd_vault_v7:' + pass + ':' + blockIdx));
+      const take = Math.min(32, inputBytes.length - pos);
+      for (let j = 0; j < take; j++) out[pos + j] = inputBytes[pos + j] ^ ks[j];
+      pos += take;
+      blockIdx++;
+    }
+    return out;
+  }
+
+  function encryptVaultObj(pass, obj) {
+    try {
+      const plainBytes = new TextEncoder().encode(JSON.stringify(obj));
+      const cipher = xorKeystreamBytes(plainBytes, pass);
+      let bin = '';
+      const chunk = 0x8000;
+      for (let i = 0; i < cipher.length; i += chunk) {
+        bin += String.fromCharCode.apply(null, cipher.subarray(i, i + chunk));
+      }
+      return btoa(bin);
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function decryptVaultB64(pass, b64Str) {
+    try {
+      const binStr = atob(b64Str);
       const cipher = new Uint8Array(binStr.length);
       for (let i = 0; i < binStr.length; i++) cipher[i] = binStr.charCodeAt(i);
-      const plain = new Uint8Array(cipher.length);
-      let blockIdx = 0, pos = 0;
-      const te = new TextEncoder();
-      while (pos < cipher.length) {
-        const ks = sha256Bytes(te.encode('wssnd_vault_v7:' + pass + ':' + blockIdx));
-        const take = Math.min(32, cipher.length - pos);
-        for (let j = 0; j < take; j++) plain[pos + j] = cipher[pos + j] ^ ks[j];
-        pos += take;
-        blockIdx++;
-      }
+      const plain = xorKeystreamBytes(cipher, pass);
       return JSON.parse(new TextDecoder().decode(plain));
     } catch (e) {
       return null;
     }
+  }
+
+  function decryptVault(pass) {
+    return decryptVaultB64(pass, ENCRYPTED_VAULT_B64);
   }
 
   // 100% Silent Referral Capture (?ref=benja | ?ref=david -> defaults to 'Se registró solo')
@@ -319,54 +396,133 @@
     return item.unit_label ? (priceText + ' ' + item.unit_label) : priceText;
   }
 
-  // Dual-Layer Sync with Node Backend + Optional Supabase KV
+  // Dual-Layer Sync with Node Backend + Encrypted Supabase Cloud Bridge (Madrid <-> Dubai)
   async function syncFromServer() {
+    let synced = false;
     try {
       const headers = {};
       if (isMasterAdmin()) headers['X-WSSND-Admin-Hash'] = MASTER_PASS_HASH;
       const res = await fetch('/api/portal-state', { headers, cache: 'no-store' });
-      if (!res.ok) return false;
-      const data = await res.json();
-      if (!data || !data.ok) return false;
-      if (Array.isArray(data.categories) && data.categories.length > 0) {
-        localStorage.setItem(KEYS.CATEGORIES, JSON.stringify(data.categories));
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok) {
+          if (Array.isArray(data.categories) && data.categories.length > 0) {
+            localStorage.setItem(KEYS.CATEGORIES, JSON.stringify(data.categories));
+          }
+          if (data.banner) localStorage.setItem(KEYS.BANNER, data.banner);
+          if (data.isAdmin && isMasterAdmin()) {
+            if (Array.isArray(data.catalog) && data.catalog.length > 0) {
+              localStorage.setItem(KEYS.ADMIN_CATALOG, JSON.stringify(data.catalog));
+              localStorage.setItem(KEYS.PUBLIC_CATALOG, JSON.stringify(sanitizeCatalogForPublic(data.catalog)));
+            }
+            if (Array.isArray(data.suppliers) && data.suppliers.length > 0) {
+              localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(data.suppliers));
+            }
+            if (Array.isArray(data.buyers) && data.buyers.length > 0) {
+              localStorage.setItem(KEYS.BUYERS, JSON.stringify(data.buyers));
+            }
+            if (Array.isArray(data.submissions)) localStorage.setItem(KEYS.SUBMISSIONS, JSON.stringify(data.submissions));
+            if (ensureAdminUnlockedSeed()) {
+              await pushAdminStateToServer();
+            }
+          } else if (Array.isArray(data.catalog) && data.catalog.length > 0) {
+            localStorage.setItem(KEYS.PUBLIC_CATALOG, JSON.stringify(data.catalog));
+          }
+          synced = true;
+        }
       }
-      if (data.banner) localStorage.setItem(KEYS.BANNER, data.banner);
-      if (data.isAdmin && isMasterAdmin()) {
-        if (Array.isArray(data.catalog) && data.catalog.length > 0) {
-          localStorage.setItem(KEYS.ADMIN_CATALOG, JSON.stringify(data.catalog));
-          localStorage.setItem(KEYS.PUBLIC_CATALOG, JSON.stringify(sanitizeCatalogForPublic(data.catalog)));
+    } catch (e) {}
+
+    // Cloud Sync via Supabase (works globally on GitHub Pages & mobile devices)
+    try {
+      const pubRows = await cloudFetchRecords('id=eq.wssnd_v7_public_state&select=notes');
+      if (pubRows.length > 0 && pubRows[0].notes) {
+        const pub = pubRows[0].notes;
+        if (Array.isArray(pub.categories) && pub.categories.length > 0) {
+          localStorage.setItem(KEYS.CATEGORIES, JSON.stringify(pub.categories));
         }
-        if (Array.isArray(data.suppliers) && data.suppliers.length > 0) {
-          localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(data.suppliers));
+        if (pub.banner) localStorage.setItem(KEYS.BANNER, pub.banner);
+        if (!isMasterAdmin() && Array.isArray(pub.catalog) && pub.catalog.length > 0) {
+          localStorage.setItem(KEYS.PUBLIC_CATALOG, JSON.stringify(pub.catalog));
         }
-        if (Array.isArray(data.buyers) && data.buyers.length > 0) {
-          localStorage.setItem(KEYS.BUYERS, JSON.stringify(data.buyers));
+        synced = true;
+      }
+
+      if (isMasterAdmin()) {
+        const vaultPass = sessionStorage.getItem(KEYS.VAULT_KEY) || '';
+        let dirtyAdmin = ensureAdminUnlockedSeed();
+
+        if (vaultPass) {
+          const admRows = await cloudFetchRecords('id=eq.wssnd_v7_admin_cipher&select=notes');
+          if (admRows.length > 0 && admRows[0].notes && admRows[0].notes.cipher) {
+            const dec = decryptVaultB64(vaultPass, admRows[0].notes.cipher);
+            if (dec) {
+              if (Array.isArray(dec.catalog) && dec.catalog.length > 0) {
+                localStorage.setItem(KEYS.ADMIN_CATALOG, JSON.stringify(dec.catalog));
+                localStorage.setItem(KEYS.PUBLIC_CATALOG, JSON.stringify(sanitizeCatalogForPublic(dec.catalog)));
+              }
+              if (Array.isArray(dec.suppliers) && dec.suppliers.length > 0) {
+                localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(dec.suppliers));
+              }
+              if (Array.isArray(dec.buyers) && dec.buyers.length > 0) {
+                localStorage.setItem(KEYS.BUYERS, JSON.stringify(dec.buyers));
+              }
+              if (Array.isArray(dec.submissions)) {
+                localStorage.setItem(KEYS.SUBMISSIONS, JSON.stringify(dec.submissions));
+              }
+              synced = true;
+            }
+          } else {
+            dirtyAdmin = true;
+          }
         }
-        if (Array.isArray(data.submissions)) localStorage.setItem(KEYS.SUBMISSIONS, JSON.stringify(data.submissions));
-        if (ensureAdminUnlockedSeed()) {
+
+        // Ingest any external Buyer/Supplier signups, RFQs, or Catalog Submissions from Cloud Queue
+        const inboundRows = await cloudFetchRecords('campaign_name=eq.wssnd_v7_inbound&select=id,lead_status,notes&order=archived_at.asc&limit=100');
+        if (inboundRows.length > 0) {
+          const sups = getSuppliers();
+          const buys = getBuyers();
+          const subs = getSubmissions();
+          for (const row of inboundRows) {
+            const n = row.notes || {};
+            if (row.lead_status === 'SUPPLIER_REG' && n.id && !sups.some(x => String(x.id) === String(n.id))) {
+              sups.unshift(n);
+              dirtyAdmin = true;
+            } else if ((row.lead_status === 'BUYER_REG' || row.lead_status === 'BUYER_RFQ') && n.id && !buys.some(x => String(x.id) === String(n.id))) {
+              buys.unshift(n);
+              dirtyAdmin = true;
+            } else if (row.lead_status === 'SUPPLIER_SUB' && n.id && !subs.some(x => String(x.id) === String(n.id))) {
+              subs.unshift(n);
+              dirtyAdmin = true;
+            }
+            await cloudDeleteRecord(row.id);
+          }
+          localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(sups));
+          localStorage.setItem(KEYS.BUYERS, JSON.stringify(buys));
+          localStorage.setItem(KEYS.SUBMISSIONS, JSON.stringify(subs));
+        }
+
+        if (dirtyAdmin) {
           await pushAdminStateToServer();
         }
-      } else if (Array.isArray(data.catalog) && data.catalog.length > 0) {
-        localStorage.setItem(KEYS.PUBLIC_CATALOG, JSON.stringify(data.catalog));
       }
-      window.dispatchEvent(new CustomEvent('wssnd:state-synced'));
-      return true;
-    } catch (e) {
-      return false;
-    }
+    } catch (e) {}
+
+    if (synced) window.dispatchEvent(new CustomEvent('wssnd:state-synced'));
+    return synced;
   }
 
   async function pushAdminStateToServer() {
     if (!isMasterAdmin()) return;
-    const payload = {
-      banner: localStorage.getItem(KEYS.BANNER) || 'WSSND SKYLINK — Sede Madrid y Sede Dubái',
-      categories: getCategories(),
-      catalog: getAdminCatalog(),
-      suppliers: getSuppliers(),
-      buyers: getBuyers(),
-      submissions: getSubmissions()
-    };
+    const admCatalog = getAdminCatalog();
+    const pubCatalog = sanitizeCatalogForPublic(admCatalog);
+    const categories = getCategories();
+    const banner = localStorage.getItem(KEYS.BANNER) || 'WSSND SKYLINK — Sede Madrid y Sede Dubái';
+    const suppliers = getSuppliers();
+    const buyers = getBuyers();
+    const submissions = getSubmissions();
+
+    const payload = { banner, categories, catalog: admCatalog, suppliers, buyers, submissions };
     try {
       await fetch('/api/portal-state', {
         method: 'POST',
@@ -377,18 +533,31 @@
         body: JSON.stringify(payload)
       });
     } catch (e) {}
-    // Optional Dual-Layer Supabase KV sync if configured
+
+    // Push Public Sanitized State + Encrypted Admin Vault to Supabase Cloud
     try {
-      const supaUrl = localStorage.getItem('wssnd_supa_url');
-      const supaKey = localStorage.getItem('wssnd_supa_key');
-      if (supaUrl && supaKey && window.supabase) {
-        const client = window.supabase.createClient(supaUrl, supaKey);
-        await client.from('wssnd_portal_kv').upsert({
-          key: 'master_state_v7',
-          payload,
-          updated_at: new Date().toISOString()
-        });
+      await cloudUpsertRecord('wssnd_v7_public_state', 'PUBLIC', 'wssnd_v7_cloud', 'public_catalog', {
+        banner,
+        categories,
+        catalog: pubCatalog,
+        updated_at: new Date().toISOString()
+      });
+      const vaultPass = sessionStorage.getItem(KEYS.VAULT_KEY) || '';
+      if (vaultPass) {
+        const cipher = encryptVaultObj(vaultPass, payload);
+        if (cipher) {
+          await cloudUpsertRecord('wssnd_v7_admin_cipher', 'ENCRYPTED', 'wssnd_v7_cloud', 'admin_vault', {
+            cipher,
+            updated_at: new Date().toISOString()
+          });
+        }
       }
+      // Also publish non-sensitive submission status map so Suppliers see live review status
+      const statusMap = {};
+      submissions.forEach(s => {
+        if (s && s.id) statusMap[s.id] = { review_status: s.review_status, product_title: s.product_title, net_price: s.net_price, currency: s.currency, unit_label: s.unit_label || '', supplier_user_id: s.supplier_user_id };
+      });
+      await cloudUpsertRecord('wssnd_v7_sub_statuses', 'STATUS_MAP', 'wssnd_v7_cloud', 'sub_statuses', { map: statusMap });
     } catch (e) {}
   }
 
@@ -419,7 +588,7 @@
       }
     } catch (e) {}
 
-    // Offline / Static Fallback Verification (SHA-256)
+    // Master Admin Verification (SHA-256 + Cloud Vault Unlock)
     if ((lowerUser === 'benja' || lowerUser === 'david') && pHash === MASTER_PASS_HASH) {
       const masterObj = lowerUser === 'benja'
         ? { id: 'master_benja', username: 'Benja', displayName: 'Benjamín Assi', role: 'MASTER_ADMIN', refCode: 'benja', attributionName: 'Benjamín', adminToken: MASTER_PASS_HASH }
@@ -427,9 +596,23 @@
       sessionStorage.setItem(KEYS.VAULT_KEY, password);
       localStorage.setItem(KEYS.SESSION, JSON.stringify(masterObj));
       ensureAdminUnlockedSeed();
+      await syncFromServer();
       updateGlobalAuthUI();
       return { ok: true, user: masterObj };
     }
+
+    // Check Cloud External User Record (cross-device login for Buyers & Suppliers)
+    try {
+      const usrCloudId = 'wssnd_usr_' + sha256Hex(lowerUser).slice(0, 24);
+      const rows = await cloudFetchRecords('id=eq.' + encodeURIComponent(usrCloudId) + '&select=notes');
+      if (rows.length > 0 && rows[0].notes && rows[0].notes.password_hash === pHash) {
+        const safe = Object.assign({}, rows[0].notes);
+        delete safe.password_hash;
+        localStorage.setItem(KEYS.SESSION, JSON.stringify(safe));
+        updateGlobalAuthUI();
+        return { ok: true, user: safe };
+      }
+    } catch (e) {}
 
     const localUsers = JSON.parse(localStorage.getItem(KEYS.USERS_LOCAL) || '[]');
     const found = localUsers.find(u =>
@@ -456,34 +639,41 @@
     });
     delete reqBody.password;
 
+    const keyU = String(reqBody.username || reqBody.email || '').trim().toLowerCase();
+    if (keyU === 'benja' || keyU === 'david') {
+      return { ok: false, error: 'Nombre de usuario reservado.' };
+    }
+
     try {
       const res = await fetch('/api/public/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reqBody)
       });
-      const data = await res.json();
-      if (res.ok && data.ok) {
-        localStorage.setItem(KEYS.SESSION, JSON.stringify(data.user));
-        updateGlobalAuthUI();
-        return { ok: true, user: data.user };
-      } else if (data && data.error) {
-        return { ok: false, error: data.error };
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok) {
+          localStorage.setItem(KEYS.SESSION, JSON.stringify(data.user));
+          updateGlobalAuthUI();
+          return { ok: true, user: data.user };
+        } else if (data && data.error) {
+          return { ok: false, error: data.error };
+        }
       }
     } catch (e) {}
 
-    // Offline fallback registration
-    const keyU = String(reqBody.username || reqBody.email || '').trim().toLowerCase();
-    if (keyU === 'benja' || keyU === 'david') {
-      return { ok: false, error: 'Nombre de usuario reservado.' };
-    }
+    // Check duplicate in Cloud + Local
+    const usrCloudId = 'wssnd_usr_' + sha256Hex(keyU).slice(0, 24);
+    const existingCloud = await cloudFetchRecords('id=eq.' + encodeURIComponent(usrCloudId) + '&select=id');
     const localUsers = JSON.parse(localStorage.getItem(KEYS.USERS_LOCAL) || '[]');
-    if (localUsers.some(u => String(u.username || '').toLowerCase() === keyU)) {
-      return { ok: false, error: 'Ese usuario ya está registrado.' };
+    if (existingCloud.length > 0 || localUsers.some(u => String(u.username || '').toLowerCase() === keyU)) {
+      return { ok: false, error: 'Ese correo o usuario ya está registrado.' };
     }
+
+    const nowIso = new Date().toISOString();
     const newUser = {
       id: 'usr_' + Date.now(),
-      created_at: new Date().toISOString(),
+      created_at: nowIso,
       role: reqBody.role === 'SUPPLIER' ? 'SUPPLIER' : 'BUYER',
       username: reqBody.username || reqBody.email,
       displayName: reqBody.name || reqBody.contact_person || reqBody.company_name,
@@ -495,6 +685,38 @@
       captured_by: capturedBy,
       password_hash: pHash
     };
+
+    // Save external account to Cloud + Queue Directory entry for Benja & David
+    await cloudUpsertRecord(usrCloudId, newUser.role, 'wssnd_v7_users', newUser.displayName, newUser);
+    if (newUser.role === 'SUPPLIER') {
+      await cloudUpsertRecord('wssnd_in_sup_' + Date.now(), 'SUPPLIER_REG', 'wssnd_v7_inbound', newUser.company_name, {
+        id: 'sup_ext_' + Date.now(),
+        company_name: newUser.company_name || newUser.displayName,
+        contact_person: newUser.contact_person || newUser.displayName,
+        phone: newUser.phone || newUser.email,
+        products_available: newUser.products_or_interest || 'Pendiente de revisión de catálogo',
+        prices: 'En revisión',
+        closed_deals: 0,
+        captured_by: capturedBy,
+        status: 'REGISTERED_PORTAL',
+        notes: 'Registro externo en portal (' + (newUser.email || '') + ')'
+      });
+    } else {
+      await cloudUpsertRecord('wssnd_in_buy_' + Date.now(), 'BUYER_REG', 'wssnd_v7_inbound', newUser.displayName, {
+        id: 'buy_ext_' + Date.now(),
+        name: newUser.displayName,
+        company: newUser.company_name || 'Particular / Empresa',
+        contact: [newUser.phone, newUser.email].filter(Boolean).join(' | '),
+        product_required: newUser.products_or_interest || 'Registro general de comprador',
+        request_date: nowIso.slice(0, 10),
+        status: 'Abierto',
+        close_date: '',
+        total_amount: 0,
+        profit_amount: 0,
+        captured_by: capturedBy
+      });
+    }
+
     localUsers.unshift(newUser);
     localStorage.setItem(KEYS.USERS_LOCAL, JSON.stringify(localUsers));
     const safe = Object.assign({}, newUser);
@@ -803,6 +1025,20 @@
         if (data && Array.isArray(data.submissions) && data.submissions.length > 0) list = data.submissions;
       }
     } catch (e) {}
+    try {
+      const stRows = await cloudFetchRecords('id=eq.wssnd_v7_sub_statuses&select=notes');
+      if (stRows.length > 0 && stRows[0].notes && stRows[0].notes.map) {
+        const map = stRows[0].notes.map;
+        Object.keys(map).forEach(subId => {
+          const entry = map[subId];
+          if (String(entry.supplier_user_id) === String(s.id)) {
+            const existingIdx = list.findIndex(x => String(x.id) === String(subId));
+            if (existingIdx !== -1) list[existingIdx].review_status = entry.review_status;
+            else list.unshift(Object.assign({ id: subId }, entry));
+          }
+        });
+      }
+    } catch (e) {}
     if (list.length === 0) {
       box.innerHTML = '<p class="text-slate-400">Aún no has enviado productos a revisión.</p>';
       return;
@@ -838,7 +1074,10 @@
       docName = docInput.files[0].name;
     }
 
-    const payload = {
+    const subId = 'sub_' + Date.now();
+    const fullSub = {
+      id: subId,
+      created_at: new Date().toISOString(),
       supplier_user_id: s.id,
       company_name: s.company_name || s.displayName,
       contact_person: s.contact_person || s.displayName,
@@ -860,17 +1099,37 @@
       await fetch('/api/public/supplier-submission', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(fullSub)
       });
     } catch (err) {}
 
+    await cloudUpsertRecord('wssnd_in_sub_' + Date.now(), 'SUPPLIER_SUB', 'wssnd_v7_inbound', fullSub.product_title, fullSub);
+
     const allSubs = getSubmissions();
-    allSubs.unshift(Object.assign({ id: 'sub_' + Date.now(), created_at: new Date().toISOString() }, payload));
+    allSubs.unshift(fullSub);
     saveSubmissions(allSubs);
 
     e.target.reset();
     await renderMySupplierSubmissions();
     alert('Solicitud enviada correctamente. Benjamín o David revisarán tu producto para su aprobación.');
+  }
+
+  async function pushBuyerRfqCloud(payload) {
+    const buyerEntry = {
+      id: 'buy_rfq_' + Date.now(),
+      name: payload.name,
+      company: payload.company || 'Particular / Empresa',
+      contact: [payload.phone, payload.email].filter(Boolean).join(' | '),
+      product_required: `${payload.item} (${payload.quantity} -> ${payload.destination})`,
+      request_date: new Date().toISOString().slice(0, 10),
+      status: 'Abierto',
+      close_date: '',
+      total_amount: 0,
+      profit_amount: 0,
+      captured_by: payload.captured_by || getCapturedBy()
+    };
+    await cloudUpsertRecord('wssnd_in_rfq_' + Date.now(), 'BUYER_RFQ', 'wssnd_v7_inbound', payload.name, buyerEntry);
+    return buyerEntry;
   }
 
   // Update Header & Drawer Buttons dynamically based on Session Role
@@ -927,6 +1186,7 @@
     compressImageFile,
     syncFromServer,
     pushAdminStateToServer,
+    pushBuyerRfqCloud,
     loginUser,
     registerExternalUser,
     logoutUser,
