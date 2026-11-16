@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cercli Payroll Ops • AI Exception & Reconciliation Engine Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #080D1A; color: #E2E8F0; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .glass { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-emerald { background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); }
+    .glass-amber { background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); }
+  </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+    <div>
+      <div class="flex items-center gap-2 mb-1">
+        <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold mono">LIVE DEMO FOR CERCLI</span>
+        <span class="text-xs text-slate-400 mono">Freelance Payroll Ops & Automation</span>
+      </div>
+      <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+        Cercli Payroll Ops • AI Exception & Reconciliation Engine
+      </h1>
+      <p class="text-sm text-slate-400 mt-1">
+        Bridge between Operations & Engineering: automated GCC WPS validation, payroll discrepancy detection, and Slack/Linear escalation.
+      </p>
+    </div>
+
+    <div class="glass px-4 py-2.5 rounded-xl text-right">
+      <div class="text-[11px] text-slate-400 mono">PREPARED BY</div>
+      <div class="text-sm font-bold text-amber-400 mono">David Rodriguez (@cubaloop)</div>
+      <div class="text-xs text-slate-400">Dubai, UAE • IFZA</div>
+    </div>
+  </header>
+
+  <!-- Metrics -->
+  <section class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 my-6">
+    <div class="glass p-4 rounded-xl">
+      <div class="text-xs text-slate-400 uppercase font-medium">Payroll Batch Size</div>
+      <div class="text-2xl font-bold text-white mono mt-1">128 Employees</div>
+      <div class="text-xs text-slate-400 mt-1">UAE, KSA & Egypt entities</div>
+    </div>
+
+    <div class="glass p-4 rounded-xl">
+      <div class="text-xs text-slate-400 uppercase font-medium">Auto-Reconciled</div>
+      <div class="text-2xl font-bold text-emerald-400 mono mt-1">124 Clean</div>
+      <div class="text-xs text-emerald-400 mt-1"><i class="fas fa-check"></i> Passed GOSI/WPS rules</div>
+    </div>
+
+    <div class="glass p-4 rounded-xl">
+      <div class="text-xs text-slate-400 uppercase font-medium">Exceptions Intercepted</div>
+      <div class="text-2xl font-bold text-amber-400 mono mt-1" id="exc-count">4 Blocked</div>
+      <div class="text-xs text-amber-400 mt-1"><i class="fas fa-shield-alt"></i> Before client notification</div>
+    </div>
+
+    <div class="glass p-4 rounded-xl">
+      <div class="text-xs text-slate-400 uppercase font-medium">Ops Hours Saved / Run</div>
+      <div class="text-2xl font-bold text-cyan-400 mono mt-1">14.5 Hours</div>
+      <div class="text-xs text-cyan-400 mt-1">94% manual effort reduction</div>
+    </div>
+  </section>
+
+  <!-- Interactive Demo Area -->
+  <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- Left: Exception Feed & Auto-Triage -->
+    <div class="lg:col-span-2 glass rounded-2xl p-5 border-slate-800">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fas fa-exclamation-triangle text-amber-400"></i>
+            Active Payroll Discrepancy Queue
+          </h2>
+          <p class="text-xs text-slate-400">AI-detected anomalies mapped against UAE Labor Law & MoHRE WPS formatting rules.</p>
+        </div>
+        <button onclick="runAutoAudit()" id="audit-btn" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition flex items-center gap-2">
+          <i class="fas fa-play"></i> Re-Run AI Audit
+        </button>
+      </div>
+
+      <div class="space-y-3" id="exception-list">
+        <!-- Item 1 -->
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition" id="item-1">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-white">Rashid Al-Maktoum (Eng Team)</span>
+                <span class="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px] font-bold mono">WPS SIF ID MISMATCH</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Routing Code: IBAN <span class="mono text-slate-300">AE44033...</span> matches Emirates NBD, but Labor Card ID in Cercli HR profile does not match WPS SIF format (missing leading 14-digit prefix).
+              </p>
+              <div class="mt-2 text-[11px] mono text-amber-400 flex items-center gap-2">
+                <i class="fas fa-robot"></i> <strong>AI Action:</strong> Extracted correct ID from uploaded Labor Contract PDF. Ready for 1-click sync.
+              </div>
+            </div>
+            <button onclick="resolveItem('item-1', 'WPS SIF ID auto-corrected in Cercli DB & Linear ticket #ENG-489 synced.')" class="px-3 py-1.5 bg-slate-800 hover:bg-emerald-600 hover:text-white text-xs font-semibold text-emerald-400 rounded-lg transition whitespace-nowrap">
+              Auto-Fix & Sync
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition" id="item-2">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-white">Elena Rostova (Marketing)</span>
+                <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-bold mono">UNPAID LEAVE DEDUCTION DISCREPANCY</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Requested 3 days unpaid leave in Slack/Notion. Timesheet deducted 4 days based on calendar days instead of working days (Art. 28 UAE Labor Law).
+              </p>
+              <div class="mt-2 text-[11px] mono text-amber-400 flex items-center gap-2">
+                <i class="fas fa-robot"></i> <strong>AI Action:</strong> Calculated exact working-day adjustment (+840.50 AED difference).
+              </div>
+            </div>
+            <button onclick="resolveItem('item-2', 'Deduction adjusted to 3 business days (+840.50 AED) and audit trail logged.')" class="px-3 py-1.5 bg-slate-800 hover:bg-emerald-600 hover:text-white text-xs font-semibold text-emerald-400 rounded-lg transition whitespace-nowrap">
+              Apply Recalculation
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition" id="item-3">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-white">Tariq Mansoor (Customer Success)</span>
+                <span class="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] font-bold mono">GOSI ANNUITY CEILING (KSA)</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Saudi entity employee base salary updated to 48,000 SAR. GOSI contribution must be capped at 45,000 SAR statutory ceiling.
+              </p>
+              <div class="mt-2 text-[11px] mono text-amber-400 flex items-center gap-2">
+                <i class="fas fa-robot"></i> <strong>AI Action:</strong> Contribution automatically clamped to 4,050 SAR (9% on 45,000 SAR cap).
+              </div>
+            </div>
+            <button onclick="resolveItem('item-3', 'GOSI contribution clamped to statutory maximum; zero penalty exposure.')" class="px-3 py-1.5 bg-slate-800 hover:bg-emerald-600 hover:text-white text-xs font-semibold text-emerald-400 rounded-lg transition whitespace-nowrap">
+              Enforce Cap
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Architecture & 30-Day Win Blueprint -->
+    <div class="space-y-4">
+      <div class="glass p-5 rounded-2xl border-slate-800">
+        <h3 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+          <i class="fas fa-bullseye text-emerald-400"></i> My 30-Day Deliverable for Cercli
+        </h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          I will deploy this production-grade pipeline connecting your <strong>Customer Success/Support tickets</strong> (Slack, Linear, Zendesk) directly with your <strong>Payroll & WPS Engine</strong>:
+        </p>
+        <ul class="text-xs text-slate-300 space-y-2 mt-3 mono">
+          <li class="flex items-start gap-2">
+            <span class="text-emerald-400">✓</span> <strong>Week 1-2:</strong> Map recurring payroll support tickets and build automated MoHRE WPS / GOSI validation webhooks.
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-emerald-400">✓</span> <strong>Week 3:</strong> Exception containment dashboard + Slack incident alerts before payroll dispatch.
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-emerald-400">✓</span> <strong>Week 4:</strong> Handover documentation, SQL audit logs, and zero-maintenance transition.
+          </li>
+        </ul>
+      </div>
+
+      <!-- Live Execution Log -->
+      <div class="glass p-5 rounded-2xl border-slate-800">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs text-slate-400 font-bold uppercase mono">Live Ops Console</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+        </div>
+        <div class="bg-black/60 p-3 rounded-lg text-[11px] mono text-slate-400 h-40 overflow-y-auto space-y-1" id="console-log">
+          <div>[20:06:12] Engine initialized. Listening to Cercli batch webhook...</div>
+          <div>[20:06:14] Ingested 128 employee records across AE, SA, EG.</div>
+          <div>[20:06:15] MoHRE WPS SIF syntax validation: OK (127/128).</div>
+          <div>[20:06:16] GOSI KSA statutory contribution audit: OK (42/43).</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function log(msg) {
+      const c = document.getElementById('console-log');
+      const time = new Date().toLocaleTimeString();
+      const div = document.createElement('div');
+      div.innerHTML = `<span class="text-emerald-400">[${time}]</span> ${msg}`;
+      c.appendChild(div);
+      c.scrollTop = c.scrollHeight;
+    }
+
+    function resolveItem(id, successMsg) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.opacity = '0.5';
+        el.innerHTML = `
+          <div class="p-3 text-emerald-400 font-bold text-xs flex items-center justify-between mono">
+            <span><i class="fas fa-check-circle"></i> ${successMsg}</span>
+            <span class="text-slate-400 text-[10px]">RESOLVED IN 0.4s</span>
+          </div>
+        `;
+        log(`Resolved ${id}: ${successMsg}`);
+      }
+    }
+
+    function runAutoAudit() {
+      const btn = document.getElementById('audit-btn');
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Auditing...';
+      log('Running full deep rule re-evaluation across all 128 employee files...');
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> Audit Passed';
+        log('Audit finished: 124 reconciled, 0 unhandled critical errors.');
+        setTimeout(() => btn.innerHTML = '<i class="fas fa-play"></i> Re-Run AI Audit', 2000);
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

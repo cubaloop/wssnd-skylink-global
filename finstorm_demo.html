@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviation MRO & Parts AI Sourcing Engine Demo • For Finstorm / AvSight</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #070C14; color: #E2E8F0; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .glass { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-gold { background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.25); }
+  </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+    <div>
+      <div class="flex items-center gap-2 mb-1">
+        <span class="px-2.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold mono">CUSTOM DEMO FOR FINSTORM (CFO REPORTING)</span>
+        <span class="text-xs text-slate-400 mono">Salesforce & AvSight AI Automation</span>
+      </div>
+      <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+        Aviation MRO & Parts AI Sourcing & Quoting Copilot
+      </h1>
+      <p class="text-sm text-slate-400 mt-1">
+        Seamless AvSight / Accounting Seed AI pipeline: automated RFQ parsing, FAA 8130/EASA Form 1 trace validation, and real-time margin optimization.
+      </p>
+    </div>
+
+    <div class="glass px-4 py-2.5 rounded-xl text-right">
+      <div class="text-[11px] text-slate-400 mono">PREPARED BY</div>
+      <div class="text-sm font-bold text-amber-400 mono">David Rodriguez (@cubaloop)</div>
+      <div class="text-xs text-slate-400">Sharjah / Dubai, UAE</div>
+    </div>
+  </header>
+
+  <!-- Metrics -->
+  <section class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 my-6">
+    <div class="glass p-4 rounded-xl">
+      <div class="text-xs text-slate-400 uppercase font-medium">Daily RFQ Volume Parsed</div>
+      <div class="text-2xl font-bold text-white mono mt-1">1,420 RFQs</div>
+      <div class="text-xs text-slate-400 mt-1">ILS, PartsBase & Direct Email</div>
+    </div>
+
+    <div class="glass p-4 rounded-xl">
+      <div class="text-xs text-slate-400 uppercase font-medium">Instant AI Quote Rate</div>
+      <div class="text-2xl font-bold text-amber-400 mono mt-1">88.4%</div>
+      <div class="text-xs text-amber-300 mt-1">Under 45s response time</div>
+    </div>
+
+    <div class="glass p-4 rounded-xl">
+      <div class="text-xs text-slate-400 uppercase font-medium">Gross Margin Protection</div>
+      <div class="text-2xl font-bold text-emerald-400 mono mt-1">+4.2% Margin</div>
+      <div class="text-xs text-emerald-400 mt-1">Accounting Seed ledger parity</div>
+    </div>
+
+    <div class="glass p-4 rounded-xl">
+      <div class="text-xs text-slate-400 uppercase font-medium">Trace Compliance</div>
+      <div class="text-2xl font-bold text-cyan-400 mono mt-1">100% Green</div>
+      <div class="text-xs text-cyan-300 mt-1">FAA 8130-3 / EASA Form 1</div>
+    </div>
+  </section>
+
+  <!-- Interactive RFQ Sourcing Matrix -->
+  <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <div class="lg:col-span-2 glass rounded-2xl p-5 border-slate-800">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fas fa-plane-departure text-amber-400"></i>
+            Live Aviation Parts Quoting & Trace Queue
+          </h2>
+          <p class="text-xs text-slate-400">Simulating incoming airline RFQs routed directly into AvSight Work Orders.</p>
+        </div>
+      </div>
+
+      <div class="space-y-3" id="rfq-list">
+        <!-- Part 1 -->
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition" id="part-1">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-white mono">PN: 3289562-4 (CFM56-7B High Pressure Turbine Blade)</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold mono">IN STOCK (SHARJAH FZ)</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Requested Qty: 1 Set (80 EA) • Customer: Flydubai MRO • Condition: Overhauled (OH) with dual FAA/EASA release.
+              </p>
+              <div class="mt-2 text-[11px] mono text-amber-400 flex items-center gap-2">
+                <i class="fas fa-calculator"></i> <strong>AI Dynamic Pricing:</strong> Cost: $42,000 USD | AI Recommended Quote: $54,800 USD (23.3% Margin).
+              </div>
+            </div>
+            <button onclick="approveQuote('part-1', 'Quote #Q-8492 auto-posted to AvSight & dispatched to Flydubai in 1.2s.')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition whitespace-nowrap">
+              Approve & Dispatch Quote
+            </button>
+          </div>
+        </div>
+
+        <!-- Part 2 -->
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition" id="part-2">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-white mono">PN: 4079860-901 (A320 Main Landing Gear Actuator)</span>
+                <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-bold mono">SOURCING REQUIRED</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Requested Qty: 1 EA (AOG Emergency) • Customer: Emirates Engineering • Condition: Serviceable (SV).
+              </p>
+              <div class="mt-2 text-[11px] mono text-amber-400 flex items-center gap-2">
+                <i class="fas fa-network-wired"></i> <strong>AI Supplier Match:</strong> Found 2 certified units in Miami & Frankfurt warehouse ($18,500 USD).
+              </div>
+            </div>
+            <button onclick="approveQuote('part-2', 'Automated PO generated to German supplier with 24h DHL Express AOG freight.')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition whitespace-nowrap">
+              Auto-Source & PO
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Architecture Details for CFO -->
+    <div class="space-y-4">
+      <div class="glass p-5 rounded-2xl border-slate-800">
+        <h3 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+          <i class="fas fa-shield-alt text-amber-400"></i> CFO & Executive Benefits
+        </h3>
+        <ul class="text-xs text-slate-300 space-y-2 mt-3 mono">
+          <li class="flex items-start gap-2">
+            <span class="text-amber-400">✓</span> <strong>Accounting Seed Reconciliation:</strong> Automated invoice matching eliminates billing leakages.
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-amber-400">✓</span> <strong>Real-Time Tableau / Power BI Feed:</strong> Direct SQL and Salesforce Flow streaming.
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-amber-400">✓</span> <strong>Audit Traceability:</strong> Zero non-incident non-conformance reports.
+          </li>
+        </ul>
+      </div>
+
+      <div class="glass p-5 rounded-2xl border-slate-800">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs text-slate-400 font-bold uppercase mono">AvSight Telemetry Stream</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+        </div>
+        <div class="bg-black/60 p-3 rounded-lg text-[11px] mono text-slate-400 h-40 overflow-y-auto space-y-1" id="mro-log">
+          <div>[20:07:01] Connected to Salesforce AvSight Sandbox via OAuth2.</div>
+          <div>[20:07:03] ILS & PartsBase pricing scrapers: Synced.</div>
+          <div>[20:07:04] Accounting Seed general ledger hook: 0 reconciliation errors.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function log(msg) {
+      const c = document.getElementById('mro-log');
+      const time = new Date().toLocaleTimeString();
+      const div = document.createElement('div');
+      div.innerHTML = `<span class="text-amber-400">[${time}]</span> ${msg}`;
+      c.appendChild(div);
+      c.scrollTop = c.scrollHeight;
+    }
+
+    function approveQuote(id, successMsg) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.opacity = '0.5';
+        el.innerHTML = `
+          <div class="p-3 text-emerald-400 font-bold text-xs flex items-center justify-between mono">
+            <span><i class="fas fa-check-circle"></i> ${successMsg}</span>
+            <span class="text-slate-400 text-[10px]">EXECUTED</span>
+          </div>
+        `;
+        log(`Approved ${id}: ${successMsg}`);
+      }
+    }
+  </script>
+</body>
+</html>
