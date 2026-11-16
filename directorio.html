@@ -132,6 +132,14 @@
             <span id="badge-buyers" class="px-2 py-0.5 rounded-full bg-slate-800 text-gold-400 text-[11px] font-extrabold">0</span>
           </button>
 
+          <button type="button" id="side-btn-orders" onclick="switchDirectoryCategory('ORDERS')" class="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl bg-navy-950 text-slate-200 hover:bg-navy-800 border border-slate-800 font-display font-bold text-xs transition">
+            <span class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+              <span>Pedidos Abiertos</span>
+            </span>
+            <span id="badge-orders" class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-extrabold">0</span>
+          </button>
+
           <button type="button" id="side-btn-submissions" onclick="switchDirectoryCategory('SUBMISSIONS')" class="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-navy-950 text-slate-300 hover:bg-navy-800 border border-slate-800 font-display font-bold text-xs transition">
             <span>Catálogos por Aprobar</span>
             <span id="badge-submissions" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-extrabold">0</span>
@@ -202,6 +210,16 @@
             </select>
           </div>
 
+          <div id="dir-order-status-filter-box" class="hidden">
+            <label for="dir-filter-order-status" class="block text-[10px] uppercase tracking-wider text-emerald-400 font-bold mb-1">Fase del Pedido</label>
+            <select id="dir-filter-order-status" onchange="renderActiveDirectory()" class="w-full rounded-xl bg-navy-950 border border-emerald-500/40 px-3 py-2.5 text-xs text-emerald-300 font-bold">
+              <option value="ALL">Todas las fases</option>
+              <option value="Pendiente">⏳ Pendientes</option>
+              <option value="En Proceso">🔄 En Proceso</option>
+              <option value="Completado">✅ Completados</option>
+            </select>
+          </div>
+
           <input type="search" id="dir-search" oninput="renderActiveDirectory()" placeholder="Buscar empresa, país, producto..." class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2.5 text-xs text-white focus:border-gold-500 focus:outline-none" />
         </div>
 
@@ -242,6 +260,9 @@
             </button>
             <button type="button" id="btn-new-buyer" onclick="openBuyerModal()" class="hidden px-4 py-2.5 rounded-xl gold-gradient text-navy-950 font-display font-extrabold text-xs shadow">
               + Nuevo Comprador
+            </button>
+            <button type="button" id="btn-new-order" onclick="openOrderModal()" class="hidden px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-navy-950 font-display font-extrabold text-xs shadow transition">
+              + Nuevo Pedido
             </button>
           </div>
         </div>
@@ -423,6 +444,124 @@
         <div class="flex justify-end gap-2 pt-2">
           <button type="button" onclick="closeBuyerModal()" class="px-4 py-2 rounded-xl bg-navy-800 text-slate-300 font-bold">Cancelar</button>
           <button type="submit" class="px-5 py-2 rounded-xl gold-gradient text-navy-950 font-display font-extrabold">Guardar Comprador</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  
+  <!-- MODAL: ADD / EDIT ORDER -->
+  <div id="modal-edit-order" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-navy-950/85 backdrop-blur-sm">
+    <div class="bg-navy-900 border border-emerald-500/40 rounded-3xl max-w-xl w-full p-6 text-white shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div>
+          <h3 class="font-display font-bold text-base text-emerald-400">Ficha de Pedido / Operación en Curso</h3>
+          <p class="text-[11px] text-slate-400">Seguimiento de pedidos activos entre compradores y proveedores.</p>
+        </div>
+        <button type="button" onclick="closeOrderModal()" class="text-slate-400 hover:text-white text-2xl">&times;</button>
+      </div>
+      <form onsubmit="saveOrderForm(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="ord-edit-id" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Título del Pedido *</label>
+            <input type="text" id="ord-edit-title" required placeholder="Ej. Suministro Azufre 25k TM" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Categoría / Sector *</label>
+            <select id="ord-edit-category" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
+              <option value="COMMODITIES">Materias Primas y Agro</option>
+              <option value="MACHINERY">Maquinaria y Tractores</option>
+              <option value="AUTOPARTS">Recambios y Transmisiones</option>
+              <option value="VEHICLES">Automoción y Flotas</option>
+              <option value="REAL_ESTATE">Real Estate</option>
+              <option value="YACHTS">Náutica y Yates</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Producto Específico *</label>
+          <input type="text" id="ord-edit-product" required placeholder="Especificación técnica exacta del producto" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Comprador / Mandato *</label>
+            <input type="text" id="ord-edit-buyer-name" required placeholder="Nombre de empresa o cliente" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">País Comprador *</label>
+            <select id="ord-edit-buyer-country" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
+              <option value="España">España</option>
+              <option value="EAU">EAU (Emiratos)</option>
+              <option value="Internacional">Internacional / Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Proveedor Asignado / Contactado *</label>
+            <input type="text" id="ord-edit-supplier" required placeholder="Ej. Kommerza / Polestar" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Teléfono Proveedor *</label>
+            <input type="text" id="ord-edit-supplier-phone" placeholder="+971..." class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Volumen / Cantidad *</label>
+            <input type="text" id="ord-edit-volume" required placeholder="Ej. 25.000 TM / 5 Unidades" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Puerto / Destino *</label>
+            <input type="text" id="ord-edit-port" required placeholder="Ej. CIF Hopa / CIF Djibouti" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Precio Objetivo *</label>
+            <input type="text" id="ord-edit-price" required placeholder="Ej. $880 USD/TM" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Monto Estimado (€ / USD)</label>
+            <input type="number" step="0.01" min="0" id="ord-edit-total" value="0" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white font-mono" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Ganancia Estimada (€ / USD)</label>
+            <input type="number" step="0.01" min="0" id="ord-edit-profit" value="0" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-emerald-400 font-mono font-bold" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Estado de Pedido *</label>
+            <select id="ord-edit-status" class="w-full rounded-xl bg-navy-950 border border-emerald-500/50 px-3 py-2 text-emerald-300 font-bold">
+              <option value="Pendiente">⏳ Pendiente</option>
+              <option value="En Proceso">🔄 En Proceso</option>
+              <option value="Completado">✅ Completado</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Quién lo Gestiona / Captó *</label>
+          <select id="ord-edit-captured" class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white">
+            <option value="Benjamín">Benjamín</option>
+            <option value="David">David</option>
+            <option value="Se registró solo">Se registró solo</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Lo que queda Pendiente / Próxima Acción *</label>
+          <textarea id="ord-edit-pending" rows="2" required placeholder="Detalla qué trámite o respuesta falta..." class="w-full rounded-xl bg-navy-950 border border-slate-700 px-3 py-2 text-white"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeOrderModal()" class="px-4 py-2 rounded-xl bg-navy-800 text-slate-300 font-bold">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-navy-950 font-display font-extrabold">Guardar Pedido</button>
         </div>
       </form>
     </div>
@@ -629,12 +768,17 @@
         SUPPLIERS: {
           btn: 'side-btn-suppliers',
           title: 'Directorio de Proveedores',
-          sub: 'Proveedores verificados en España y EAU: contacto directo, productos, precios netos, negocios cerrados y quién lo captó.'
+          sub: 'Proveedores verificados en España y EAU: estado en tiempo real, lo que queda pendiente, contacto directo, precios netos y quién lo captó.'
         },
         BUYERS: {
           btn: 'side-btn-buyers',
           title: 'Directorio de Compradores',
           sub: 'Compradores interesados por país y categoría, producto requerido, fechas, estado, monto, ganancia y quién lo captó.'
+        },
+        ORDERS: {
+          btn: 'side-btn-orders',
+          title: 'Área de Pedidos Abiertos y en Curso',
+          sub: 'Control operacional de pedidos: cambia de fase (Pendiente, En Proceso, Completado) con 1 clic para organizar y filtrar las áreas limpiamente.'
         },
         SUBMISSIONS: {
           btn: 'side-btn-submissions',
@@ -643,7 +787,7 @@
         }
       };
 
-      ['SUPPLIERS', 'BUYERS', 'SUBMISSIONS'].forEach(k => {
+      ['SUPPLIERS', 'BUYERS', 'ORDERS', 'SUBMISSIONS'].forEach(k => {
         const el = document.getElementById(map[k].btn);
         if (!el) return;
         el.className = k === cat
@@ -655,6 +799,10 @@
       document.getElementById('dir-view-subtitle').textContent = map[cat].sub;
       document.getElementById('btn-new-supplier').classList.toggle('hidden', cat !== 'SUPPLIERS');
       document.getElementById('btn-new-buyer').classList.toggle('hidden', cat !== 'BUYERS');
+      const orderBtn = document.getElementById('btn-new-order');
+      if (orderBtn) orderBtn.classList.toggle('hidden', cat !== 'ORDERS');
+      const orderFilterBox = document.getElementById('dir-order-status-filter-box');
+      if (orderFilterBox) orderFilterBox.classList.toggle('hidden', cat !== 'ORDERS');
       renderActiveDirectory();
     }
 
@@ -665,10 +813,15 @@
       const buyers = window.WSSND.getBuyers();
       const subs = window.WSSND.getSubmissions();
 
+      const orders = window.WSSND.getOrders ? window.WSSND.getOrders() : [];
       const closedFromSuppliers = suppliers.reduce((acc, s) => acc + Number(s.closed_deals || 0), 0);
       const closedBuyers = buyers.filter(b => b.status === 'Cerrado');
-      const totalClosed = Math.max(closedFromSuppliers, closedBuyers.length);
-      const totalProfit = buyers.reduce((acc, b) => acc + (b.status === 'Cerrado' ? Number(b.profit_amount || 0) : 0), 0);
+      const completedOrders = orders.filter(o => o.status === 'Completado');
+      const totalClosed = Math.max(closedFromSuppliers, closedBuyers.length, completedOrders.length);
+      
+      const profitFromBuyers = buyers.reduce((acc, b) => acc + (b.status === 'Cerrado' ? Number(b.profit_amount || 0) : 0), 0);
+      const profitFromOrders = orders.reduce((acc, o) => acc + (o.status === 'Completado' ? Number(o.est_profit || 0) : 0), 0);
+      const totalProfit = Math.max(profitFromBuyers, profitFromOrders);
 
       document.getElementById('kpi-suppliers-count').textContent = String(suppliers.length);
       document.getElementById('kpi-buyers-count').textContent = String(buyers.length);
@@ -677,6 +830,8 @@
 
       document.getElementById('badge-suppliers').textContent = String(suppliers.length);
       document.getElementById('badge-buyers').textContent = String(buyers.length);
+      const ordersBadge = document.getElementById('badge-orders');
+      if (ordersBadge) ordersBadge.textContent = String(orders.length);
       document.getElementById('badge-submissions').textContent = String(subs.filter(x => x.review_status === 'PENDING_REVIEW').length);
 
       if (activeDirTab === 'SUPPLIERS') {
@@ -685,6 +840,9 @@
       } else if (activeDirTab === 'BUYERS') {
         populateProductFilterOptions(buyers);
         syncQuickPillsAndCounts(buyers, 'España');
+      } else if (activeDirTab === 'ORDERS') {
+        populateProductFilterOptions(orders);
+        syncQuickPillsAndCounts(orders, 'España');
       } else {
         populateProductFilterOptions(subs);
         syncQuickPillsAndCounts(subs, 'EAU');
@@ -760,11 +918,22 @@
             </button>`;
           }).join('');
 
+          const statusClass = String(s.status || '').includes('🟢') 
+            ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' 
+            : (String(s.status || '').includes('🟡') ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : 'bg-slate-800 text-slate-300 border-slate-700');
+
           return `
             <tr class="hover:bg-navy-800/50 transition align-top">
-              <td class="px-4 py-3.5 font-bold text-white min-w-[200px]">
-                ${escHtml(s.company_name)}
-                ${s.status ? `<span class="block mt-1 text-[10px] font-semibold text-gold-400">${escHtml(s.status)}</span>` : ''}
+              <td class="px-4 py-3.5 font-bold text-white min-w-[220px]">
+                <span class="text-sm block">${escHtml(s.company_name)}</span>
+                <span class="inline-block mt-1.5 px-2 py-0.5 rounded-full border text-[10px] font-bold ${statusClass}">
+                  ${escHtml(s.status || 'Activo')}
+                </span>
+                ${s.pending_action ? `
+                  <div class="mt-2 p-2 rounded-xl bg-navy-950/80 border border-amber-500/30 text-[11px] text-amber-200/90 leading-tight">
+                    <strong class="text-amber-400 uppercase text-[9px] block mb-0.5 tracking-wider">⏳ Lo que queda pendiente:</strong>
+                    ${escHtml(s.pending_action)}
+                  </div>` : ''}
               </td>
               <td class="px-4 py-3.5 min-w-[140px]">
                 ${renderCountryBadge(sCountry)}
@@ -887,6 +1056,134 @@
             </tr>
           `;
         }).join('') || `<tr><td colspan="12" class="p-8 text-center text-slate-400">No hay compradores registrados con ese filtro de país, categoría o producto.</td></tr>`;
+
+            } else if (activeDirTab === 'ORDERS') {
+        const orderPhaseFilter = document.getElementById('dir-filter-order-status')?.value || 'ALL';
+
+        thead.innerHTML = `
+          <tr>
+            <th class="px-4 py-3.5">Pedido / Código</th>
+            <th class="px-4 py-3.5">Fase Actual (1-Clic)</th>
+            <th class="px-4 py-3.5">País / Sector</th>
+            <th class="px-4 py-3.5">Comprador</th>
+            <th class="px-4 py-3.5">Proveedor Asignado</th>
+            <th class="px-4 py-3.5">Producto (1-Clic)</th>
+            <th class="px-4 py-3.5">Volumen / Puerto</th>
+            <th class="px-4 py-3.5">Lo que queda Pendiente</th>
+            <th class="px-4 py-3.5">Total Est.</th>
+            <th class="px-4 py-3.5">Ganancia Est.</th>
+            <th class="px-4 py-3.5">Gestor</th>
+            <th class="px-4 py-3.5 text-right">Acciones</th>
+          </tr>
+        `;
+
+        const filteredOrders = orders.filter(ord => {
+          const ordCountry = inferCountry(ord, 'España');
+          const ordSector = inferSector(ord);
+          if (countryFilter !== 'ALL') {
+            if (countryFilter === 'Internacional') {
+              if (ordCountry === 'España' || ordCountry === 'EAU') return false;
+            } else if (ordCountry !== countryFilter) {
+              return false;
+            }
+          }
+          if (sectorFilter !== 'ALL' && ordSector !== sectorFilter) return false;
+          if (orderPhaseFilter !== 'ALL' && ord.status !== orderPhaseFilter) return false;
+          if (prodFilter !== 'all') {
+            const hayProd = `${ord.product || ''} ${ord.title || ''}`.toLowerCase();
+            if (!hayProd.includes(prodFilter)) return false;
+          }
+          if (capFilter !== 'ALL' && ord.captured_by !== capFilter) return false;
+          if (q) {
+            const hay = `${ord.order_number} ${ord.title} ${ord.product} ${ord.buyer_name} ${ord.supplier_assigned} ${ord.target_port} ${ord.pending_action}`.toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        });
+
+        counterEl.textContent = `${filteredOrders.length} de ${orders.length} pedidos`;
+
+        tbody.innerHTML = filteredOrders.map(ord => {
+          const ordCountry = inferCountry(ord, 'España');
+          const ordSector = inferSector(ord);
+          const cleanProd = String(ord.product || '').replace(/\s*\([^)]*\)/g, '').trim();
+
+          // Phase badge and 1-click status cycle
+          let statusBadge = '';
+          if (ord.status === 'Completado') {
+            statusBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+          } else if (ord.status === 'En Proceso') {
+            statusBadge = 'bg-blue-500/20 text-blue-300 border-blue-500/40';
+          } else {
+            statusBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+          }
+
+          const waDigits = extractWaDigits(ord.supplier_phone);
+          const waBtn = waDigits ? `
+            <a href="https://wa.me/${waDigits}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Proveedor" class="w-6 h-6 rounded-full bg-[#25D366] text-white inline-flex items-center justify-center shrink-0 hover:scale-105 transition">
+              <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771z"/></svg>
+            </a>` : '';
+
+          return `
+            <tr class="hover:bg-navy-800/50 transition align-top">
+              <td class="px-4 py-3.5 font-bold text-white min-w-[160px]">
+                <span class="text-xs font-mono text-gold-400 block">${escHtml(ord.order_number)}</span>
+                <span class="text-sm font-display font-bold block mt-0.5">${escHtml(ord.title)}</span>
+                <span class="text-[10px] text-slate-400 block mt-1">Alta: ${escHtml(ord.created_at)}</span>
+              </td>
+              <td class="px-4 py-3.5 min-w-[130px]">
+                <button type="button" onclick="cycleOrderStatus('${escHtml(ord.id)}')" title="Clic para cambiar de fase (Pendiente -> En Proceso -> Completado)" class="px-3 py-1.5 rounded-full border text-[11px] font-bold ${statusBadge} hover:scale-105 transition flex items-center gap-1.5">
+                  <span>${escHtml(ord.status)}</span>
+                  <svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <span class="text-[9px] text-slate-400 block mt-1">Clic para rotar fase</span>
+              </td>
+              <td class="px-4 py-3.5 min-w-[130px]">
+                ${renderCountryBadge(ordCountry)}
+                <span class="block mt-1 text-[10px] text-slate-400 font-semibold">${escHtml(SECTOR_LABELS[ordSector] || ordSector)}</span>
+              </td>
+              <td class="px-4 py-3.5 text-slate-200 min-w-[140px]">
+                <strong class="block text-white">${escHtml(ord.buyer_name)}</strong>
+                <span class="text-[11px] text-slate-400 font-mono">${escHtml(ord.buyer_contact || '')}</span>
+              </td>
+              <td class="px-4 py-3.5 text-slate-200 min-w-[160px]">
+                <div class="flex items-center gap-1.5">
+                  ${waBtn}
+                  <span class="font-bold text-white">${escHtml(ord.supplier_assigned)}</span>
+                </div>
+                <span class="text-[11px] text-slate-400 font-mono block mt-0.5">${escHtml(ord.supplier_phone || '')}</span>
+              </td>
+              <td class="px-4 py-3.5 min-w-[180px]">
+                <button type="button" onclick="setProductQuickFilter('${escHtml(cleanProd)}')" title="Filtrar por este producto" class="text-left text-xs text-slate-200 hover:text-gold-300 hover:underline font-medium bg-navy-950/80 px-2.5 py-1 rounded-xl border border-slate-800 transition">
+                  ${escHtml(ord.product)}
+                </button>
+              </td>
+              <td class="px-4 py-3.5 text-xs text-slate-300 min-w-[150px]">
+                <strong class="text-white block">${escHtml(ord.volume)}</strong>
+                <span class="text-[11px] text-gold-400 block mt-0.5">${escHtml(ord.target_port)}</span>
+                <span class="text-[10px] text-slate-400 block mt-0.5">${escHtml(ord.target_price)}</span>
+              </td>
+              <td class="px-4 py-3.5 min-w-[200px]">
+                <div class="p-2.5 rounded-xl bg-navy-950/90 border border-amber-500/30 text-xs text-amber-200/90">
+                  ${escHtml(ord.pending_action)}
+                </div>
+              </td>
+              <td class="px-4 py-3.5 font-mono font-bold text-white whitespace-nowrap">${Number(ord.est_total_amount || 0) > 0 ? Number(ord.est_total_amount).toLocaleString('es-ES') + ' €' : 'A cotizar'}</td>
+              <td class="px-4 py-3.5 font-mono font-bold text-emerald-400 whitespace-nowrap">${Number(ord.est_profit || 0) > 0 ? '+' + Number(ord.est_profit).toLocaleString('es-ES') + ' €' : 'A cotizar'}</td>
+              <td class="px-4 py-3.5 min-w-[140px]">
+                <select onchange="updateOrderCaptured('${escHtml(ord.id)}', this.value)" class="rounded-lg bg-navy-950 border border-slate-700 px-2 py-1 text-[11px] text-gold-300 font-semibold">
+                  <option value="Benjamín" ${ord.captured_by === 'Benjamín' ? 'selected' : ''}>Benjamín</option>
+                  <option value="David" ${ord.captured_by === 'David' ? 'selected' : ''}>David</option>
+                  <option value="Se registró solo" ${ord.captured_by === 'Se registró solo' ? 'selected' : ''}>Se registró solo</option>
+                </select>
+              </td>
+              <td class="px-4 py-3.5 text-right whitespace-nowrap space-x-1">
+                <button type="button" onclick="openOrderModal('${escHtml(ord.id)}')" class="px-2.5 py-1 rounded-lg bg-navy-800 hover:bg-navy-700 text-gold-400 font-bold">Editar</button>
+                <button type="button" onclick="deleteOrder('${escHtml(ord.id)}')" class="px-2.5 py-1 rounded-lg bg-red-500/15 hover:bg-red-500/30 text-red-300 font-bold">Borrar</button>
+              </td>
+            </tr>
+          `;
+        }).join('') || `<tr><td colspan="12" class="p-8 text-center text-slate-400">No hay pedidos registrados con ese filtro de fase, país o producto.</td></tr>`;
 
       } else {
         thead.innerHTML = `
@@ -1138,6 +1435,117 @@
     function deleteBuyer(id) {
       if (!confirm('¿Eliminar este registro de comprador?')) return;
       window.WSSND.saveBuyers(window.WSSND.getBuyers().filter(x => String(x.id) !== String(id)));
+      renderActiveDirectory();
+    }
+
+    
+    function cycleOrderStatus(id) {
+      const list = window.WSSND.getOrders ? window.WSSND.getOrders() : [];
+      const item = list.find(x => String(x.id) === String(id));
+      if (!item) return;
+      if (item.status === 'Pendiente') item.status = 'En Proceso';
+      else if (item.status === 'En Proceso') item.status = 'Completado';
+      else item.status = 'Pendiente';
+      item.updated_at = new Date().toISOString().slice(0, 10);
+      window.WSSND.saveOrders(list);
+      renderActiveDirectory();
+    }
+
+    function updateOrderCaptured(id, val) {
+      const list = window.WSSND.getOrders ? window.WSSND.getOrders() : [];
+      const item = list.find(x => String(x.id) === String(id));
+      if (!item) return;
+      item.captured_by = val;
+      window.WSSND.saveOrders(list);
+      renderActiveDirectory();
+    }
+
+    function openOrderModal(id = '') {
+      document.getElementById('modal-edit-order').classList.remove('hidden');
+      if (!id) {
+        document.getElementById('ord-edit-id').value = '';
+        document.getElementById('ord-edit-title').value = '';
+        document.getElementById('ord-edit-category').value = 'COMMODITIES';
+        document.getElementById('ord-edit-product').value = '';
+        document.getElementById('ord-edit-buyer-name').value = '';
+        document.getElementById('ord-edit-buyer-country').value = 'España';
+        document.getElementById('ord-edit-supplier').value = '';
+        document.getElementById('ord-edit-supplier-phone').value = '';
+        document.getElementById('ord-edit-volume').value = '';
+        document.getElementById('ord-edit-port').value = '';
+        document.getElementById('ord-edit-price').value = '';
+        document.getElementById('ord-edit-total').value = '0';
+        document.getElementById('ord-edit-profit').value = '0';
+        document.getElementById('ord-edit-status').value = 'En Proceso';
+        document.getElementById('ord-edit-pending').value = '';
+        const s = window.WSSND.getSession();
+        document.getElementById('ord-edit-captured').value = (s && s.attributionName) || 'Benjamín';
+        return;
+      }
+      const list = window.WSSND.getOrders ? window.WSSND.getOrders() : [];
+      const ord = list.find(x => String(x.id) === String(id));
+      if (!ord) return;
+      document.getElementById('ord-edit-id').value = ord.id;
+      document.getElementById('ord-edit-title').value = ord.title || '';
+      document.getElementById('ord-edit-category').value = ord.category || 'COMMODITIES';
+      document.getElementById('ord-edit-product').value = ord.product || '';
+      document.getElementById('ord-edit-buyer-name').value = ord.buyer_name || '';
+      document.getElementById('ord-edit-buyer-country').value = ord.buyer_country || 'España';
+      document.getElementById('ord-edit-supplier').value = ord.supplier_assigned || '';
+      document.getElementById('ord-edit-supplier-phone').value = ord.supplier_phone || '';
+      document.getElementById('ord-edit-volume').value = ord.volume || '';
+      document.getElementById('ord-edit-port').value = ord.target_port || '';
+      document.getElementById('ord-edit-price').value = ord.target_price || '';
+      document.getElementById('ord-edit-total').value = Number(ord.est_total_amount || 0);
+      document.getElementById('ord-edit-profit').value = Number(ord.est_profit || 0);
+      document.getElementById('ord-edit-status').value = ord.status || 'En Proceso';
+      document.getElementById('ord-edit-pending').value = ord.pending_action || '';
+      document.getElementById('ord-edit-captured').value = ord.captured_by || 'Benjamín';
+    }
+
+    function closeOrderModal() {
+      document.getElementById('modal-edit-order').classList.add('hidden');
+    }
+
+    function saveOrderForm(e) {
+      e.preventDefault();
+      const list = window.WSSND.getOrders ? window.WSSND.getOrders() : [];
+      const id = document.getElementById('ord-edit-id').value;
+      const num = id ? (list.find(x => String(x.id) === String(id))?.order_number || ('ORD-' + Date.now())) : ('ORD-' + (new Date().getFullYear()) + '-' + String(list.length + 1).padStart(3, '0'));
+      const obj = {
+        id: id || ('ord_' + Date.now()),
+        order_number: num,
+        title: document.getElementById('ord-edit-title').value.trim(),
+        category: document.getElementById('ord-edit-category').value,
+        product: document.getElementById('ord-edit-product').value.trim(),
+        buyer_name: document.getElementById('ord-edit-buyer-name').value.trim(),
+        buyer_contact: 'Canal Benjamín / David',
+        buyer_country: document.getElementById('ord-edit-buyer-country').value,
+        supplier_assigned: document.getElementById('ord-edit-supplier').value.trim(),
+        supplier_phone: document.getElementById('ord-edit-supplier-phone').value.trim(),
+        volume: document.getElementById('ord-edit-volume').value.trim(),
+        target_port: document.getElementById('ord-edit-port').value.trim(),
+        target_price: document.getElementById('ord-edit-price').value.trim(),
+        est_total_amount: Number(document.getElementById('ord-edit-total').value || 0),
+        est_profit: Number(document.getElementById('ord-edit-profit').value || 0),
+        status: document.getElementById('ord-edit-status').value,
+        pending_action: document.getElementById('ord-edit-pending').value.trim(),
+        captured_by: document.getElementById('ord-edit-captured').value,
+        created_at: id ? (list.find(x => String(x.id) === String(id))?.created_at || new Date().toISOString().slice(0, 10)) : new Date().toISOString().slice(0, 10),
+        updated_at: new Date().toISOString().slice(0, 10)
+      };
+      const idx = list.findIndex(x => String(x.id) === String(id));
+      if (idx >= 0) list[idx] = Object.assign({}, list[idx], obj);
+      else list.unshift(obj);
+      window.WSSND.saveOrders(list);
+      closeOrderModal();
+      renderActiveDirectory();
+    }
+
+    function deleteOrder(id) {
+      if (!confirm('¿Eliminar este pedido del registro operativo?')) return;
+      const list = window.WSSND.getOrders ? window.WSSND.getOrders() : [];
+      window.WSSND.saveOrders(list.filter(x => String(x.id) !== String(id)));
       renderActiveDirectory();
     }
 

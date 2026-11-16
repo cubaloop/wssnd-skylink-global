@@ -164,6 +164,7 @@ const server = http.createServer(async (req, res) => {
         catalog: state.catalog || [],
         suppliers: state.suppliers || [],
         buyers: state.buyers || [],
+        orders: state.orders || [],
         users: safeUsers,
         submissions: state.submissions || []
       });
@@ -190,6 +191,7 @@ const server = http.createServer(async (req, res) => {
       if (Array.isArray(body.catalog)) state.catalog = body.catalog;
       if (Array.isArray(body.suppliers)) state.suppliers = body.suppliers;
       if (Array.isArray(body.buyers)) state.buyers = body.buyers;
+      if (Array.isArray(body.orders)) state.orders = body.orders;
       if (Array.isArray(body.submissions)) state.submissions = body.submissions;
       saveState(state);
       return sendJson(res, 200, { ok: true });
