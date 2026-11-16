@@ -3,225 +3,398 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cercli Payroll Ops • AI Exception & Reconciliation Engine Demo</title>
+  <title>Cercli • AI Payroll Ops & GCC Compliance Engine Demo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #080D1A; color: #E2E8F0; }
+    :root {
+      --cercli-bg: #FFFFFA;
+      --cercli-card: #FFFFFF;
+      --cercli-dark: #081611;
+      --cercli-green: #0E261E;
+      --cercli-accent: #00D084;
+      --cercli-purple: #E6C8FE;
+      --cercli-yellow: #FEFDC8;
+      --cercli-border: rgba(14, 38, 30, 0.08);
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--cercli-bg);
+      color: var(--cercli-dark);
+      -webkit-font-smoothing: antialiased;
+    }
     .mono { font-family: 'JetBrains Mono', monospace; }
-    .glass { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
-    .glass-emerald { background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); }
-    .glass-amber { background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); }
+    .c-card {
+      background: var(--cercli-card);
+      border: 1px solid var(--cercli-border);
+      box-shadow: 0 1px 3px rgba(8, 22, 17, 0.04), 0 4px 12px rgba(8, 22, 17, 0.02);
+    }
+    .c-card:hover {
+      box-shadow: 0 4px 20px rgba(8, 22, 17, 0.06);
+    }
+    .badge-pill {
+      background: rgba(14, 38, 30, 0.05);
+      border: 1px solid rgba(14, 38, 30, 0.1);
+    }
+    .badge-purple {
+      background: #F3E8FF;
+      color: #6B21A8;
+      border: 1px solid #E9D5FF;
+    }
+    .badge-yellow {
+      background: #FEF9C3;
+      color: #854D0E;
+      border: 1px solid #FEF08A;
+    }
+    .badge-emerald {
+      background: #DCFCE7;
+      color: #166534;
+      border: 1px solid #BBF7D0;
+    }
+    .badge-red {
+      background: #FEE2E2;
+      color: #991B1B;
+      border: 1px solid #FECACA;
+    }
   </style>
 </head>
-<body class="min-h-screen p-4 md:p-8">
+<body class="min-h-screen py-8 px-4 md:px-8">
 
-  <!-- Header -->
-  <header class="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
-    <div>
-      <div class="flex items-center gap-2 mb-1">
-        <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold mono">LIVE DEMO FOR CERCLI</span>
-        <span class="text-xs text-slate-400 mono">Freelance Payroll Ops & Automation</span>
+  <!-- Top Navigation & Cercli Brand Bar -->
+  <header class="max-w-6xl mx-auto pb-6 border-b border-[#0E261E]/10">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-4">
+        <!-- Official Cercli SVG Logo Wordmark -->
+        <a href="https://www.cercli.com/" target="_blank" rel="noopener noreferrer" class="hover:opacity-85 transition-opacity" title="Cercli Official Website">
+          <svg width="112" height="38" viewBox="0 0 98 33" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-8 w-auto">
+            <path d="M88.3477 0H80.9753V31.9996H88.3477V0Z" fill="#081611"/>
+            <path d="M31.3566 8.60235C27.6853 8.60235 24.6706 9.74573 22.3143 12.0308C19.9581 14.3159 18.7808 17.1625 18.7808 20.5706C18.7808 23.9788 19.9651 26.861 22.3372 29.1308C24.7077 31.4023 27.7718 32.6667 31.5313 32.6667C34.3058 32.6667 36.7715 31.8742 38.9249 30.5448C41.0782 29.2154 42.5466 27.206 43.3268 24.5184H35.7373C35.4478 25.3218 34.9271 25.9527 34.177 26.4094C33.425 26.866 32.5426 27.0944 31.5313 27.0944C30.144 27.0944 28.9649 26.6715 27.9976 25.8275C27.0287 24.9835 26.4586 23.7285 26.2839 22.0658H43.6745C44.0505 18.2703 43.0673 15.077 40.7252 12.4875C38.383 9.89795 35.2607 8.60235 31.3582 8.60235H31.3566ZM26.501 17.7866C27.1946 15.2935 28.799 14.0469 31.3142 14.0469C32.5867 14.0469 33.6193 14.387 34.4153 15.0652C35.2095 15.7451 35.7373 16.6517 35.9984 17.7866H26.501Z" fill="#081611"/>
+            <path d="M93.7251 8.19312C96.0861 8.19312 98 6.35903 98 4.09656C98 1.8341 96.0861 0 93.7251 0C91.3642 0 89.4503 1.8341 89.4503 4.09656C89.4503 6.35903 91.3642 8.19312 93.7251 8.19312Z" fill="#081611"/>
+            <path d="M97.4113 9.14279H90.0389V32.0003H97.4113V9.14279Z" fill="#081611"/>
+            <path d="M12.8899 26.2078C9.38279 26.2078 6.53054 23.6877 6.53054 20.589C6.53054 17.4904 9.38279 14.9702 12.8899 14.9702C14.6213 14.9702 16.1922 15.5858 17.3395 16.5804C17.9148 14.4762 18.9667 12.5566 20.3771 10.9311C18.2643 9.53742 15.6803 8.71202 12.8899 8.71202C5.78216 8.71202 0 14.0399 0 20.589C0 27.1381 5.78216 32.466 12.8899 32.466C15.8233 32.466 18.5308 31.556 20.6983 30.0303C19.2333 28.4472 18.1178 26.558 17.4735 24.4792C16.3158 25.5448 14.6902 26.2096 12.8899 26.2096V26.2078Z" fill="#081611"/>
+            <path d="M71.866 26.2078C68.3589 26.2078 65.5067 23.6877 65.5067 20.589C65.5067 17.4904 68.3589 14.9702 71.866 14.9702C73.5974 14.9702 75.1683 15.5858 76.3156 16.5804C76.8909 14.4762 77.9428 12.5566 79.3532 10.9311C77.2404 9.53742 74.6564 8.71202 71.866 8.71202C64.7583 8.71202 58.9761 14.0399 58.9761 20.589C58.9761 27.1381 64.7583 32.466 71.866 32.466C74.7994 32.466 77.507 31.556 79.6744 30.0303C78.2094 28.4472 77.094 26.558 76.4497 24.4792C75.2919 25.5448 73.6663 26.2096 71.866 26.2096V26.2078Z" fill="#081611"/>
+            <path d="M62.3981 10.008C62.6488 9.77629 62.9065 9.55472 63.1712 9.33991C62.0098 8.80882 60.5281 8.54157 58.9907 8.54157C56.1421 8.54157 53.9649 9.58517 52.1929 11.674V9.08451H44.7816V32.0621H52.1929V19.8638C52.1929 16.8277 53.6595 15.3106 56.5965 15.3106C57.232 15.3106 57.7773 15.3765 58.2397 15.5067C59.1347 13.3739 60.5731 11.4931 62.3981 10.0097V10.008Z" fill="#081611"/>
+          </svg>
+        </a>
+        <div class="h-6 w-px bg-slate-300"></div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="badge-purple px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wide mono">AI Payroll Ops Agent</span>
+            <span class="text-xs text-[#0E261E]/60 mono">v2.4 GCC SIF & WPS Engine</span>
+          </div>
+          <h1 class="text-xl md:text-2xl font-bold tracking-tight text-[#081611] mt-0.5">
+            Payroll Exception & Compliance Copilot
+          </h1>
+        </div>
       </div>
-      <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-        Cercli Payroll Ops • AI Exception & Reconciliation Engine
-      </h1>
-      <p class="text-sm text-slate-400 mt-1">
-        Bridge between Operations & Engineering: automated GCC WPS validation, payroll discrepancy detection, and Slack/Linear escalation.
-      </p>
-    </div>
 
-    <div class="glass px-4 py-2.5 rounded-xl text-right">
-      <div class="text-[11px] text-slate-400 mono">PREPARED BY</div>
-      <div class="text-sm font-bold text-amber-400 mono">David Rodriguez (@cubaloop)</div>
-      <div class="text-xs text-slate-400">Dubai, UAE • IFZA</div>
+      <!-- Applicant / Author Badge -->
+      <div class="c-card px-4 py-2.5 rounded-xl border border-[#0E261E]/10 bg-white flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-[#081611] text-[#FEFDC8] flex items-center justify-center font-bold text-xs">
+          DR
+        </div>
+        <div class="text-left">
+          <div class="text-[10px] text-[#0E261E]/50 mono uppercase font-semibold">Specialist Demo By</div>
+          <div class="text-xs font-bold text-[#081611]">David Rodriguez <span class="text-[#0E261E]/50 font-normal">(@cubaloop)</span></div>
+          <div class="text-[11px] text-[#0E261E]/60">Dubai, UAE • Systems & Automation</div>
+        </div>
+      </div>
     </div>
   </header>
 
-  <!-- Metrics -->
+  <!-- Executive KPIs Banner -->
   <section class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 my-6">
-    <div class="glass p-4 rounded-xl">
-      <div class="text-xs text-slate-400 uppercase font-medium">Payroll Batch Size</div>
-      <div class="text-2xl font-bold text-white mono mt-1">128 Employees</div>
-      <div class="text-xs text-slate-400 mt-1">UAE, KSA & Egypt entities</div>
+    <div class="c-card p-4 rounded-xl">
+      <div class="text-[11px] text-[#0E261E]/60 font-semibold uppercase tracking-wider">Payroll Run Size</div>
+      <div class="text-2xl font-bold text-[#081611] mono mt-1">128 Employees</div>
+      <div class="text-xs text-[#0E261E]/60 mt-1">UAE MoHRE + KSA GOSI</div>
     </div>
 
-    <div class="glass p-4 rounded-xl">
-      <div class="text-xs text-slate-400 uppercase font-medium">Auto-Reconciled</div>
-      <div class="text-2xl font-bold text-emerald-400 mono mt-1">124 Clean</div>
-      <div class="text-xs text-emerald-400 mt-1"><i class="fas fa-check"></i> Passed GOSI/WPS rules</div>
+    <div class="c-card p-4 rounded-xl">
+      <div class="text-[11px] text-[#0E261E]/60 font-semibold uppercase tracking-wider">Passed Compliance</div>
+      <div class="text-2xl font-bold text-emerald-700 mono mt-1">124 Valid</div>
+      <div class="text-xs text-emerald-700 mt-1 flex items-center gap-1">
+        <i class="fas fa-check-circle text-xs"></i> Ready for SIF bank dispatch
+      </div>
     </div>
 
-    <div class="glass p-4 rounded-xl">
-      <div class="text-xs text-slate-400 uppercase font-medium">Exceptions Intercepted</div>
-      <div class="text-2xl font-bold text-amber-400 mono mt-1" id="exc-count">4 Blocked</div>
-      <div class="text-xs text-amber-400 mt-1"><i class="fas fa-shield-alt"></i> Before client notification</div>
+    <div class="c-card p-4 rounded-xl">
+      <div class="text-[11px] text-[#0E261E]/60 font-semibold uppercase tracking-wider">Exceptions Intercepted</div>
+      <div class="text-2xl font-bold text-amber-700 mono mt-1" id="exc-count">4 Blocked</div>
+      <div class="text-xs text-amber-700 mt-1 flex items-center gap-1">
+        <i class="fas fa-shield-alt text-xs"></i> 0 manual tickets required
+      </div>
     </div>
 
-    <div class="glass p-4 rounded-xl">
-      <div class="text-xs text-slate-400 uppercase font-medium">Ops Hours Saved / Run</div>
-      <div class="text-2xl font-bold text-cyan-400 mono mt-1">14.5 Hours</div>
-      <div class="text-xs text-cyan-400 mt-1">94% manual effort reduction</div>
+    <div class="c-card p-4 rounded-xl">
+      <div class="text-[11px] text-[#0E261E]/60 font-semibold uppercase tracking-wider">SIF Generation Time</div>
+      <div class="text-2xl font-bold text-indigo-700 mono mt-1">1.8s</div>
+      <div class="text-xs text-indigo-700 mt-1 flex items-center gap-1">
+        <i class="fas fa-bolt text-xs"></i> Automated hash & padding
+      </div>
     </div>
   </section>
 
-  <!-- Interactive Demo Area -->
+  <!-- Main Workspace -->
   <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-    <!-- Left: Exception Feed & Auto-Triage -->
-    <div class="lg:col-span-2 glass rounded-2xl p-5 border-slate-800">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <h2 class="text-lg font-bold text-white flex items-center gap-2">
-            <i class="fas fa-exclamation-triangle text-amber-400"></i>
-            Active Payroll Discrepancy Queue
-          </h2>
-          <p class="text-xs text-slate-400">AI-detected anomalies mapped against UAE Labor Law & MoHRE WPS formatting rules.</p>
+    <!-- Left 2 Cols: Interactive Payroll Exception Table -->
+    <div class="lg:col-span-2 space-y-4">
+      <div class="c-card rounded-xl p-5">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-[#0E261E]/10 gap-2">
+          <div>
+            <h2 class="text-base font-bold text-[#081611] flex items-center gap-2">
+              <i class="fas fa-list-check text-[#0E261E]/70"></i>
+              Pre-Flight Batch Exceptions (Auto-Isolated)
+            </h2>
+            <p class="text-xs text-[#0E261E]/60 mt-0.5">
+              Identified discrepancies across MoHRE Labour Contracts, IBAN checksums and KSA GOSI ceilings.
+            </p>
+          </div>
+          <button onclick="reconcileAll()" class="px-3.5 py-1.5 rounded-lg bg-[#081611] text-[#FFFFFA] text-xs font-semibold hover:bg-[#0E261E] transition-all flex items-center gap-1.5 shadow-sm">
+            <i class="fas fa-wand-magic-sparkles text-amber-300"></i> Auto-Resolve Clean Cases
+          </button>
         </div>
-        <button onclick="runAutoAudit()" id="audit-btn" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition flex items-center gap-2">
-          <i class="fas fa-play"></i> Re-Run AI Audit
-        </button>
+
+        <div class="overflow-x-auto mt-4">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="text-[11px] text-[#0E261E]/60 uppercase border-b border-[#0E261E]/10 font-bold mono">
+                <th class="pb-2.5">Employee & Entity</th>
+                <th class="pb-2.5">Flagged Reason</th>
+                <th class="pb-2.5 text-right">Variance</th>
+                <th class="pb-2.5 text-center">Status</th>
+                <th class="pb-2.5 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#0E261E]/5 mono" id="exceptions-table">
+              <!-- Item 1 -->
+              <tr class="hover:bg-[#0E261E]/[0.02] transition-colors" id="row-1">
+                <td class="py-3 pr-2">
+                  <div class="font-bold text-[#081611]">Kareem Al-Mansoor</div>
+                  <div class="text-[11px] text-[#0E261E]/50">UAE Entity • MoHRE #948201</div>
+                </td>
+                <td class="py-3 pr-2">
+                  <div class="text-[#081611] font-medium">Fixed basic drops below registered contract</div>
+                  <div class="text-[11px] text-[#0E261E]/50">Contract: AED 14,000 | Input: AED 12,500</div>
+                </td>
+                <td class="py-3 pr-2 text-right font-bold text-red-600">- AED 1,500</td>
+                <td class="py-3 text-center">
+                  <span class="badge-red px-2 py-0.5 rounded text-[10px] font-bold">WPS REJECT RISK</span>
+                </td>
+                <td class="py-3 text-right">
+                  <button onclick="fixRow(1, 'Restored contract basic AED 14,000 via MoHRE sync')" class="px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 rounded text-[11px] font-semibold transition-colors">
+                    Auto-Patch
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Item 2 -->
+              <tr class="hover:bg-[#0E261E]/[0.02] transition-colors" id="row-2">
+                <td class="py-3 pr-2">
+                  <div class="font-bold text-[#081611]">Sarah Jenkins</div>
+                  <div class="text-[11px] text-[#0E261E]/50">UAE Entity • ENBD Account</div>
+                </td>
+                <td class="py-3 pr-2">
+                  <div class="text-[#081611] font-medium">Invalid UAE IBAN Checksum (MOD-97)</div>
+                  <div class="text-[11px] text-[#0E261E]/50">AE070331... (Missing 1 digit)</div>
+                </td>
+                <td class="py-3 pr-2 text-right font-bold text-[#0E261E]/60">AED 26,400</td>
+                <td class="py-3 text-center">
+                  <span class="badge-yellow px-2 py-0.5 rounded text-[10px] font-bold">BANK BOUNCE</span>
+                </td>
+                <td class="py-3 text-right">
+                  <button onclick="fixRow(2, 'Verified IBAN against Onboarding Vault: AE070331200000012345678')" class="px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 rounded text-[11px] font-semibold transition-colors">
+                    Re-verify
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Item 3 -->
+              <tr class="hover:bg-[#0E261E]/[0.02] transition-colors" id="row-3">
+                <td class="py-3 pr-2">
+                  <div class="font-bold text-[#081611]">Fahad Al-Otaibi</div>
+                  <div class="text-[11px] text-[#0E261E]/50">KSA Entity • Riyadh HQ</div>
+                </td>
+                <td class="py-3 pr-2">
+                  <div class="text-[#081611] font-medium">GOSI Contributory Wage Cap Exceeded</div>
+                  <div class="text-[11px] text-[#0E261E]/50">Gross SAR 54,000 (Capped at SAR 45,000 for deductions)</div>
+                </td>
+                <td class="py-3 pr-2 text-right font-bold text-amber-600">+ SAR 9,000</td>
+                <td class="py-3 text-center">
+                  <span class="badge-purple px-2 py-0.5 rounded text-[10px] font-bold">GOSI CEILING</span>
+                </td>
+                <td class="py-3 text-right">
+                  <button onclick="fixRow(3, 'Applied GOSI statutory cap rule (SAR 45k max deduction base)')" class="px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 rounded text-[11px] font-semibold transition-colors">
+                    Cap GOSI
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Item 4 -->
+              <tr class="hover:bg-[#0E261E]/[0.02] transition-colors" id="row-4">
+                <td class="py-3 pr-2">
+                  <div class="font-bold text-[#081611]">Elena Rostova</div>
+                  <div class="text-[11px] text-[#0E261E]/50">UAE Entity • Remote Contract</div>
+                </td>
+                <td class="py-3 pr-2">
+                  <div class="text-[#081611] font-medium">Unpaid Leave deduction mismatch</div>
+                  <div class="text-[11px] text-[#0E261E]/50">HRIS reports 3 days, timesheet approved 1 day</div>
+                </td>
+                <td class="py-3 pr-2 text-right font-bold text-red-600">AED 1,840</td>
+                <td class="py-3 text-center">
+                  <span class="badge-red px-2 py-0.5 rounded text-[10px] font-bold">AUDIT HOLD</span>
+                </td>
+                <td class="py-3 text-right">
+                  <button onclick="fixRow(4, 'Synced with BambooHR manager sign-off: 1 day unpaid leave recorded')" class="px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 rounded text-[11px] font-semibold transition-colors">
+                    Re-align
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="space-y-3" id="exception-list">
-        <!-- Item 1 -->
-        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition" id="item-1">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-bold text-white">Rashid Al-Maktoum (Eng Team)</span>
-                <span class="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px] font-bold mono">WPS SIF ID MISMATCH</span>
-              </div>
-              <p class="text-xs text-slate-400 mt-1">
-                Routing Code: IBAN <span class="mono text-slate-300">AE44033...</span> matches Emirates NBD, but Labor Card ID in Cercli HR profile does not match WPS SIF format (missing leading 14-digit prefix).
-              </p>
-              <div class="mt-2 text-[11px] mono text-amber-400 flex items-center gap-2">
-                <i class="fas fa-robot"></i> <strong>AI Action:</strong> Extracted correct ID from uploaded Labor Contract PDF. Ready for 1-click sync.
-              </div>
-            </div>
-            <button onclick="resolveItem('item-1', 'WPS SIF ID auto-corrected in Cercli DB & Linear ticket #ENG-489 synced.')" class="px-3 py-1.5 bg-slate-800 hover:bg-emerald-600 hover:text-white text-xs font-semibold text-emerald-400 rounded-lg transition whitespace-nowrap">
-              Auto-Fix & Sync
-            </button>
+      <!-- Live SIF (Salary Information File) Output Box -->
+      <div class="c-card rounded-xl p-5">
+        <div class="flex items-center justify-between pb-3 border-b border-[#0E261E]/10">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <h3 class="text-xs font-bold text-[#081611] uppercase tracking-wider mono">
+              UAE MoHRE SIF Generation Terminal (Live Stream)
+            </h3>
           </div>
+          <span class="text-[11px] text-[#0E261E]/50 mono">Format: EWP-SIF-v1.4</span>
         </div>
-
-        <!-- Item 2 -->
-        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition" id="item-2">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-bold text-white">Elena Rostova (Marketing)</span>
-                <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-bold mono">UNPAID LEAVE DEDUCTION DISCREPANCY</span>
-              </div>
-              <p class="text-xs text-slate-400 mt-1">
-                Requested 3 days unpaid leave in Slack/Notion. Timesheet deducted 4 days based on calendar days instead of working days (Art. 28 UAE Labor Law).
-              </p>
-              <div class="mt-2 text-[11px] mono text-amber-400 flex items-center gap-2">
-                <i class="fas fa-robot"></i> <strong>AI Action:</strong> Calculated exact working-day adjustment (+840.50 AED difference).
-              </div>
-            </div>
-            <button onclick="resolveItem('item-2', 'Deduction adjusted to 3 business days (+840.50 AED) and audit trail logged.')" class="px-3 py-1.5 bg-slate-800 hover:bg-emerald-600 hover:text-white text-xs font-semibold text-emerald-400 rounded-lg transition whitespace-nowrap">
-              Apply Recalculation
-            </button>
-          </div>
-        </div>
-
-        <!-- Item 3 -->
-        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition" id="item-3">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-bold text-white">Tariq Mansoor (Customer Success)</span>
-                <span class="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] font-bold mono">GOSI ANNUITY CEILING (KSA)</span>
-              </div>
-              <p class="text-xs text-slate-400 mt-1">
-                Saudi entity employee base salary updated to 48,000 SAR. GOSI contribution must be capped at 45,000 SAR statutory ceiling.
-              </p>
-              <div class="mt-2 text-[11px] mono text-amber-400 flex items-center gap-2">
-                <i class="fas fa-robot"></i> <strong>AI Action:</strong> Contribution automatically clamped to 4,050 SAR (9% on 45,000 SAR cap).
-              </div>
-            </div>
-            <button onclick="resolveItem('item-3', 'GOSI contribution clamped to statutory maximum; zero penalty exposure.')" class="px-3 py-1.5 bg-slate-800 hover:bg-emerald-600 hover:text-white text-xs font-semibold text-emerald-400 rounded-lg transition whitespace-nowrap">
-              Enforce Cap
-            </button>
-          </div>
-        </div>
+        <pre class="bg-[#081611] text-[#FEFDC8] p-3.5 rounded-lg text-[11px] mono overflow-x-auto mt-3 border border-[#081611] leading-relaxed" id="sif-stream">
+[08:00:12] INITIALIZING SIF BATCH FOR EMPLOYER: CERCLI-CLIENT-DXB-88391
+[08:00:12] ROUTING_CODE: 033 (EMIRATES NBD CBUAE GATEWAY)
+[08:00:13] VALIDATING 128 RECORD HEADERS... 124 OK, 4 EXCEPTIONS FLAGGED
+[08:00:13] STATUS: AWAITING RESOLUTION BEFORE DISPATCH HASH SIGNATURE...</pre>
       </div>
     </div>
 
-    <!-- Right: Architecture & 30-Day Win Blueprint -->
+    <!-- Right Col: Engineering & Ops Automation Console -->
     <div class="space-y-4">
-      <div class="glass p-5 rounded-2xl border-slate-800">
-        <h3 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
-          <i class="fas fa-bullseye text-emerald-400"></i> My 30-Day Deliverable for Cercli
+      
+      <!-- Operations Bridge -->
+      <div class="c-card rounded-xl p-5">
+        <h3 class="text-sm font-bold text-[#081611] flex items-center gap-2">
+          <i class="fas fa-network-wired text-indigo-600"></i>
+          Automated Escalation Pipeline
         </h3>
-        <p class="text-xs text-slate-400 leading-relaxed">
-          I will deploy this production-grade pipeline connecting your <strong>Customer Success/Support tickets</strong> (Slack, Linear, Zendesk) directly with your <strong>Payroll & WPS Engine</strong>:
+        <p class="text-xs text-[#0E261E]/60 mt-1">
+          When exceptions cannot be automatically auto-healed, Cercli triggers instant notifications.
         </p>
-        <ul class="text-xs text-slate-300 space-y-2 mt-3 mono">
+
+        <div class="mt-4 space-y-2.5">
+          <div class="p-3 rounded-lg bg-[#0E261E]/[0.03] border border-[#0E261E]/10 flex items-start gap-3">
+            <i class="fab fa-slack text-purple-600 mt-1 text-base"></i>
+            <div>
+              <div class="text-xs font-bold text-[#081611]">Slack Alert: #payroll-ops</div>
+              <div class="text-[11px] text-[#0E261E]/60 mt-0.5">Batch #489 has 4 warnings. MoHRE SIF generation paused.</div>
+              <span class="inline-block mt-1 text-[10px] text-purple-700 font-semibold mono">DISPATCHED 08:00:14</span>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-lg bg-[#0E261E]/[0.03] border border-[#0E261E]/10 flex items-start gap-3">
+            <i class="fas fa-ticket text-amber-600 mt-1 text-base"></i>
+            <div>
+              <div class="text-xs font-bold text-[#081611]">Linear Issue Created</div>
+              <div class="text-[11px] text-[#0E261E]/60 mt-0.5">OPS-1192: Kareem Al-Mansoor basic salary mismatch.</div>
+              <span class="inline-block mt-1 text-[10px] text-amber-700 font-semibold mono">AUTO-ASSIGNED TO ON-CALL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Why This Matters for Cercli -->
+      <div class="c-card rounded-xl p-5 bg-[#FFFFFA] border border-[#0E261E]/10">
+        <h3 class="text-sm font-bold text-[#081611] flex items-center gap-2">
+          <i class="fas fa-check-double text-emerald-600"></i>
+          Key Capabilities Built In
+        </h3>
+        <ul class="mt-3 space-y-2 text-xs text-[#0E261E]/80">
           <li class="flex items-start gap-2">
-            <span class="text-emerald-400">✓</span> <strong>Week 1-2:</strong> Map recurring payroll support tickets and build automated MoHRE WPS / GOSI validation webhooks.
+            <i class="fas fa-shield-halved text-emerald-600 text-xs mt-0.5"></i>
+            <span><strong>Zero-Fines WPS Guarantee:</strong> Intercepts salary reductions before bank upload.</span>
           </li>
           <li class="flex items-start gap-2">
-            <span class="text-emerald-400">✓</span> <strong>Week 3:</strong> Exception containment dashboard + Slack incident alerts before payroll dispatch.
+            <i class="fas fa-calculator text-emerald-600 text-xs mt-0.5"></i>
+            <span><strong>Multi-Jurisdiction Rules:</strong> Native support for KSA GOSI 45k caps & UAE MoHRE.</span>
           </li>
           <li class="flex items-start gap-2">
-            <span class="text-emerald-400">✓</span> <strong>Week 4:</strong> Handover documentation, SQL audit logs, and zero-maintenance transition.
+            <i class="fas fa-code-merge text-emerald-600 text-xs mt-0.5"></i>
+            <span><strong>Ops & Eng Bridge:</strong> Speaks both payroll regulations and robust API architectures.</span>
           </li>
         </ul>
+
+        <div class="mt-4 pt-4 border-t border-[#0E261E]/10">
+          <div class="text-[11px] text-[#0E261E]/60 mono uppercase font-semibold">David's Track Record</div>
+          <p class="text-xs text-[#0E261E]/80 mt-1">
+            Resident in Dubai (IFZA). 100+ automated cloud pipelines delivered. Fast-turnaround engineering contractor.
+          </p>
+          <a href="https://github.com/cubaloop" target="_blank" class="mt-2.5 inline-flex items-center gap-1.5 text-xs font-bold text-[#081611] hover:underline">
+            <i class="fab fa-github"></i> View GitHub Profile: github.com/cubaloop
+          </a>
+        </div>
       </div>
 
-      <!-- Live Execution Log -->
-      <div class="glass p-5 rounded-2xl border-slate-800">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs text-slate-400 font-bold uppercase mono">Live Ops Console</span>
-          <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
-        </div>
-        <div class="bg-black/60 p-3 rounded-lg text-[11px] mono text-slate-400 h-40 overflow-y-auto space-y-1" id="console-log">
-          <div>[20:06:12] Engine initialized. Listening to Cercli batch webhook...</div>
-          <div>[20:06:14] Ingested 128 employee records across AE, SA, EG.</div>
-          <div>[20:06:15] MoHRE WPS SIF syntax validation: OK (127/128).</div>
-          <div>[20:06:16] GOSI KSA statutory contribution audit: OK (42/43).</div>
-        </div>
-      </div>
     </div>
-
   </main>
 
+  <footer class="max-w-6xl mx-auto mt-10 pt-6 border-t border-[#0E261E]/10 flex flex-col md:flex-row items-center justify-between text-xs text-[#0E261E]/50 gap-2">
+    <div>Cercli Custom Technical Demo • Created for the Freelance Payroll Ops & Automation role</div>
+    <div class="mono">Developed by Tecnoemprende • David Rodriguez</div>
+  </footer>
+
+  <!-- Universal Spy Tracker Integration -->
   <script>
-    function log(msg) {
-      const c = document.getElementById('console-log');
-      const time = new Date().toLocaleTimeString();
-      const div = document.createElement('div');
-      div.innerHTML = `<span class="text-emerald-400">[${time}]</span> ${msg}`;
-      c.appendChild(div);
-      c.scrollTop = c.scrollHeight;
-    }
+    window.SPY_SITE_ID = "cercli-payroll-demo";
+    window.SPY_SITE_NAME = "Cercli AI Payroll Ops Demo";
+    window.SPY_SITE_CATEGORY = "jota_preview";
+  </script>
+  <script src="spy-tracker.js"></script>
 
-    function resolveItem(id, successMsg) {
-      const el = document.getElementById(id);
-      if (el) {
-        el.style.opacity = '0.5';
-        el.innerHTML = `
-          <div class="p-3 text-emerald-400 font-bold text-xs flex items-center justify-between mono">
-            <span><i class="fas fa-check-circle"></i> ${successMsg}</span>
-            <span class="text-slate-400 text-[10px]">RESOLVED IN 0.4s</span>
-          </div>
-        `;
-        log(`Resolved ${id}: ${successMsg}`);
+  <script>
+    let remainingExceptions = 4;
+
+    function fixRow(rowId, logMessage) {
+      const row = document.getElementById('row-' + rowId);
+      if (!row) return;
+      row.style.transition = 'all 0.3s ease';
+      row.style.opacity = '0.4';
+      row.style.background = '#ECFDF5';
+      
+      const actionCell = row.cells[4];
+      actionCell.innerHTML = '<span class="text-emerald-700 font-bold text-xs"><i class="fas fa-check"></i> Resolved</span>';
+      
+      const statusCell = row.cells[3];
+      statusCell.innerHTML = '<span class="badge-emerald px-2 py-0.5 rounded text-[10px] font-bold">RECONCILED</span>';
+
+      remainingExceptions = Math.max(0, remainingExceptions - 1);
+      document.getElementById('exc-count').innerText = remainingExceptions + ' Blocked';
+
+      const sifStream = document.getElementById('sif-stream');
+      const time = new Date().toTimeString().split(' ')[0];
+      sifStream.innerText += `\n[${time}] PATCH APPLIED: ${logMessage}`;
+      
+      if (remainingExceptions === 0) {
+        sifStream.innerText += `\n[${time}] SUCCESS: ALL 128 EMPLOYEES COMPLIANT. GENERATING CBUAE SIF DIGITAL SIGNATURE...`;
+        sifStream.innerText += `\n[${time}] SIF FILE HASH: 9a7b4f2c019e... READY FOR AUTOPAY.`;
       }
+      sifStream.scrollTop = sifStream.scrollHeight;
     }
 
-    function runAutoAudit() {
-      const btn = document.getElementById('audit-btn');
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Auditing...';
-      log('Running full deep rule re-evaluation across all 128 employee files...');
-      setTimeout(() => {
-        btn.innerHTML = '<i class="fas fa-check"></i> Audit Passed';
-        log('Audit finished: 124 reconciled, 0 unhandled critical errors.');
-        setTimeout(() => btn.innerHTML = '<i class="fas fa-play"></i> Re-Run AI Audit', 2000);
-      }, 1200);
+    function reconcileAll() {
+      for (let i = 1; i <= 4; i++) {
+        fixRow(i, `Auto-reconciled exception #${i} via Cercli Ops Policy Rulebook`);
+      }
     }
   </script>
 </body>
