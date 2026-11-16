@@ -1,11 +1,11 @@
 {
   "last_sync_dxb": "2026-11-16 19:08:10",
   "metrics": {
-    "total_tasks_done": 31,
+    "total_tasks_done": 32,
     "in_review_count": 7,
     "open_count": 21,
     "estimated_value_in_review_usd": 5500,
-    "total_tracked_value_usd": 24000
+    "total_tracked_value_usd": 25500
   },
   "prs": [
     {
@@ -270,6 +270,18 @@
     }
   ],
   "bounties": [
+    {
+      "id": "hanzo-engine-71",
+      "title": "Decentralized edge and mobile inference providers",
+      "reward_usd": 1500,
+      "platform": "Hanzo Engine (,500)",
+      "created_date": "2026-11-16",
+      "our_executed_date": "2026-11-16",
+      "state": "open",
+      "competitors_before": 0,
+      "url": "https://github.com/hanzoai/engine/issues/71#issuecomment-6921414207",
+      "notes": "DVFS y telemetría de inferencia descentralizada entregada por cubaloop."
+    },
     {
       "id": "hanzo-engine-51",
       "title": "Persistent, shareable prefix caches for multi-turn agents",
