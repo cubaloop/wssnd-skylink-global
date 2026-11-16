@@ -213,7 +213,8 @@
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp5cnF6amN0a216ZHZtcmFxcmN2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NjI4MTU3NCwiZXhwIjoyMTAxODU3NTc0fQ.jpzy38i_JqhKiLZwNFXESJo62kk4vWvwCVPLpFIyLjc";
     const STORAGE_KEY = "kael_talent_bounty_state_v1";
 
-    let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"mercor_ref":"","paraform_ref":"","prospect_statuses":{},"inbound_candidates":[]}');
+    let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"mercor_ref":"b3cc5a76-ea2c-cd2b-07c3-eeca56e612c3","paraform_ref":"","prospect_statuses":{},"inbound_candidates":[]}');
+    if (!state.mercor_ref) state.mercor_ref = "b3cc5a76-ea2c-cd2b-07c3-eeca56e612c3";
     let currentJobScope = "all";
 
     function toggleTheme() {
