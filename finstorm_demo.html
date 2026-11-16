@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Finstorm • Aviation MRO & AvSight AI Quoting Copilot</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,20 +20,23 @@
       --fs-text: #0F172A;
       --fs-border: rgba(16, 82, 111, 0.12);
     }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
     body {
       font-family: 'Golos Text', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--fs-bg);
       color: var(--fs-text);
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
     .mono { font-family: 'JetBrains Mono', monospace; }
     .fs-card {
       background: var(--fs-card);
       border: 1px solid var(--fs-border);
       box-shadow: 0 1px 3px rgba(16, 82, 111, 0.04), 0 4px 12px rgba(16, 82, 111, 0.02);
-    }
-    .fs-card:hover {
-      box-shadow: 0 6px 20px rgba(16, 82, 111, 0.06);
+      border-radius: 1rem;
     }
     .btn-finstorm {
       background: linear-gradient(135deg, #10526F 0%, #1D6786 100%);
@@ -49,250 +52,303 @@
       color: #10526F;
       border: 1px solid rgba(16, 82, 111, 0.2);
     }
+    /* Toast */
+    #toast {
+      transform: translateY(150%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #toast.show {
+      transform: translateY(0);
+    }
   </style>
 </head>
-<body class="min-h-screen py-8 px-4 md:px-8">
+<body class="min-h-screen py-4 md:py-8 px-3 md:px-8">
 
-  <!-- Header with Finstorm Branding -->
-  <header class="max-w-6xl mx-auto pb-6 border-b border-[#10526F]/15">
-    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 left-5 md:left-auto md:w-96 z-50 bg-[#094057] text-white p-4 rounded-xl shadow-2xl border border-teal-500/30 flex items-center gap-3">
+    <div class="w-8 h-8 rounded-full bg-teal-500/20 text-teal-300 flex items-center justify-center shrink-0">
+      <i class="fas fa-check"></i>
+    </div>
+    <div class="text-xs">
+      <div class="font-bold text-white" id="toast-title">AvSight Synced</div>
+      <div class="text-white/70 text-[11px] mt-0.5" id="toast-desc">RFQ quote posted to Salesforce opportunity.</div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto pb-5 border-b border-[#10526F]/15">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       
       <!-- Brand & Title -->
-      <div class="flex items-center gap-4">
-        <a href="https://ae.fin-storm.com/" target="_blank" rel="noopener noreferrer" class="hover:opacity-90 transition-opacity bg-[#10526F] px-3.5 py-2 rounded-xl flex items-center shadow-sm" title="Finstorm Workforce Solutions">
-          <!-- Official Finstorm Wordmark with HLB HAMT backing -->
+      <div class="flex items-center gap-3 md:gap-4">
+        <a href="https://ae.fin-storm.com/" target="_blank" rel="noopener noreferrer" class="hover:opacity-90 transition-opacity bg-[#10526F] px-3 py-1.5 md:px-3.5 md:py-2 rounded-xl flex items-center shadow-sm shrink-0" title="Finstorm Workforce Solutions">
           <div class="flex flex-col">
             <div class="flex items-center gap-1.5">
-              <span class="text-xl font-black text-white tracking-wider uppercase font-sans">FINSTORM</span>
+              <span class="text-lg md:text-xl font-black text-white tracking-wider uppercase font-sans">FINSTORM</span>
               <span class="w-1.5 h-1.5 rounded-full bg-[#F5B300]"></span>
             </div>
-            <div class="text-[9px] text-white/70 tracking-widest uppercase font-semibold">WORKFORCE SOLUTIONS • DUBAI</div>
+            <div class="text-[8px] md:text-[9px] text-white/70 tracking-widest uppercase font-semibold">DUBAI • WORKFORCE SOLUTIONS</div>
           </div>
         </a>
 
         <div class="h-8 w-px bg-slate-200"></div>
 
         <div>
-          <div class="flex items-center gap-2">
-            <span class="badge-finstorm px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wide mono">AI Implementation Demo</span>
-            <span class="text-xs text-slate-500 mono">AvSight • Salesforce • Accounting Seed</span>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="badge-finstorm px-2 py-0.5 rounded-full text-[10px] md:text-[11px] font-bold uppercase tracking-wide mono">AI Implementation</span>
+            <span class="text-[11px] text-slate-500 mono">AvSight • Salesforce MRO</span>
           </div>
-          <h1 class="text-xl md:text-2xl font-bold tracking-tight text-[#094057] mt-0.5">
-            Aviation MRO RFQ & Compliance Copilot
+          <h1 class="text-base md:text-xl font-bold tracking-tight text-[#094057] mt-0.5">
+            Aviation MRO RFQ & Sourcing Copilot
           </h1>
         </div>
       </div>
 
       <!-- Applicant Badge -->
-      <div class="fs-card px-4 py-2.5 rounded-xl flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-[#10526F] text-[#F5B300] flex items-center justify-center font-bold text-xs">
-          DR
+      <div class="fs-card px-3 py-2 rounded-xl flex items-center gap-2.5 self-stretch sm:self-auto justify-between sm:justify-start">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-full bg-[#10526F] text-[#F5B300] flex items-center justify-center font-bold text-xs">
+            DR
+          </div>
+          <div>
+            <div class="text-[9px] text-slate-400 mono uppercase font-semibold">Specialist Demo By</div>
+            <div class="text-xs font-bold text-[#094057]">David Rodriguez <span class="text-slate-400 font-normal">(@cubaloop)</span></div>
+          </div>
         </div>
-        <div class="text-left">
-          <div class="text-[10px] text-slate-400 mono uppercase font-semibold">Demonstration For Finstorm by</div>
-          <div class="text-xs font-bold text-[#094057]">David Rodriguez <span class="text-slate-400 font-normal">(@cubaloop)</span></div>
-          <div class="text-[11px] text-slate-500">Meydan / Nad Al Sheba Client Pipeline</div>
-        </div>
+        <a href="https://github.com/cubaloop" target="_blank" class="px-2 py-1 rounded bg-[#10526F]/5 hover:bg-[#10526F]/10 text-[11px] font-semibold text-[#10526F] transition-colors">
+          <i class="fab fa-github"></i>
+        </a>
       </div>
 
     </div>
   </header>
 
   <!-- Metrics / KPI Row -->
-  <section class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 my-6">
-    <div class="fs-card p-4 rounded-xl">
-      <div class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Aviation RFQ Volume</div>
-      <div class="text-2xl font-bold text-[#094057] mono mt-1">1,420 / Day</div>
-      <div class="text-xs text-slate-500 mt-1">ILS, PartsBase & Direct Email</div>
+  <section class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-3 my-5">
+    <div class="fs-card p-3.5">
+      <div class="text-[10px] md:text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Aviation RFQ Volume</div>
+      <div class="text-xl md:text-2xl font-bold text-[#094057] mono mt-1">1,420 / Day</div>
+      <div class="text-[11px] text-slate-500 mt-0.5">ILS, PartsBase & Email</div>
     </div>
 
-    <div class="fs-card p-4 rounded-xl">
-      <div class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Sub-45s AI Quote Rate</div>
-      <div class="text-2xl font-bold text-[#1D6786] mono mt-1">88.4%</div>
-      <div class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+    <div class="fs-card p-3.5">
+      <div class="text-[10px] md:text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Sub-45s AI Quote Rate</div>
+      <div class="text-xl md:text-2xl font-bold text-[#1D6786] mono mt-1">88.4%</div>
+      <div class="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1">
         <i class="fas fa-bolt text-amber-500 text-xs"></i> Instant margin calculation
       </div>
     </div>
 
-    <div class="fs-card p-4 rounded-xl">
-      <div class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Trace Certification</div>
-      <div class="text-2xl font-bold text-emerald-700 mono mt-1">100% Trace</div>
-      <div class="text-xs text-emerald-700 mt-1 flex items-center gap-1">
-        <i class="fas fa-check-circle text-xs"></i> FAA 8130-3 / EASA Form 1
+    <div class="fs-card p-3.5">
+      <div class="text-[10px] md:text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Trace Compliance</div>
+      <div class="text-xl md:text-2xl font-bold text-emerald-700 mono mt-1" id="trace-stat">100% Trace</div>
+      <div class="text-[11px] text-emerald-700 mt-0.5 flex items-center gap-1">
+        <i class="fas fa-check-circle text-xs"></i> FAA 8130 / EASA Form 1
       </div>
     </div>
 
-    <div class="fs-card p-4 rounded-xl">
-      <div class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Ledger Reconciliation</div>
-      <div class="text-2xl font-bold text-indigo-700 mono mt-1">AvSight Live</div>
-      <div class="text-xs text-indigo-700 mt-1 flex items-center gap-1">
-        <i class="fas fa-sync-alt text-xs"></i> Accounting Seed parity
+    <div class="fs-card p-3.5">
+      <div class="text-[10px] md:text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Active Pipeline Value</div>
+      <div class="text-xl md:text-2xl font-bold text-indigo-700 mono mt-1" id="total-val">$96,800 USD</div>
+      <div class="text-[11px] text-indigo-700 mt-0.5 flex items-center gap-1">
+        <i class="fas fa-sync text-xs"></i> Accounting Seed Live
       </div>
     </div>
   </section>
 
-  <!-- Main Interactive Console -->
-  <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- Main Work Area -->
+  <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-    <!-- Left 2 Cols: RFQ Ingestion & Parts Matcher -->
+    <!-- Left 2 Cols: Ingestion & Mobile Cards -->
     <div class="lg:col-span-2 space-y-4">
       
-      <!-- Input Box -->
-      <div class="fs-card rounded-xl p-5">
-        <div class="flex items-center justify-between pb-3 border-b border-[#10526F]/10">
+      <!-- Interactive Ingestion Card -->
+      <div class="fs-card p-4 md:p-5">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-[#10526F]/10 gap-2">
           <div>
-            <h2 class="text-sm font-bold text-[#094057] uppercase tracking-wide mono flex items-center gap-2">
+            <h2 class="text-sm md:text-base font-bold text-[#094057] uppercase tracking-wide mono flex items-center gap-2">
               <i class="fas fa-inbox text-[#10526F]"></i>
-              Incoming RFQ Unstructured Parser (Simulated Aircraft Part Request)
+              Aviation RFQ Unstructured Parser
             </h2>
             <p class="text-xs text-slate-500 mt-0.5">
-              Simulates receiving an unformatted broker request via email/ILS and parsing part numbers, condition codes and quantities.
+              Simulates broker RFQ extraction and automatic AvSight inventory matching.
             </p>
           </div>
-          <button onclick="parseRFQ()" class="btn-finstorm px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm">
-            <i class="fas fa-brain text-[#F5B300]"></i> Parse with AI Copilot
+          <button onclick="parseNewRFQ()" id="btn-parse" class="w-full sm:w-auto btn-finstorm px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm">
+            <i class="fas fa-brain text-[#F5B300]"></i> Parse Incoming Email
           </button>
         </div>
 
-        <div class="mt-4">
-          <label class="block text-xs font-semibold text-slate-600 mb-1 mono">RAW INCOMING BROKER TEXT:</label>
-          <textarea id="raw-rfq" rows="3" class="w-full text-xs mono p-3 rounded-lg border border-slate-300 focus:outline-none focus:border-[#10526F] bg-slate-50 text-slate-800 leading-relaxed font-mono">REQ-2026-DXB: Urgent requirement for A320 CFM56-5B Starter Air Valve P/N 3505582-4 (Qty: 2, FN condition preferred, dual release FAA/EASA mandatory). Also quote P/N 115268-2 Fuel Flow Transmitter (Qty: 1, OH/SV accepted). Deliver to DWC Airport Hub.</textarea>
+        <div class="mt-3">
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1 mono">INCOMING BROKER TEXT (REAL-TIME INPUT):</label>
+          <textarea id="raw-rfq" rows="2" class="w-full text-xs mono p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:border-[#10526F] bg-slate-50 text-slate-800 leading-relaxed font-mono resize-none">REQ-DXB: Flydubai A320 CFM56-5B High-Pressure Turbine Blades P/N 3289562-4 (Qty: 80, OH trace required). Also A320 Main Gear Actuator P/N 4079860-901 (Qty: 1, AOG priority delivery to DWC).</textarea>
         </div>
       </div>
 
-      <!-- Parts Breakdown & Quoting Table -->
-      <div class="fs-card rounded-xl p-5">
-        <div class="flex items-center justify-between pb-3 border-b border-[#10526F]/10">
-          <h2 class="text-sm font-bold text-[#094057] uppercase tracking-wide mono flex items-center gap-2">
+      <!-- Parts Sourcing Cards (Mobile Responsive Card Layout) -->
+      <div class="fs-card p-4 md:p-5">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-[#10526F]/10 gap-2">
+          <h2 class="text-sm md:text-base font-bold text-[#094057] uppercase tracking-wide mono flex items-center gap-2">
             <i class="fas fa-boxes-stacked text-[#10526F]"></i>
-            AvSight Real-Time Inventory & Margin Optimizer
+            AvSight Real-Time Inventory & Margin Quoter
           </h2>
-          <span class="text-xs text-slate-400 mono">Pricing Strategy: Dynamic Cost+</span>
+          <span class="text-xs text-slate-400 mono">Pricing: Dynamic Cost + 24% Floor</span>
         </div>
 
-        <div class="overflow-x-auto mt-4">
-          <table class="w-full text-left text-xs">
-            <thead>
-              <tr class="text-[11px] text-slate-500 uppercase border-b border-slate-200 font-bold mono">
-                <th class="pb-2.5">Part Number & Desc</th>
-                <th class="pb-2.5">Cond & Trace</th>
-                <th class="pb-2.5 text-right">AvSight Cost</th>
-                <th class="pb-2.5 text-right">Target Margin</th>
-                <th class="pb-2.5 text-right">AI Quote (USD)</th>
-                <th class="pb-2.5 text-center">Status</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-100 mono" id="rfq-table">
-              <tr class="hover:bg-slate-50/80 transition-colors">
-                <td class="py-3 pr-2">
-                  <div class="font-bold text-[#094057]">3505582-4</div>
-                  <div class="text-[11px] text-slate-500">Starter Air Valve (CFM56-5B)</div>
-                </td>
-                <td class="py-3 pr-2">
-                  <span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">FN (Factory New)</span>
-                  <div class="text-[10px] text-slate-400 mt-0.5">FAA 8130 + EASA Form 1</div>
-                </td>
-                <td class="py-3 pr-2 text-right font-semibold text-slate-600">$8,250.00</td>
-                <td class="py-3 pr-2 text-right font-bold text-[#1D6786]">24.0%</td>
-                <td class="py-3 pr-2 text-right font-bold text-[#094057] text-sm">$10,855.00</td>
-                <td class="py-3 text-center">
-                  <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">READY</span>
-                </td>
-              </tr>
+        <!-- Sourcing Items Container -->
+        <div class="mt-4 space-y-3" id="parts-container">
 
-              <tr class="hover:bg-slate-50/80 transition-colors">
-                <td class="py-3 pr-2">
-                  <div class="font-bold text-[#094057]">115268-2</div>
-                  <div class="text-[11px] text-slate-500">Fuel Flow Transmitter</div>
-                </td>
-                <td class="py-3 pr-2">
-                  <span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[10px]">OH (Overhauled)</span>
-                  <div class="text-[10px] text-slate-400 mt-0.5">Dual Release Tag Attached</div>
-                </td>
-                <td class="py-3 pr-2 text-right font-semibold text-slate-600">$3,400.00</td>
-                <td class="py-3 pr-2 text-right font-bold text-[#1D6786]">28.5%</td>
-                <td class="py-3 pr-2 text-right font-bold text-[#094057] text-sm">$4,755.00</td>
-                <td class="py-3 text-center">
-                  <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">READY</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <!-- Part Item 1 -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-white hover:border-[#10526F]/30 transition-all" id="part-1">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-bold text-sm text-[#094057] mono">P/N: 3289562-4</span>
+                  <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px] mono">IN STOCK (SHARJAH FZE)</span>
+                </div>
+                <div class="text-xs text-slate-500 mt-0.5">High-Pressure Turbine Blades (CFM56-7B) • Qty: 80 units</div>
+              </div>
+              <button onclick="approvePart(1, '3289562-4', 54800, 'Flydubai MRO')" id="btn-part-1" class="w-full sm:w-auto px-3.5 py-1.5 bg-[#F5B300] hover:bg-[#dca100] text-slate-900 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 shrink-0 shadow-sm">
+                <i class="fas fa-check"></i> Approve & Send Quote
+              </button>
+            </div>
+
+            <!-- Details Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 pt-1 text-xs">
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-[10px] text-slate-400 uppercase mono">Customer</div>
+                <div class="font-semibold text-slate-700 mt-0.5">Flydubai MRO</div>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-[10px] text-slate-400 uppercase mono">Trace Standard</div>
+                <div class="font-semibold text-emerald-700 mt-0.5 flex items-center gap-1">
+                  <i class="fas fa-certificate text-[10px]"></i> Dual FAA/EASA
+                </div>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-[10px] text-slate-400 uppercase mono">AvSight Cost</div>
+                <div class="font-semibold text-slate-700 mono mt-0.5">$42,000 USD</div>
+              </div>
+              <div class="p-2 rounded-lg bg-emerald-50 border border-emerald-100">
+                <div class="text-[10px] text-emerald-700 uppercase mono font-bold">AI Quote (23.3% Margin)</div>
+                <div class="font-bold text-[#094057] mono text-sm mt-0.5">$54,800 USD</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Part Item 2 -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-white hover:border-[#10526F]/30 transition-all" id="part-2">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-bold text-sm text-[#094057] mono">P/N: 4079860-901</span>
+                  <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[10px] mono">SOURCING REQUIRED</span>
+                </div>
+                <div class="text-xs text-slate-500 mt-0.5">A320 Main Landing Gear Actuator • Qty: 1 unit (AOG Emergency)</div>
+              </div>
+              <button onclick="autoSourcePart(2, '4079860-901', 42000, 'Emirates Engineering')" id="btn-part-2" class="w-full sm:w-auto px-3.5 py-1.5 bg-[#10526F] hover:bg-[#094057] text-white rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 shrink-0 shadow-sm">
+                <i class="fas fa-radar"></i> Auto-Source & Quote
+              </button>
+            </div>
+
+            <!-- Details Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 pt-1 text-xs">
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-[10px] text-slate-400 uppercase mono">Customer</div>
+                <div class="font-semibold text-slate-700 mt-0.5">Emirates Engineering</div>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-[10px] text-slate-400 uppercase mono">Condition</div>
+                <div class="font-semibold text-amber-700 mt-0.5 flex items-center gap-1">
+                  <i class="fas fa-wrench text-[10px]"></i> SV (Serviceable)
+                </div>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-[10px] text-slate-400 uppercase mono">Network Benchmark</div>
+                <div class="font-semibold text-slate-700 mono mt-0.5">$31,500 USD</div>
+              </div>
+              <div class="p-2 rounded-lg bg-teal-50 border border-teal-100">
+                <div class="text-[10px] text-teal-800 uppercase mono font-bold">Target Quote (25% Floor)</div>
+                <div class="font-bold text-[#094057] mono text-sm mt-0.5">$42,000 USD</div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs mono">
-          <span class="text-slate-500">Total Lot Quote Value: <strong class="text-[#094057] text-sm">$26,465.00 USD</strong></span>
-          <button onclick="dispatchQuote()" id="btn-dispatch" class="px-4 py-1.5 rounded-lg bg-[#10526F] text-white font-semibold hover:bg-[#094057] transition-all flex items-center gap-1.5 shadow-sm">
-            <i class="fas fa-paper-plane text-xs"></i> Post Quote to AvSight Opportunity
+        <!-- AvSight Opportunity Sync Status -->
+        <div class="mt-4 pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs mono gap-2">
+          <span class="text-slate-500">Live Lots In Review: <strong class="text-[#094057] text-sm" id="quoted-val">$96,800.00 USD</strong></span>
+          <button onclick="syncAllToAvSight()" id="btn-sync-all" class="w-full sm:w-auto px-4 py-2 rounded-lg bg-[#094057] text-white font-semibold hover:bg-[#10526F] transition-all flex items-center justify-center gap-1.5 shadow-sm">
+            <i class="fas fa-cloud-arrow-up text-teal-300"></i> Sync All to AvSight & Accounting Seed
           </button>
         </div>
       </div>
 
     </div>
 
-    <!-- Right Col: Architecture & Salesforce Integration -->
+    <!-- Right Col: Architecture & Salesforce AvSight Integration -->
     <div class="space-y-4">
       
-      <!-- AvSight & Accounting Seed Integration -->
-      <div class="fs-card rounded-xl p-5">
+      <!-- Ecosystem Integration -->
+      <div class="fs-card p-4 md:p-5">
         <h3 class="text-sm font-bold text-[#094057] flex items-center gap-2">
           <i class="fas fa-cloud-bolt text-[#10526F]"></i>
-          Enterprise Salesforce Ecosystem
+          Enterprise Salesforce Architecture
         </h3>
         <p class="text-xs text-slate-500 mt-1">
-          Designed specifically to plug directly into AvSight MRO Objects and Accounting Seed general ledgers.
+          Plugs into AvSight MRO Objects, Inventory Records and Accounting Seed ledgers.
         </p>
 
-        <div class="mt-4 space-y-2 text-xs">
-          <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-            <i class="fas fa-shield text-emerald-600 mt-0.5 text-sm"></i>
+        <div class="mt-3.5 space-y-2.5 text-xs">
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
+            <i class="fas fa-shield text-emerald-600 mt-0.5 text-sm shrink-0"></i>
             <div>
               <div class="font-bold text-[#094057]">Trace & Airworthiness Gate</div>
-              <div class="text-slate-500 text-[11px] mt-0.5">Blocks any quote lacking digitized 8130-3 or EASA Form 1 on file.</div>
+              <div class="text-slate-500 text-[11px] mt-0.5">Automated validation of 8130-3 / EASA Form 1 certificates.</div>
             </div>
           </div>
 
-          <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-            <i class="fas fa-calculator text-[#1D6786] mt-0.5 text-sm"></i>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
+            <i class="fas fa-calculator text-[#1D6786] mt-0.5 text-sm shrink-0"></i>
             <div>
               <div class="font-bold text-[#094057]">CFO Margin Floor Rules</div>
-              <div class="text-slate-500 text-[11px] mt-0.5">Dynamic price bounds protect against exchange rate and freight inflation.</div>
+              <div class="text-slate-500 text-[11px] mt-0.5">Enforces 22-28% margin guards against market fluctuations.</div>
             </div>
           </div>
 
-          <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-            <i class="fas fa-network-wired text-indigo-600 mt-0.5 text-sm"></i>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
+            <i class="fas fa-network-wired text-indigo-600 mt-0.5 text-sm shrink-0"></i>
             <div>
-              <div class="font-bold text-[#094057]">Accounting Seed Journal Parity</div>
-              <div class="text-slate-500 text-[11px] mt-0.5">Real-time COGS posting upon PO generation without end-of-month surprises.</div>
+              <div class="font-bold text-[#094057]">Accounting Seed Journal Sync</div>
+              <div class="text-slate-500 text-[11px] mt-0.5">Automated COGS posting when PO is generated.</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Applicant Credentials Box -->
-      <div class="fs-card rounded-xl p-5 bg-white border border-[#10526F]/20">
+      <!-- Applicant Box -->
+      <div class="fs-card p-4 md:p-5">
         <div class="text-xs font-bold text-[#094057] uppercase tracking-wider mono flex items-center gap-2">
-          <i class="fas fa-id-card text-[#10526F]"></i>
+          <i class="fas fa-user-check text-[#10526F]"></i>
           Why David Rodriguez (@cubaloop)?
         </div>
         <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-          Deep background in custom ERP integrations, Python/REST microservices, and AI-driven automation pipelines. Based in UAE (Dubai/Sharjah timezone) with instant availability for contract or project-based execution.
+          Based in UAE. Experience delivering mission-critical ERP/CRM integrations, high-performance automation scripts, and custom AI copilot workflows that accelerate procurement speed and enforce audit compliance.
         </p>
-
         <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
           <a href="https://github.com/cubaloop" target="_blank" class="text-xs font-bold text-[#10526F] hover:underline flex items-center gap-1.5">
             <i class="fab fa-github"></i> github.com/cubaloop
           </a>
-          <span class="text-[11px] text-slate-400 mono">Available Immediately</span>
+          <span class="text-[10px] text-slate-400 mono">Available Immediately</span>
         </div>
       </div>
 
     </div>
   </main>
 
-  <footer class="max-w-6xl mx-auto mt-10 pt-6 border-t border-[#10526F]/15 flex flex-col md:flex-row items-center justify-between text-xs text-slate-400 gap-2">
-    <div>Custom Demo Prepared for Finstorm Workforce Solutions • AI Implementation Specialist Opportunity</div>
+  <footer class="max-w-6xl mx-auto mt-8 pt-5 border-t border-[#10526F]/15 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-2 text-center sm:text-left">
+    <div>Custom Technical Demo • Prepared for Finstorm Workforce Solutions (Aviation AI Implementation)</div>
     <div class="mono">Developed by Tecnoemprende • David Rodriguez</div>
   </footer>
 
@@ -305,32 +361,76 @@
   <script src="spy-tracker.js"></script>
 
   <script>
-    function parseRFQ() {
-      const btn = event.target;
-      const originalText = btn.innerHTML;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Parsing AI Model...';
-      
+    function showToast(title, desc) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-title').innerText = title;
+      document.getElementById('toast-desc').innerText = desc;
+      toast.classList.add('show');
       setTimeout(() => {
-        btn.innerHTML = '<i class="fas fa-check"></i> RFQ Parsed';
-        btn.classList.remove('btn-finstorm');
-        btn.classList.add('bg-emerald-600', 'text-white');
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    function approvePart(id, pn, price, customer) {
+      const btn = document.getElementById('btn-part-' + id);
+      const card = document.getElementById('part-' + id);
+      
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+
+      setTimeout(() => {
+        btn.className = 'w-full sm:w-auto px-3.5 py-1.5 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shrink-0 cursor-default';
+        btn.innerHTML = '<i class="fas fa-check-circle"></i> Quote Sent ($' + price.toLocaleString() + ')';
+        card.style.borderColor = '#10B981';
+        card.style.background = '#F0FDF4';
+        showToast('Quote Dispatched to ' + customer, `P/N ${pn} locked at $${price.toLocaleString()} USD in AvSight.`);
+      }, 600);
+    }
+
+    function autoSourcePart(id, pn, price, customer) {
+      const btn = document.getElementById('btn-part-' + id);
+      const card = document.getElementById('part-' + id);
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning ILS/PartsBase...';
+
+      setTimeout(() => {
+        btn.className = 'w-full sm:w-auto px-3.5 py-1.5 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shrink-0 cursor-default';
+        btn.innerHTML = '<i class="fas fa-check-circle"></i> Sourced & Quoted ($' + price.toLocaleString() + ')';
+        card.style.borderColor = '#10B981';
+        card.style.background = '#F0FDF4';
+        showToast('Stock Located & Quoted', `Found 2 units in Frankfurt hub with EASA Form 1. Quoted to ${customer}.`);
+      }, 800);
+    }
+
+    function parseNewRFQ() {
+      const btn = document.getElementById('btn-parse');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ingesting RFQ...';
+
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> 2 Line Items Extracted';
+        btn.className = 'w-full sm:w-auto bg-emerald-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm';
+        showToast('RFQ Extraction Complete', 'Identified 2 aircraft part numbers, trace requirements and customer accounts.');
         setTimeout(() => {
-          btn.innerHTML = originalText;
-          btn.classList.add('btn-finstorm');
-          btn.classList.remove('bg-emerald-600', 'text-white');
+          btn.innerHTML = '<i class="fas fa-brain text-[#F5B300]"></i> Parse Incoming Email';
+          btn.className = 'w-full sm:w-auto btn-finstorm px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm';
+          btn.disabled = false;
         }, 2000);
       }, 700);
     }
 
-    function dispatchQuote() {
-      const btn = document.getElementById('btn-dispatch');
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing to AvSight...';
+    function syncAllToAvSight() {
+      const btn = document.getElementById('btn-sync-all');
       btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing Salesforce AvSight...';
 
       setTimeout(() => {
-        btn.innerHTML = '<i class="fas fa-check-circle"></i> Posted to Salesforce AvSight (Opp #AV-8921)';
-        btn.classList.remove('bg-[#10526F]');
-        btn.classList.add('bg-emerald-600');
+        approvePart(1, '3289562-4', 54800, 'Flydubai MRO');
+        autoSourcePart(2, '4079860-901', 42000, 'Emirates Engineering');
+        btn.innerHTML = '<i class="fas fa-check-double text-teal-300"></i> All Records Synced to AvSight Opp #AV-8921';
+        btn.className = 'w-full sm:w-auto px-4 py-2 rounded-lg bg-emerald-800 text-white font-semibold flex items-center justify-center gap-1.5 shadow-sm';
+        showToast('Salesforce & Accounting Seed Synced', 'All RFQ items posted with complete FAA/EASA trace logs.');
       }, 900);
     }
   </script>
