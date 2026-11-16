@@ -1,23 +1,49 @@
 {
-  "last_sync_dxb": "2026-11-16 19:08:10",
+  "last_sync_dxb": "2026-11-16 23:31:00",
   "metrics": {
-    "total_tasks_done": 32,
-    "in_review_count": 7,
-    "open_count": 21,
-    "estimated_value_in_review_usd": 6250,
-    "total_tracked_value_usd": 26250
+    "total_tasks_done": 35,
+    "in_review_count": 9,
+    "open_count": 26,
+    "estimated_value_in_review_usd": 6550,
+    "total_tracked_value_usd": 27500
   },
   "prs": [
     {
-      "number": 64800,
+      "number": 65938,
+      "title": "[Bug fix] fast_reduce_nc: keep wide partial sums between stages for BFLOAT8_B (#65910)",
+      "repo": "https://api.github.com/repos/tenstorrent/tt-metal",
+      "state": "open",
+      "created_at_origin": "2026-11-16",
+      "executed_at": "2026-11-16",
+      "updated": "2026-11-16 23:26",
+      "has_review": false,
+      "review_info": "Nuevo PR con c\u00f3digo + tests C++/Python enviado hoy (0 competidores)",
+      "estimated_value_usd": 750,
+      "competitors_before": 0
+    },
+    {
+      "number": 65932,
+      "title": "[Bug fix] Key quasar reshape_view program hash on RM staging slot count (#65743)",
+      "repo": "https://api.github.com/repos/tenstorrent/tt-metal",
+      "state": "open",
+      "created_at_origin": "2026-11-16",
+      "executed_at": "2026-11-16",
+      "updated": "2026-11-16 23:04",
+      "has_review": false,
+      "review_info": "Nuevo PR MCW con c\u00f3digo + test L1 pressure enviado hoy (0 competidores)",
+      "estimated_value_usd": 500,
+      "competitors_before": 0
+    },
+    {
+      "number": 65926,
       "title": "fix(ttnn): renumber tensor topology Shard placements across view and reshape (#64322)",
       "repo": "https://api.github.com/repos/tenstorrent/tt-metal",
       "state": "in_review",
       "created_at_origin": "2026-11-07",
       "executed_at": "2026-11-07",
-      "updated": "2026-11-16 14:06",
+      "updated": "2026-11-16 22:45",
       "has_review": true,
-      "review_info": "Revisado por @vtsilytskyiTT (CHANGES_REQUESTED)",
+      "review_info": "5/5 puntos de @vtsilytskyiTT y @mcw-anasuya resueltos en PR #65926",
       "estimated_value_usd": 750,
       "competitors_before": 0
     },
@@ -61,28 +87,28 @@
       "competitors_before": 0
     },
     {
-      "number": 64792,
+      "number": 65928,
       "title": "fix(ttnn): retain op-owned tensors in CommandListBuilder and CommandList (#64289)",
       "repo": "https://api.github.com/repos/tenstorrent/tt-metal",
       "state": "in_review",
       "created_at_origin": "2026-11-07",
       "executed_at": "2026-11-07",
-      "updated": "2026-11-12 15:46",
+      "updated": "2026-11-16 22:49",
       "has_review": true,
-      "review_info": "Revisado por @vtsilytskyiTT (CHANGES_REQUESTED)",
+      "review_info": "4/4 puntos de @vtsilytskyiTT resueltos en PR #65928",
       "estimated_value_usd": 500,
       "competitors_before": 0
     },
     {
-      "number": 64791,
-      "title": "fix(mistral_24b): slice per-image batch index and concat tokens along dim=1 in MistralVisionTower (#64646)",
+      "number": 65931,
+      "title": "fix(mistral_24b): slice per-image batch index and isolate per-image attention in MistralVisionTower (#64646)",
       "repo": "https://api.github.com/repos/tenstorrent/tt-metal",
       "state": "in_review",
       "created_at_origin": "2026-11-07",
       "executed_at": "2026-11-07",
-      "updated": "2026-11-12 15:46",
+      "updated": "2026-11-16 22:56",
       "has_review": true,
-      "review_info": "Revisado por @yieldthought (COMMENTED)",
+      "review_info": "Aislamiento de atenci\u00f3n por imagen (@yieldthought) resuelto en PR #65931",
       "estimated_value_usd": 500,
       "competitors_before": 0
     },
@@ -217,15 +243,15 @@
       "competitors_before": 0
     },
     {
-      "number": 64669,
-      "title": "[Bug fix] Fix ttnn.requantize output_tensor forwarding, axis bounds check, and mixed per-channel dispatch (#64667)",
+      "number": 65930,
+      "title": "[Bug fix] Fix quantization axis bounds, unit-axis classification, mixed dispatch, and output_tensor forwarding (#64667)",
       "repo": "https://api.github.com/repos/tenstorrent/tt-metal",
       "state": "in_review",
       "created_at_origin": "2026-11-06",
       "executed_at": "2026-11-06",
-      "updated": "2026-11-12 15:42",
+      "updated": "2026-11-16 22:52",
       "has_review": true,
-      "review_info": "Revisado por @mcw-anasuya (COMMENTED)",
+      "review_info": "3/3 puntos + tests de @mcw-anasuya resueltos en PR #65930",
       "estimated_value_usd": 500,
       "competitors_before": 0
     },
@@ -233,12 +259,12 @@
       "number": 6601,
       "title": "fix(sessions): clean up relational session rows and agent connections on dataset delete (#6557)",
       "repo": "https://api.github.com/repos/topoteretes/cognee",
-      "state": "open",
+      "state": "in_review",
       "created_at_origin": "2026-11-06",
       "executed_at": "2026-11-06",
-      "updated": "2026-11-10 15:00",
-      "has_review": false,
-      "review_info": "",
+      "updated": "2026-11-16 23:05",
+      "has_review": true,
+      "review_info": "Locks de concurrencia (@Abhishek764) resueltos + 42/42 pytest OK",
       "estimated_value_usd": 300,
       "competitors_before": 0
     },
@@ -423,8 +449,8 @@
       "our_executed_date": "2026-11-16",
       "state": "in_review",
       "competitors_before": 0,
-      "url": "https://github.com/tenstorrent/tt-metal/issues/65873#issuecomment-6922597574",
-      "notes": "Soluci\u00c3\u00b3n matem\u00c3\u00a1tica scale-invariant y kernel SFPU posteados a ingenieros de Tenstorrent hoy."
+      "url": "https://github.com/tenstorrent/tt-metal/pull/65937",
+      "notes": "PR oficial #65937 abierto con combinaci\u00f3n convexa libre de overflow + gtest RingAttentionMergeTest."
     }
   ]
 }
