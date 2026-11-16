@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kael Bounty Mission Control • Live Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #06090D; color: #E2E8F0; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .glass { background: rgba(13, 20, 36, 0.7); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-gold { background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.25); }
+    .pulse-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+  </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+  <!-- Header -->
+  <header class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-6 border-b border-slate-800/80 gap-4">
+    <div>
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center justify-center w-3 h-3 rounded-full bg-emerald-400 pulse-dot"></span>
+        <span class="text-xs uppercase tracking-widest text-emerald-400 font-bold mono">Watcher Autónomo Activo • 0 Créditos</span>
+      </div>
+      <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mt-1 flex items-center gap-3">
+        <span>Kael Bounty & Task Command Center</span>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 mono">v2.0 PRO</span>
+      </h1>
+      <p class="text-sm text-slate-400">
+        Monitoreo en vivo de tareas ejecutadas, valor en dólares en revisión, fechas de entrega y competidores previos.
+      </p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <div class="glass px-4 py-2 rounded-xl text-right">
+        <div class="text-[11px] text-slate-400 mono">CUENTA OFICIAL GITHUB</div>
+        <div class="text-sm font-bold text-amber-400 mono flex items-center gap-2 justify-end">
+          <i class="fab fa-github"></i> cubaloop
+        </div>
+      </div>
+      <button onclick="fetchLiveState()" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider rounded-xl transition flex items-center gap-2 shadow-lg shadow-amber-500/20">
+        <i class="fas fa-sync-alt" id="refresh-icon"></i> Actualizar
+      </button>
+    </div>
+  </header>
+
+  <!-- Key Statistics (Highlighting Value In Review) -->
+  <section class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 my-6">
+    
+    <!-- Big Priority Card: Value In Review -->
+    <div class="glass-gold p-5 rounded-2xl border-amber-500/30 relative overflow-hidden">
+      <div class="absolute -right-4 -bottom-4 text-amber-500/10 text-7xl font-bold mono select-none">$</div>
+      <div class="text-xs uppercase text-amber-300 font-bold tracking-wider mb-1 flex items-center gap-1.5">
+        <i class="fas fa-hand-holding-usd"></i> Valor en Revisión Activa
+      </div>
+      <div class="text-3xl md:text-4xl font-black text-amber-400 mono" id="stat-val-in-review">$3,500 USD</div>
+      <div class="text-xs text-amber-200/80 mt-2 font-medium">
+        🎯 Máxima probabilidad real de cobro
+      </div>
+    </div>
+
+    <div class="glass p-5 rounded-2xl">
+      <div class="text-xs uppercase text-slate-400 font-medium mb-1">Total Tareas Hechas</div>
+      <div class="text-3xl font-extrabold text-white mono" id="stat-total-done">30</div>
+      <div class="text-xs text-emerald-400 mt-2 flex items-center gap-1">
+        <i class="fas fa-check-double"></i> Soluciones enviadas a repositorios
+      </div>
+    </div>
+
+    <div class="glass p-5 rounded-2xl">
+      <div class="text-xs uppercase text-slate-400 font-medium mb-1">Tareas en Revisión (Ingenieros)</div>
+      <div class="text-3xl font-extrabold text-cyan-400 mono" id="stat-in-review-count">2</div>
+      <div class="text-xs text-cyan-300 mt-2">
+        Feedback recibido / atendido
+      </div>
+    </div>
+
+    <div class="glass p-5 rounded-2xl">
+      <div class="text-xs uppercase text-slate-400 font-medium mb-1">Valor Total Rastreado</div>
+      <div class="text-3xl font-extrabold text-slate-200 mono" id="stat-total-val">$18,450 USD</div>
+      <div class="text-xs text-slate-400 mt-2">
+        Tenstorrent, Hanzo AI, Algora
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter Controls -->
+  <section class="max-w-7xl mx-auto glass p-4 rounded-2xl mb-6 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="text-xs text-slate-400 uppercase font-bold mono mr-2"><i class="fas fa-filter"></i> Filtrar Estado:</span>
+      <button onclick="setFilter('all')" id="btn-filter-all" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-amber-500 text-slate-950 transition">Todas</button>
+      <button onclick="setFilter('in_review')" id="btn-filter-in_review" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 hover:text-white transition">En Revisión (Ingeniero)</button>
+      <button onclick="setFilter('open')" id="btn-filter-open" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 hover:text-white transition">Abiertas / Enviadas</button>
+      <button onclick="setFilter('merged')" id="btn-filter-merged" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 hover:text-white transition">Cerradas (Archivadas)</button>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <span class="text-xs text-slate-400 uppercase font-bold mono"><i class="fas fa-calendar-alt"></i> Buscar Fecha:</span>
+      <input type="text" id="search-date" oninput="applyFilters()" placeholder="Ej. 2026-11 o 2026-11-16" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 mono w-44">
+    </div>
+  </section>
+
+  <!-- Master Table: Tasks & Solved Bounties -->
+  <main class="max-w-7xl mx-auto space-y-6">
+
+    <div class="glass rounded-2xl overflow-hidden">
+      <div class="p-5 border-b border-slate-800 flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fas fa-tasks text-amber-400"></i>
+            Listado Maestro de Tareas & Bounties Ejecutados
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">Detalle exhaustivo de fecha de creación del bug, fecha de nuestra ejecución, valor estimado y competidores.</p>
+        </div>
+        <span class="text-xs mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300" id="sync-time">Sincronizado: Recién</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-slate-900/80 border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase mono">
+              <th class="py-3.5 px-4">Plataforma / ID</th>
+              <th class="py-3.5 px-4">Título de la Tarea / Solución</th>
+              <th class="py-3.5 px-4 text-center">Recompensa ($)</th>
+              <th class="py-3.5 px-4 text-center">Estado</th>
+              <th class="py-3.5 px-4 text-center">Fecha Creación</th>
+              <th class="py-3.5 px-4 text-center">Nuestra Ejecución</th>
+              <th class="py-3.5 px-4 text-center">Competidores Previos</th>
+              <th class="py-3.5 px-4">Feedback Ingenieros</th>
+              <th class="py-3.5 px-4 text-right">Enlace</th>
+            </tr>
+          </thead>
+          <tbody id="master-table-body" class="divide-y divide-slate-800/60 text-xs">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    let localData = {"last_sync_dxb": "2026-11-16 18:49:52", "metrics": {"total_tasks_done": 30, "in_review_count": 7, "open_count": 21, "merged_count": 2, "estimated_value_in_review_usd": 5500, "total_tracked_value_usd": 20100}, "prs": [{"number": 64800, "title": "fix(ttnn): renumber tensor topology Shard placements across view and reshape (#64322)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "in_review", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-16 14:06", "has_review": true, "review_info": "Revisado por @vtsilytskyiTT (CHANGES_REQUESTED)", "estimated_value_usd": 750, "competitors_before": 0}, {"number": 64796, "title": "fix(ccl): reject unsupported transpose_a and transpose_b in fused CCL matmul ops (#64325)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "open", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-12 15:46", "has_review": false, "review_info": "", "estimated_value_usd": 500, "competitors_before": 0}, {"number": 64794, "title": "fix(sockets): account for alignment and wrap bytes in set_page_size and avoid reserve underflow (#64664)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "open", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-12 15:46", "has_review": false, "review_info": "", "estimated_value_usd": 750, "competitors_before": 0}, {"number": 64793, "title": "fix(deepseek_prefill): synchronize pack and unpack on cb_out_interm under FUSE_BIAS (#64678)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "open", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-12 15:46", "has_review": false, "review_info": "", "estimated_value_usd": 500, "competitors_before": 0}, {"number": 64792, "title": "fix(ttnn): retain op-owned tensors in CommandListBuilder and CommandList (#64289)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "in_review", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-12 15:46", "has_review": true, "review_info": "Revisado por @vtsilytskyiTT (CHANGES_REQUESTED)", "estimated_value_usd": 500, "competitors_before": 0}, {"number": 64791, "title": "fix(mistral_24b): slice per-image batch index and concat tokens along dim=1 in MistralVisionTower (#64646)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "in_review", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-12 15:46", "has_review": true, "review_info": "Revisado por @yieldthought (COMMENTED)", "estimated_value_usd": 500, "competitors_before": 0}, {"number": 64786, "title": "fix(conv3d): step overlapping local L1 reads in shift_retained_w_columns (#64557)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "open", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-12 15:46", "has_review": false, "review_info": "", "estimated_value_usd": 500, "competitors_before": 0}, {"number": 64785, "title": "fix(ccl): split part-tile and rank-1 TILE shares in row-major order in mesh_partition (#64626)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "open", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-12 15:46", "has_review": false, "review_info": "", "estimated_value_usd": 500, "competitors_before": 0}, {"number": 64784, "title": "fix(groupnorm): fuse negative_mask multiply and x add into one chain to avoid pack/unpack race (#64468)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "open", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-12 15:45", "has_review": false, "review_info": "", "estimated_value_usd": 500, "competitors_before": 0}, {"number": 64783, "title": "fix(buffers): remove unused simulator-only write paths in global_semaphore and simulator_direct_write (#64474)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "open", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-12 15:45", "has_review": false, "review_info": "", "estimated_value_usd": 500, "competitors_before": 0}, {"number": 64782, "title": "fix(tt-train): mask padded vocab columns in vocab_parallel_cross_entropy_loss and TP Llama (#64714)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "open", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-12 15:45", "has_review": false, "review_info": "", "estimated_value_usd": 500, "competitors_before": 0}, {"number": 64781, "title": "fix(logging): demote repetitive device open/close and test fixture info logs to debug (#64718)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "in_review", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-12 15:45", "has_review": true, "review_info": "Revisado por @blozano-tt (APPROVED)", "estimated_value_usd": 500, "competitors_before": 0}, {"number": 6613, "title": "fix(permissions): surface missing-ACL diagnostics on recreated datasets and support keep_acls in forget (#6558)", "repo": "https://api.github.com/repos/topoteretes/cognee", "state": "open", "created_at_origin": "2026-11-07", "executed_at": "2026-11-07", "updated": "2026-11-07 12:41", "has_review": false, "review_info": "", "estimated_value_usd": 300, "competitors_before": 0}, {"number": 6607, "title": "fix(session): isolate session attribution and QA vectors on read-only shared datasets (#6375)", "repo": "https://api.github.com/repos/topoteretes/cognee", "state": "open", "created_at_origin": "2026-11-06", "executed_at": "2026-11-06", "updated": "2026-11-06 20:40", "has_review": false, "review_info": "", "estimated_value_usd": 300, "competitors_before": 0}, {"number": 64685, "title": "[ttnn/experimental/quasar] Align fused bias CB/DFB page size and reader stride in 1D mcast (#57362)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "open", "created_at_origin": "2026-11-06", "executed_at": "2026-11-06", "updated": "2026-11-12 15:42", "has_review": false, "review_info": "", "estimated_value_usd": 500, "competitors_before": 0}, {"number": 6604, "title": "fix(frontend): restore COGNEE_BACKEND_URL and DEFAULT_USER_PASSWORD handling (#6454)", "repo": "https://api.github.com/repos/topoteretes/cognee", "state": "open", "created_at_origin": "2026-11-06", "executed_at": "2026-11-06", "updated": "2026-11-06 18:01", "has_review": false, "review_info": "", "estimated_value_usd": 300, "competitors_before": 0}, {"number": 64669, "title": "[Bug fix] Fix ttnn.requantize output_tensor forwarding, axis bounds check, and mixed per-channel dispatch (#64667)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "in_review", "created_at_origin": "2026-11-06", "executed_at": "2026-11-06", "updated": "2026-11-12 15:42", "has_review": true, "review_info": "Revisado por @mcw-anasuya (COMMENTED)", "estimated_value_usd": 500, "competitors_before": 0}, {"number": 6601, "title": "fix(sessions): clean up relational session rows and agent connections on dataset delete (#6557)", "repo": "https://api.github.com/repos/topoteretes/cognee", "state": "open", "created_at_origin": "2026-11-06", "executed_at": "2026-11-06", "updated": "2026-11-10 15:00", "has_review": false, "review_info": "", "estimated_value_usd": 300, "competitors_before": 0}, {"number": 64601, "title": "[Bug fix] Align _addcdiv zero-divisor NaN, signed-zero, and input_a propagation with torch (#64600)", "repo": "https://api.github.com/repos/tenstorrent/tt-metal", "state": "open", "created_at_origin": "2026-11-06", "executed_at": "2026-11-06", "updated": "2026-11-12 15:40", "has_review": false, "review_info": "", "estimated_value_usd": 750, "competitors_before": 0}, {"number": 6585, "title": "fix(migrations): escape percent-encoded DB URI in Alembic env.py (#6474)", "repo": "https://api.github.com/repos/topoteretes/cognee", "state": "merged", "created_at_origin": "2026-11-06", "executed_at": "2026-11-06", "updated": "2026-11-07 07:40", "has_review": false, "review_info": "", "estimated_value_usd": 250, "competitors_before": 0}, {"number": 147, "title": "feat: add Dozer + LLM + LangChain credit card advisor sample (dozer#1690)", "repo": "https://api.github.com/repos/getdozer/dozer-samples", "state": "merged", "created_at_origin": "2026-11-05", "executed_at": "2026-11-05", "updated": "2026-11-06 06:16", "has_review": false, "review_info": "", "estimated_value_usd": 250, "competitors_before": 0}, {"number": 6575, "title": "feat(connectors): add Jira Cloud Issues data-source connector (closes #6466)", "repo": "https://api.github.com/repos/topoteretes/cognee", "state": "open", "created_at_origin": "2026-11-05", "executed_at": "2026-11-05", "updated": "2026-11-05 17:38", "has_review": false, "review_info": "", "estimated_value_usd": 400, "competitors_before": 0}, {"number": 1, "title": "Build Pulpo Market affiliate storefront and automation platform", "repo": "https://api.github.com/repos/cubaloop/amazon-ui", "state": "open", "created_at_origin": "2026-10-20", "executed_at": "2026-10-20", "updated": "2026-10-21 10:26", "has_review": false, "review_info": "", "estimated_value_usd": 250, "competitors_before": 0}], "bounties": [{"id": "tt-65437", "title": "[Bounty $2,000] Restore OpenVLA execution and action correctness", "reward_usd": 2000, "platform": "Tenstorrent (tt-metal)", "created_date": "2026-11-12", "our_executed_date": "2026-11-16", "state": "in_review", "competitors_before": 4, "url": "https://github.com/tenstorrent/tt-metal/issues/65437", "notes": "Comunidad activa; PRs sometidas en evaluación."}, {"id": "tt-64878", "title": "Sharded softmax uses Float16_b sum scaler when fp32_dest_acc_en=true", "reward_usd": 750, "platform": "Tenstorrent (tt-metal)", "created_date": "2026-11-08", "our_executed_date": "2026-11-16", "state": "open", "competitors_before": 1, "url": "https://github.com/tenstorrent/tt-metal/issues/64878#issuecomment-6919427522", "notes": "Solución técnica completa enviada hoy por cubaloop."}, {"id": "hanzo-18", "title": "On-chain agent identity, reputation and delegated wallets (ERC-8004)", "reward_usd": 1500, "platform": "Hanzo AI (ERC-8004)", "created_date": "2026-11-16", "our_executed_date": "2026-11-16", "state": "open", "competitors_before": 0, "url": "https://github.com/hanzoai/cloud/issues/18#issuecomment-6919627500", "notes": "Publicado hoy. Reclamo y arquitectura entregados por cubaloop."}, {"id": "hanzo-17", "title": "Compute escrow, service guarantees, challenges and rewards", "reward_usd": 1500, "platform": "Hanzo AI (Escrow)", "created_date": "2026-11-16", "our_executed_date": "2026-11-16", "state": "open", "competitors_before": 0, "url": "https://github.com/hanzoai/cloud/issues/17#issuecomment-6919636361", "notes": "Publicado hoy. Propuesta de smart contracts entregada por cubaloop."}, {"id": "hanzo-19", "title": "Open protocol governance, treasury and forkability", "reward_usd": 1500, "platform": "Hanzo AI (Gov)", "created_date": "2026-11-16", "our_executed_date": "2026-11-16", "state": "open", "competitors_before": 0, "url": "https://github.com/hanzoai/cloud/issues/19#issuecomment-6919768309", "notes": "Publicado hoy. Propuesta de Gobernanza timelock entregada por cubaloop."}, {"id": "hanzo-20", "title": "Full sovereignty and network exit test", "reward_usd": 1500, "platform": "Hanzo AI (Testing)", "created_date": "2026-11-16", "our_executed_date": "2026-11-16", "state": "open", "competitors_before": 0, "url": "https://github.com/hanzoai/cloud/issues/20#issuecomment-6919772539", "notes": "Publicado hoy. Propuesta de harness de testing entregada por cubaloop."}, {"id": "tt-64575", "title": "[Bounty $750] Fix sharded softmax on offset core grids", "reward_usd": 750, "platform": "Tenstorrent (tt-metal)", "created_date": "2026-11-06", "our_executed_date": "2026-11-07", "state": "in_review", "competitors_before": 1, "url": "https://github.com/tenstorrent/tt-metal/issues/64575", "notes": "En revisión activa por el equipo de Tenstorrent."}]};
+    let currentFilter = 'all';
+
+    async function fetchLiveState() {
+      const icon = document.getElementById('refresh-icon');
+      if (icon) icon.classList.add('fa-spin');
+      try {
+        const res = await fetch('dashboard_data.json?t=' + Date.now());
+        if (res.ok) {
+          localData = await res.json();
+          renderDashboard();
+        } else if (localData) {
+          renderDashboard();
+        }
+      } catch (err) {
+        if (localData) renderDashboard();
+      } finally {
+        if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 600);
+      }
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      ['all', 'in_review', 'open', 'merged'].forEach(f => {
+        const btn = document.getElementById('btn-filter-' + f);
+        if (btn) {
+          if (f === filter) {
+            btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg bg-amber-500 text-slate-950 transition";
+          } else {
+            btn.className = "px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 hover:text-white transition";
+          }
+        }
+      });
+      renderDashboard();
+    }
+
+    function applyFilters() {
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      if (!localData) return;
+
+      const m = localData.metrics || {};
+      document.getElementById('sync-time').textContent = 'Sincronizado: ' + (localData.last_sync_dxb || 'En vivo');
+      document.getElementById('stat-val-in-review').textContent = '$' + (m.estimated_value_in_review_usd || 3500).toLocaleString() + ' USD';
+      document.getElementById('stat-total-done').textContent = m.total_tasks_done || (localData.prs.length + localData.bounties.length);
+      document.getElementById('stat-in-review-count').textContent = m.in_review_count || 2;
+      document.getElementById('stat-total-val').textContent = '$' + (m.total_tracked_value_usd || 18450).toLocaleString() + ' USD';
+
+      const searchDate = (document.getElementById('search-date')?.value || '').trim().toLowerCase();
+
+      // Combine PRs and executed Bounties into unified rows
+      const combined = [
+        ...localData.bounties.map(b => ({
+          type: 'BOUNTY',
+          platform: b.platform,
+          id: b.id,
+          title: b.title,
+          reward_usd: b.reward_usd,
+          state: b.state,
+          created: b.created_date,
+          executed: b.our_executed_date,
+          competitors: b.competitors_before,
+          feedback: b.notes,
+          url: b.url
+        })),
+        ...localData.prs.map(p => {
+          const repoShort = p.repo.replace('https://api.github.com/repos/', '');
+          return {
+            type: 'PR',
+            platform: repoShort,
+            id: '#' + p.number,
+            title: p.title,
+            reward_usd: p.estimated_value_usd || 500,
+            state: p.state,
+            created: p.created_at_origin,
+            executed: p.executed_at,
+            competitors: p.competitors_before || 0,
+            feedback: p.review_info || '<span class="text-slate-500">En espera de triage</span>',
+            url: `https://github.com/${repoShort}/pull/${p.number}`
+          };
+        })
+      ];
+
+      // Filter logic
+      const filtered = combined.filter(item => {
+        if (currentFilter !== 'all' && item.state !== currentFilter) return false;
+        if (searchDate) {
+          const matchDate = (item.created && item.created.toLowerCase().includes(searchDate)) ||
+                            (item.executed && item.executed.toLowerCase().includes(searchDate));
+          if (!matchDate) return false;
+        }
+        return true;
+      });
+
+      const tbody = document.getElementById('master-table-body');
+      tbody.innerHTML = filtered.map(item => {
+        const stateColor = item.state === 'in_review'
+          ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+          : (item.state === 'open' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30');
+
+        const stateLabel = item.state === 'in_review'
+          ? 'En Revisión (Ingeniero)'
+          : (item.state === 'open' ? 'Abierta / Enviada' : 'Cerrada (Sin Fusionar)');
+
+        const compBadge = item.competitors > 0
+          ? `<span class="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 font-bold mono">${item.competitors} rivales</span>`
+          : `<span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold mono">0 (Pioneros)</span>`;
+
+        return `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="py-3 px-4 mono font-semibold">
+              <span class="text-slate-400">${item.platform}</span><br>
+              <span class="text-amber-400 font-bold">${item.id}</span>
+            </td>
+            <td class="py-3 px-4 font-medium text-slate-200 max-w-xs md:max-w-sm">
+              ${item.title}
+            </td>
+            <td class="py-3 px-4 text-center mono font-bold text-amber-400 whitespace-nowrap">
+              $${item.reward_usd.toLocaleString()}
+            </td>
+            <td class="py-3 px-4 text-center whitespace-nowrap">
+              <span class="px-2.5 py-1 rounded-md border text-[11px] font-semibold ${stateColor}">
+                ${stateLabel}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-center mono text-slate-400 whitespace-nowrap">
+              ${item.created}
+            </td>
+            <td class="py-3 px-4 text-center mono text-emerald-400 font-semibold whitespace-nowrap">
+              <i class="fas fa-check-circle text-[10px]"></i> ${item.executed}
+            </td>
+            <td class="py-3 px-4 text-center whitespace-nowrap">
+              ${compBadge}
+            </td>
+            <td class="py-3 px-4 text-slate-300">
+              ${item.feedback}
+            </td>
+            <td class="py-3 px-4 text-right whitespace-nowrap">
+              <a href="${item.url}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-amber-400 border border-slate-700 transition">
+                <span>Ver Tarea</span> <i class="fas fa-external-link-alt text-[10px]"></i>
+              </a>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Auto-fetch every 10 seconds locally
+    fetchLiveState();
+    setInterval(fetchLiveState, 10000);
+  </script>
+</body>
+</html>
