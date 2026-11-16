@@ -4,8 +4,8 @@
     "total_tasks_done": 32,
     "in_review_count": 7,
     "open_count": 21,
-    "estimated_value_in_review_usd": 5500,
-    "total_tracked_value_usd": 25500
+    "estimated_value_in_review_usd": 3500,
+    "total_tracked_value_usd": 16400
   },
   "prs": [
     {
@@ -280,7 +280,7 @@
       "state": "open",
       "competitors_before": 0,
       "url": "https://github.com/hanzoai/engine/issues/71#issuecomment-6921414207",
-      "notes": "DVFS y telemetría de inferencia descentralizada entregada por cubaloop."
+      "notes": "DVFS y telemetr\u00c3\u00ada de inferencia descentralizada entregada por cubaloop."
     },
     {
       "id": "hanzo-engine-51",
@@ -328,7 +328,7 @@
       "state": "open",
       "competitors_before": 5,
       "url": "https://github.com/overturn-ai/overturn/issues/20",
-      "notes": "Bounty $150 verificado en issue. Pago garantizado vía PayPal/GitHub Sponsors."
+      "notes": "Bounty $150 verificado en issue. Pago garantizado v\u00c3\u00ada PayPal/GitHub Sponsors."
     },
     {
       "id": "tt-65437",
@@ -340,7 +340,7 @@
       "state": "in_review",
       "competitors_before": 4,
       "url": "https://github.com/tenstorrent/tt-metal/issues/65437",
-      "notes": "Bounty oficial $2,000 USD asignado por @jberkowitzTT. Soluciones en evaluación."
+      "notes": "Bounty oficial $2,000 USD asignado por @jberkowitzTT. Soluciones en evaluaci\u00c3\u00b3n."
     },
     {
       "id": "tt-64878",
@@ -352,7 +352,7 @@
       "state": "open",
       "competitors_before": 1,
       "url": "https://github.com/tenstorrent/tt-metal/issues/64878#issuecomment-6919427522",
-      "notes": "Solución de precisión Float32 enviada hoy por cubaloop."
+      "notes": "Soluci\u00c3\u00b3n de precisi\u00c3\u00b3n Float32 enviada hoy por cubaloop."
     },
     {
       "id": "hanzo-18",
@@ -376,7 +376,7 @@
       "state": "open",
       "competitors_before": 0,
       "url": "https://github.com/hanzoai/cloud/issues/17#issuecomment-6919636361",
-      "notes": "Bounty P0. Propuesta de smart contracts de depósito en custodia entregada."
+      "notes": "Bounty P0. Propuesta de smart contracts de dep\u00c3\u00b3sito en custodia entregada."
     },
     {
       "id": "hanzo-19",
@@ -412,7 +412,19 @@
       "state": "in_review",
       "competitors_before": 1,
       "url": "https://github.com/tenstorrent/tt-metal/issues/64575",
-      "notes": "Bounty $750 en revisión activa por el equipo de Tenstorrent."
+      "notes": "Bounty $750 en revisi\u00c3\u00b3n activa por el equipo de Tenstorrent."
+    },
+    {
+      "id": "tt-65873",
+      "title": "[Bounty $750] Ring attention merge: lerp FP32 overflow remediation",
+      "reward_usd": 750,
+      "platform": "Tenstorrent TT-Train ($750)",
+      "created_date": "2026-11-16",
+      "our_executed_date": "2026-11-16",
+      "state": "in_review",
+      "competitors_before": 0,
+      "url": "https://github.com/tenstorrent/tt-metal/issues/65873#issuecomment-6922597574",
+      "notes": "Soluci\u00c3\u00b3n matem\u00c3\u00a1tica scale-invariant y kernel SFPU posteados a ingenieros de Tenstorrent hoy."
     }
   ]
 }
