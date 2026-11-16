@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Executive Domain Fellowship • Remote AI Evaluation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F6F1E7;
+      --surface: #FFFDF8;
+      --ink: #14201B;
+      --muted: #53615A;
+      --accent: #7A5A1E;
+      --border: rgba(20, 32, 27, 0.12);
+    }
+    [data-theme="dark"] {
+      --bg: #09100D;
+      --surface: #121D18;
+      --ink: #F2EDE0;
+      --muted: #A7B4AD;
+      --accent: #D9B76F;
+      --border: rgba(242, 237, 224, 0.14);
+    }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+    .display-font { font-family: 'Fraunces', serif; }
+    .card-lux { background: var(--surface); border: 1px solid var(--border); }
+    .accent-text { color: var(--accent); }
+    .btn-brass { background: var(--accent); color: #FFFDF8; }
+    [data-theme="dark"] .btn-brass { color: #09100D; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- Minimalist Universal Header (Rule 8.2: Logo + WA Icon ONLY + Hamburger ONLY) -->
+  <header class="w-full border-b" style="border-color: var(--border); background: var(--surface);">
+    <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <span class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm btn-brass display-font">S</span>
+        <span class="font-bold tracking-tight text-base display-font">Skylink Executive Talent</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="https://wa.me/971508379080" target="_blank" aria-label="WhatsApp" class="w-10 h-10 rounded-full flex items-center justify-center border transition hover:opacity-80" style="border-color: var(--border);">
+          <i class="fab fa-whatsapp text-lg accent-text"></i>
+        </a>
+        <button onclick="document.getElementById('drawer').classList.toggle('hidden')" aria-label="Menu" class="w-10 h-10 rounded-full flex items-center justify-center border text-lg font-bold" style="border-color: var(--border);">
+          ☰
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile / Universal Drawer -->
+  <div id="drawer" class="hidden fixed inset-0 z-50 flex justify-end" style="background: rgba(0,0,0,0.45);">
+    <div class="w-72 h-full p-6 flex flex-col justify-between card-lux">
+      <div class="space-y-5">
+        <div class="flex items-center justify-between border-b pb-4" style="border-color: var(--border);">
+          <span class="font-bold display-font">Menu</span>
+          <button onclick="document.getElementById('drawer').classList.add('hidden')" class="text-xl">&times;</button>
+        </div>
+        <button onclick="toggleTheme()" class="w-full py-2.5 px-4 rounded-xl border text-left text-sm font-semibold flex items-center justify-between" style="border-color: var(--border);">
+          <span>Switch Light / Dark</span>
+          <i class="fas fa-adjust accent-text"></i>
+        </button>
+      </div>
+      <div class="text-xs" style="color: var(--muted);">Direct Invitation Portal</div>
+    </div>
+  </div>
+
+  <!-- Main Invitation Card -->
+  <main class="max-w-2xl mx-auto w-full px-4 py-10">
+    <div class="card-lux rounded-3xl p-6 md:p-10 shadow-sm space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider border" style="border-color: var(--border); color: var(--accent);">
+        <span>Verified Remote Advisory Mandate</span>
+      </div>
+
+      <h1 id="job-title" class="text-2xl md:text-4xl font-bold display-font leading-tight">
+        Domain Expert Fellowship
+      </h1>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
+        <div class="p-3.5 rounded-2xl border" style="border-color: var(--border);">
+          <div class="text-[11px] uppercase font-semibold" style="color: var(--muted);">Compensation</div>
+          <div id="job-pay" class="text-lg font-bold accent-text mt-0.5">$100–$350/hr</div>
+        </div>
+        <div class="p-3.5 rounded-2xl border" style="border-color: var(--border);">
+          <div class="text-[11px] uppercase font-semibold" style="color: var(--muted);">Format</div>
+          <div class="text-lg font-bold mt-0.5">100% Remote</div>
+        </div>
+        <div class="p-3.5 rounded-2xl border col-span-2 sm:col-span-1" style="border-color: var(--border);">
+          <div class="text-[11px] uppercase font-semibold" style="color: var(--muted);">Open Positions</div>
+          <div id="job-slots" class="text-lg font-bold mt-0.5">Priority Cohort</div>
+        </div>
+      </div>
+
+      <details class="rounded-2xl border p-4" style="border-color: var(--border);">
+        <summary class="font-semibold text-sm cursor-pointer flex items-center justify-between">
+          <span>Program Scope & Zero-Fee Guarantee</span>
+          <i class="fas fa-chevron-down text-xs accent-text"></i>
+        </summary>
+        <p class="text-sm mt-3 leading-relaxed" style="color: var(--muted);">
+          Leading U.S. AI research laboratories contract credentialed non-technical specialists (Physicians, Financial Analysts, Film/Audio Directors, and Enterprise Leaders) on a flexible hourly basis (5–20 hrs/week) to benchmark and review domain-specific AI outputs. There is zero cost to candidates, weekly/bi-weekly direct payouts via Stripe/Wire, and a single 20-minute remote assessment.
+        </p>
+      </details>
+
+      <form onsubmit="proceedToApplication(event)" class="space-y-4 pt-2">
+        <div>
+          <label class="block text-xs font-semibold uppercase mb-1.5" style="color: var(--muted);">Full Name & Title</label>
+          <input id="cand-name" type="text" required placeholder="e.g. Dr. Ahmed Al-Mansoori / Senior Radiologist" class="w-full px-4 py-3 rounded-xl border bg-transparent text-sm focus:outline-none" style="border-color: var(--border);">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase mb-1.5" style="color: var(--muted);">Email or LinkedIn URL</label>
+          <input id="cand-contact" type="text" required placeholder="name@clinic.com or linkedin.com/in/..." class="w-full px-4 py-3 rounded-xl border bg-transparent text-sm focus:outline-none" style="border-color: var(--border);">
+        </div>
+        <button type="submit" id="submit-btn" class="w-full py-4 rounded-full font-bold text-sm tracking-wide btn-brass transition hover:opacity-90 shadow-md">
+          Book Appointment
+        </button>
+        <p class="text-[11px] text-center" style="color: var(--muted);">
+          Continues immediately to the official partner application portal.
+        </p>
+      </form>
+    </div>
+  </main>
+
+  <footer class="py-6 text-center text-xs" style="color: var(--muted);">
+    Developed by Tecnoemprende
+  </footer>
+
+  <script>
+    const JOBS = [{"id": "list_AAABoUYJgC6FFGQLBmRFJZvf", "title": "Film & Video Craft Expert (Camera, VFX, Editing & Performance)", "domain": "Arts & Design", "referral_usd": 1600, "rate_min": 70, "rate_max": 100, "slots": 48, "recent_candidates": 55, "locations": ["Global (Incluye UAE, Espa\u00f1a, Latam, USA, UK)"], "url": "https://work.mercor.com/jobs/list_AAABoUYJgC6FFGQLBmRFJZvf", "posted": "2026-10-16", "platform": "Mercor", "pay_unit": "hr USD", "scope": "global", "xray": "site:linkedin.com/in \"Film & Video Craft Expert\" (\"Dubai\" OR \"London\" OR \"Madrid\")"}, {"id": "list_AAABoWtwzY78zzncm-FELrjZ", "title": "Radiologist", "domain": "Medicine", "referral_usd": 1400, "rate_min": 350, "rate_max": 350, "slots": 41, "recent_candidates": 5, "locations": ["Global (Incluye UAE, Espa\u00f1a, Latam, USA, UK)"], "url": "https://work.mercor.com/jobs/list_AAABoWtwzY78zzncm-FELrjZ", "posted": "2026-10-24", "platform": "Mercor", "pay_unit": "hr USD", "scope": "global", "xray": "site:linkedin.com/in \"Radiologist\" (\"Dubai\" OR \"London\" OR \"Madrid\")"}, {"id": "list_AAABoWtwmMBbLnGYAPFKNLAQ", "title": "Orthopedic Surgeon", "domain": "Medicine", "referral_usd": 1400, "rate_min": 350, "rate_max": 350, "slots": 29, "recent_candidates": 9, "locations": ["Global (Incluye UAE, Espa\u00f1a, Latam, USA, UK)"], "url": "https://work.mercor.com/jobs/list_AAABoWtwmMBbLnGYAPFKNLAQ", "posted": "2026-10-24", "platform": "Mercor", "pay_unit": "hr USD", "scope": "global", "xray": "site:linkedin.com/in \"Orthopedic Surgeon\" (\"Dubai\" OR \"London\" OR \"Madrid\")"}, {"id": "list_AAABoWtwpFEaRuHYqcNK6KyX", "title": "Anesthesiologist", "domain": "Medicine", "referral_usd": 1400, "rate_min": 350, "rate_max": 350, "slots": 26, "recent_candidates": 2, "locations": ["Global (Incluye UAE, Espa\u00f1a, Latam, USA, UK)"], "url": "https://work.mercor.com/jobs/list_AAABoWtwpFEaRuHYqcNK6KyX", "posted": "2026-10-24", "platform": "Mercor", "pay_unit": "hr USD", "scope": "global", "xray": "site:linkedin.com/in \"Anesthesiologist\" (\"Dubai\" OR \"London\" OR \"Madrid\")"}, {"id": "list_AAABoWtwvCp5G7Swt0JDu7wl", "title": "Cardiologist", "domain": "Medicine", "referral_usd": 1400, "rate_min": 350, "rate_max": 350, "slots": 20, "recent_candidates": 12, "locations": ["Global (Incluye UAE, Espa\u00f1a, Latam, USA, UK)"], "url": "https://work.mercor.com/jobs/list_AAABoWtwvCp5G7Swt0JDu7wl", "posted": "2026-10-24", "platform": "Mercor", "pay_unit": "hr USD", "scope": "global", "xray": "site:linkedin.com/in \"Cardiologist\" (\"Dubai\" OR \"London\" OR \"Madrid\")"}, {"id": "list_AAABoYQqZfrpr7vPO4JFA62D", "title": "Luxury Automotive Strategy Expert", "domain": "Business Operations", "referral_usd": 1400, "rate_min": 300, "rate_max": 350, "slots": 2, "recent_candidates": 2, "locations": ["Global (Incluye UAE, Espa\u00f1a, Latam, USA, UK)"], "url": "https://work.mercor.com/jobs/list_AAABoYQqZfrpr7vPO4JFA62D", "posted": "2026-10-28", "platform": "Mercor", "pay_unit": "hr USD", "scope": "global", "xray": "site:linkedin.com/in \"Luxury Automotive Strategy Expert\" (\"Dubai\" OR \"London\" OR \"Madrid\")"}, {"id": "list_AAABn9FrqwkKOQjZxPtAX7FV", "title": "Payer & Market Access Expert \u2014 Gross-to-Net & Formulary Strategy", "domain": "Life, Physical, and Social Science", "referral_usd": 1200, "rate_min": 175, "rate_max": 200, "slots": 5, "recent_candidates": 0, "locations": ["Global (Incluye UAE, Espa\u00f1a, Latam, USA, UK)"], "url": "https://work.mercor.com/jobs/list_AAABn9FrqwkKOQjZxPtAX7FV", "posted": "2026-08-05", "platform": "Mercor", "pay_unit": "hr USD", "scope": "global", "xray": "site:linkedin.com/in \"Payer & Market Access Expert\" (\"Dubai\" OR \"London\" OR \"Madrid\")"}, {"id": "list_AAABoWtwjZ8YPP1X8zpPf7U3", "title": "Dermatologist", "domain": "Medicine", "referral_usd": 1100, "rate_min": 275, "rate_max": 275, "slots": 40, "recent_candidates": 4, "locations": ["Global (Incluye UAE, Espa\u00f1a, Latam, USA, UK)"], "url": "https://work.mercor.com/jobs/list_AAABoWtwjZ8YPP1X8zpPf7U3", "posted": "2026-10-24", "platform": "Mercor", "pay_unit": "hr USD", "scope": "global", "xray": "site:linkedin.com/in \"Dermatologist\" (\"Dubai\" OR \"London\" OR \"Madrid\")"}, {"id": "list_AAABn9Frhef3j5d5wCJAiYZu", "title": "Epidemiologist \u2014 Patient Population Sizing", "domain": "Life, Physical, and Social Science", "referral_usd": 1080, "rate_min": 150, "rate_max": 175, "slots": 5, "recent_candidates": 0, "locations": ["Global (Incluye UAE, Espa\u00f1a, Latam, USA, UK)"], "url": "https://work.mercor.com/jobs/list_AAABn9Frhef3j5d5wCJAiYZu", "posted": "2026-08-05", "platform": "Mercor", "pay_unit": "hr USD", "scope": "global", "xray": "site:linkedin.com/in \"Epidemiologist\" (\"Dubai\" OR \"London\" OR \"Madrid\")"}, {"id": "list_AAABoOppU3x5v3XMbLRHP4rK", "title": "Economics Research Expert", "domain": "Life, Physical, and Social Science", "referral_usd": 1000, "rate_min": 150, "rate_max": 160, "slots": 53, "recent_candidates": 20, "locations": ["Global (Incluye UAE, Espa\u00f1a, Latam, USA, UK)"], "url": "https://work.mercor.com/jobs/list_AAABoOppU3x5v3XMbLRHP4rK", "posted": "2026-09-28", "platform": "Mercor", "pay_unit": "hr USD", "scope": "global", "xray": "site:linkedin.com/in \"Economics Research Expert\" (\"Dubai\" OR \"London\" OR \"Madrid\")"}, {"id": "list_AAABn_cBCuQM7WBSR_BNoqrS", "title": "Preclinical R&D Expert \u2013 ADC & Bispecifics", "domain": "Life, Physical, and Social Science", "referral_usd": 1000, "rate_min": 60, "rate_max": 100, "slots": 5, "recent_candidates": 0, "locations": ["Global (Incluye UAE, Espa\u00f1a, Latam, USA, UK)"], "url": "https://work.mercor.com/jobs/list_AAABn_cBCuQM7WBSR_BNoqrS", "posted": "2026-08-12", "platform": "Mercor", "pay_unit": "hr USD", "scope": "global", "xray": "site:linkedin.com/in \"Preclinical R&D Expert \u2013 ADC & Bispecifics\" (\"Dubai\" OR \"London\" OR \"Madrid\")"}, {"id": "list_AAABnJzK0z1CNefOyERAAb9m", "title": "Physician Talent Network", "domain": "Medicine", "referral_usd": 1000, "rate_min": 110, "rate_max": 250, "slots": null, "recent_candidates": 0, "locations": ["Global (Incluye UAE, Espa\u00f1a, Latam, USA, UK)"], "url": "https://work.mercor.com/jobs/list_AAABnJzK0z1CNefOyERAAb9m", "posted": "2026-02-27", "platform": "Mercor", "pay_unit": "hr USD", "scope": "global", "xray": "site:linkedin.com/in \"Physician Talent Network\" (\"Dubai\" OR \"London\" OR \"Madrid\")"}, {"id": "list_AAABocIjhdfSM-NMTbdByLg8", "title": "Clinical / Health Domain Expert", "domain": "Medicine", "referral_usd": 2000, "rate_min": 90, "rate_max": 150, "slots": 15, "recent_candidates": 0, "locations": ["USA"], "url": "https://work.mercor.com/jobs/list_AAABocIjhdfSM-NMTbdByLg8", "posted": "2026-11-09", "platform": "Mercor", "pay_unit": "hr USD", "scope": "usa", "xray": "site:linkedin.com/in \"Clinical / Health Domain Expert\" (\"New York\" OR \"Los Angeles\" OR \"Miami\")"}, {"id": "list_AAABoUX0FsrPqLbZr_lPg4xU", "title": "Senior Character Animator", "domain": "Arts & Design", "referral_usd": 2000, "rate_min": 60, "rate_max": 90, "slots": 4, "recent_candidates": 0, "locations": ["USA"], "url": "https://work.mercor.com/jobs/list_AAABoUX0FsrPqLbZr_lPg4xU", "posted": "2026-10-16", "platform": "Mercor", "pay_unit": "hr USD", "scope": "usa", "xray": "site:linkedin.com/in \"Senior Character Animator\" (\"New York\" OR \"Los Angeles\" OR \"Miami\")"}, {"id": "list_AAABoa1sLA0lq8iNfmRFUqbI", "title": "Music Producer & Audio Post Specialist (AI Evaluation)", "domain": "Creative / Specialized", "referral_usd": 1920, "rate_min": 70, "rate_max": 120, "slots": 20, "recent_candidates": 0, "locations": ["USA"], "url": "https://work.mercor.com/jobs/list_AAABoa1sLA0lq8iNfmRFUqbI", "posted": "2026-11-05", "platform": "Mercor", "pay_unit": "hr USD", "scope": "usa", "xray": "site:linkedin.com/in \"Music Producer & Audio Post Specialist\" (\"New York\" OR \"Los Angeles\" OR \"Miami\")"}, {"id": "list_AAABoa1sCbPwvr1_PhpCHLux", "title": "3D Generalist: Modeling, Rigging & Animation (AI Evaluation)", "domain": "Creative / Specialized", "referral_usd": 1920, "rate_min": 70, "rate_max": 120, "slots": 20, "recent_candidates": 0, "locations": ["USA"], "url": "https://work.mercor.com/jobs/list_AAABoa1sCbPwvr1_PhpCHLux", "posted": "2026-11-05", "platform": "Mercor", "pay_unit": "hr USD", "scope": "usa", "xray": "site:linkedin.com/in \"3D Generalist\" (\"New York\" OR \"Los Angeles\" OR \"Miami\")"}, {"id": "list_AAABoa1r6s480sXRHpNIq6eg", "title": "Editorial, Deck & Document Designer (AI Evaluation)", "domain": "Creative / Specialized", "referral_usd": 1920, "rate_min": 70, "rate_max": 120, "slots": 20, "recent_candidates": 0, "locations": ["USA"], "url": "https://work.mercor.com/jobs/list_AAABoa1r6s480sXRHpNIq6eg", "posted": "2026-11-05", "platform": "Mercor", "pay_unit": "hr USD", "scope": "usa", "xray": "site:linkedin.com/in \"Editorial, Deck & Document Designer\" (\"New York\" OR \"Los Angeles\" OR \"Miami\")"}, {"id": "list_AAABoa1r0Q2Xlj69bvJGq7d-", "title": "Brand & Advertising Art Director (AI Evaluation)", "domain": "Creative / Specialized", "referral_usd": 1920, "rate_min": 70, "rate_max": 120, "slots": 20, "recent_candidates": 0, "locations": ["USA"], "url": "https://work.mercor.com/jobs/list_AAABoa1r0Q2Xlj69bvJGq7d-", "posted": "2026-11-05", "platform": "Mercor", "pay_unit": "hr USD", "scope": "usa", "xray": "site:linkedin.com/in \"Brand & Advertising Art Director\" (\"New York\" OR \"Los Angeles\" OR \"Miami\")"}, {"id": "list_AAABoa1rvJBdN-DTyENP7KJ4", "title": "Senior Motion Designer & Creative Technologist (AI Evaluation)", "domain": "Creative / Specialized", "referral_usd": 1920, "rate_min": 70, "rate_max": 120, "slots": 20, "recent_candidates": 0, "locations": ["USA"], "url": "https://work.mercor.com/jobs/list_AAABoa1rvJBdN-DTyENP7KJ4", "posted": "2026-11-05", "platform": "Mercor", "pay_unit": "hr USD", "scope": "usa", "xray": "site:linkedin.com/in \"Senior Motion Designer & Creative Technologist\" (\"New York\" OR \"Los Angeles\" OR \"Miami\")"}, {"id": "list_AAABoa1gUkpcGLZXlqdBXK5J", "title": "Commercial Video Editor & Post-Production Lead (AI Evaluation)", "domain": "Creative / Specialized", "referral_usd": 1920, "rate_min": 70, "rate_max": 120, "slots": 20, "recent_candidates": 0, "locations": ["USA"], "url": "https://work.mercor.com/jobs/list_AAABoa1gUkpcGLZXlqdBXK5J", "posted": "2026-11-05", "platform": "Mercor", "pay_unit": "hr USD", "scope": "usa", "xray": "site:linkedin.com/in \"Commercial Video Editor & Post-Production Lead\" (\"New York\" OR \"Los Angeles\" OR \"Miami\")"}, {"id": "list_AAABoUCyCieEKxAsNFtGkabI", "title": "Electrical Engineer", "domain": "Other Engineering", "referral_usd": 1920, "rate_min": 80, "rate_max": 120, "slots": 20, "recent_candidates": 0, "locations": ["USA"], "url": "https://work.mercor.com/jobs/list_AAABoUCyCieEKxAsNFtGkabI", "posted": "2026-10-15", "platform": "Mercor", "pay_unit": "hr USD", "scope": "usa", "xray": "site:linkedin.com/in \"Electrical Engineer\" (\"New York\" OR \"Los Angeles\" OR \"Miami\")"}, {"id": "list_AAABocIjT4I9rt3yNzZPmZpw", "title": "Finance Domain Expert", "domain": "Finance", "referral_usd": 1920, "rate_min": 80, "rate_max": 120, "slots": 15, "recent_candidates": 0, "locations": ["USA"], "url": "https://work.mercor.com/jobs/list_AAABocIjT4I9rt3yNzZPmZpw", "posted": "2026-11-09", "platform": "Mercor", "pay_unit": "hr USD", "scope": "usa", "xray": "site:linkedin.com/in \"Finance Domain Expert\" (\"New York\" OR \"Los Angeles\" OR \"Miami\")"}, {"id": "list_AAABoWTgVrfzF78gL6BI_brn", "title": "Colorist & Finishing Editor", "domain": "Arts & Design", "referral_usd": 1760, "rate_min": 70, "rate_max": 110, "slots": 2, "recent_candidates": 0, "locations": ["USA"], "url": "https://work.mercor.com/jobs/list_AAABoWTgVrfzF78gL6BI_brn", "posted": "2026-10-22", "platform": "Mercor", "pay_unit": "hr USD", "scope": "usa", "xray": "site:linkedin.com/in \"Colorist & Finishing Editor\" (\"New York\" OR \"Los Angeles\" OR \"Miami\")"}, {"id": "list_AAABoWTgSJZkV8di89dEJ5Z3", "title": "VFX & Compositing Supervisor", "domain": "Arts & Design", "referral_usd": 1760, "rate_min": 70, "rate_max": 110, "slots": 2, "recent_candidates": 0, "locations": ["USA"], "url": "https://work.mercor.com/jobs/list_AAABoWTgSJZkV8di89dEJ5Z3", "posted": "2026-10-22", "platform": "Mercor", "pay_unit": "hr USD", "scope": "usa", "xray": "site:linkedin.com/in \"VFX & Compositing Supervisor\" (\"New York\" OR \"Los Angeles\" OR \"Miami\")"}, {"id": "pf_alma_ae", "platform": "Paraform", "title": "Mid-Market Account Executive (Full-Cycle Sales)", "domain": "Sales / GTM (Alma)", "referral_usd": 5000, "rate_min": 140000, "rate_max": 220000, "pay_unit": "yr OTE", "slots": 3, "recent_candidates": 2, "locations": ["USA (San Francisco / Hybrid)"], "url": "https://www.paraform.com", "posted": "2026-11", "xray": "site:linkedin.com/in (\"Account Executive\" OR \"Mid-Market AE\") (\"SaaS\" OR \"B2B\") \"San Francisco\"", "scope": "paraform"}, {"id": "pf_listen_ae", "platform": "Paraform", "title": "Enterprise Account Executive (VP Revenue Partner)", "domain": "Enterprise Sales (Listen Labs)", "referral_usd": 7500, "rate_min": 160000, "rate_max": 260000, "pay_unit": "yr OTE", "slots": 2, "recent_candidates": 1, "locations": ["USA (New York)"], "url": "https://www.paraform.com", "posted": "2026-11", "xray": "site:linkedin.com/in \"Enterprise Account Executive\" (\"New York\" OR \"NYC\") SaaS", "scope": "paraform"}, {"id": "pf_longitude_fin", "platform": "Paraform", "title": "Strategic Deployments Lead \u2014 Quality Ops [Finance / IB / PE]", "domain": "Finance / Private Equity (Longitude Labs)", "referral_usd": 6000, "rate_min": 150000, "rate_max": 210000, "pay_unit": "yr Base", "slots": 2, "recent_candidates": 1, "locations": ["USA (New York / SF)"], "url": "https://www.paraform.com", "posted": "2026-11", "xray": "site:linkedin.com/in (\"Investment Banking\" OR \"Private Equity\") (\"Operations\" OR \"Strategy\") \"New York\"", "scope": "paraform"}, {"id": "dxb_start_setup", "platform": "StartDXB UAE Partner", "title": "UAE Mainland / Freezone Business Setup Referral", "domain": "Corporate Services (Dubai)", "referral_usd": 815, "rate_min": 3000, "rate_max": 3000, "pay_unit": "AED Flat Cash", "slots": 99, "recent_candidates": 0, "locations": ["Global / Dubai UAE"], "url": "https://startdxb.ae", "posted": "2026-11", "xray": "site:linkedin.com/in (\"Expanding to Dubai\" OR \"Moving to Dubai\" OR \"Founder\") \"UAE\"", "scope": "paraform"}];
+    const SB_URL = "https://jyrqzjctkmzdvmraqrcv.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp5cnF6amN0a216ZHZtcmFxcmN2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NjI4MTU3NCwiZXhwIjoyMTAxODU3NTc0fQ.jpzy38i_JqhKiLZwNFXESJo62kk4vWvwCVPLpFIyLjc";
+    let activeJob = JOBS[1]; // Default Radiologist $350/h
+    let mercorRef = "";
+    let paraformRef = "";
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    }
+
+    (async function init() {
+      const params = new URLSearchParams(window.location.search);
+      const jid = params.get('job');
+      const directRef = params.get('ref');
+      if (directRef) mercorRef = directRef;
+
+      if (jid) {
+        const found = JOBS.find(j => j.id === jid);
+        if (found) activeJob = found;
+      }
+      document.getElementById('job-title').textContent = activeJob.title;
+      const payStr = activeJob.rate_min === activeJob.rate_max
+        ? `$${activeJob.rate_min.toLocaleString()}/${activeJob.pay_unit}`
+        : `$${activeJob.rate_min.toLocaleString()}–$${activeJob.rate_max.toLocaleString()}/${activeJob.pay_unit}`;
+      document.getElementById('job-pay').textContent = payStr;
+      document.getElementById('job-slots').textContent = activeJob.slots ? `${activeJob.slots} Open Slots` : 'Open Cohort';
+
+      try {
+        const res = await fetch(`${SB_URL}/rest/v1/legacy_system_records?id=eq.kael_talent_bounty_hub_v1&select=notes`, {
+          headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+        });
+        if (res.ok) {
+          const rows = await res.json();
+          if (rows.length && rows[0].notes) {
+            if (!mercorRef && rows[0].notes.mercor_ref) mercorRef = rows[0].notes.mercor_ref;
+            if (rows[0].notes.paraform_ref) paraformRef = rows[0].notes.paraform_ref;
+          }
+        }
+      } catch (e) {}
+    })();
+
+    async function proceedToApplication(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      btn.textContent = 'Redirecting...';
+      const name = document.getElementById('cand-name').value.trim();
+      const contact = document.getElementById('cand-contact').value.trim();
+
+      try {
+        const getRes = await fetch(`${SB_URL}/rest/v1/legacy_system_records?id=eq.kael_talent_bounty_hub_v1&select=notes`, {
+          headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+        });
+        let notes = { mercor_ref: mercorRef, paraform_ref: paraformRef, prospect_statuses: {}, inbound_candidates: [] };
+        if (getRes.ok) {
+          const rows = await getRes.json();
+          if (rows.length && rows[0].notes) notes = rows[0].notes;
+        }
+        notes.inbound_candidates = notes.inbound_candidates || [];
+        notes.inbound_candidates.unshift({
+          id: String(Date.now()),
+          name,
+          contact,
+          job_id: activeJob.id,
+          job_title: activeJob.title,
+          bounty_usd: activeJob.referral_usd,
+          ts: new Date().toISOString()
+        });
+        await fetch(`${SB_URL}/rest/v1/legacy_system_records?id=eq.kael_talent_bounty_hub_v1`, {
+          method: 'PATCH',
+          headers: {
+            apikey: SB_KEY,
+            Authorization: `Bearer ${SB_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ notes })
+        });
+      } catch (err) {}
+
+      let target = activeJob.url;
+      if (activeJob.platform === 'Mercor' && mercorRef) {
+        const cleanCode = mercorRef.includes('referralCode=')
+          ? mercorRef.split('referralCode=')[1].split('&')[0]
+          : mercorRef.trim();
+        target = `${activeJob.url}?referralCode=${encodeURIComponent(cleanCode)}`;
+      } else if (activeJob.platform === 'Paraform' && paraformRef && paraformRef.startsWith('http')) {
+        target = paraformRef.trim();
+      }
+      window.location.href = target;
+    }
+  </script>
+  <script>
+    window.SPY_SITE_ID = "skylink-executive-talent-apply";
+    window.SPY_SITE_NAME = "Skylink Executive Talent Bridge";
+    window.SPY_SITE_CATEGORY = "dubai";
+  </script>
+  <script src="spy-tracker.js"></script>
+</body>
+</html>
