@@ -108,6 +108,20 @@
           </div>
         </div>
 
+        <!-- Compra Rápida Directa (1 Clic Sin Formulario • Botón WhatsApp Solo Ícono Regla 5) -->
+        <div class="px-6 sm:px-8 py-4 bg-emerald-50/90 border-b border-emerald-200 flex items-center justify-between gap-4">
+          <div class="text-xs sm:text-sm">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 block">Compra Rápida en 1 Clic</span>
+            <p class="font-display font-bold text-navy-900">¿Prefieres cerrar este pedido directo sin llenar el formulario?</p>
+            <p id="quickbuy-summary" class="text-[11px] text-slate-600">Envía automáticamente tu producto seleccionado al equipo ejecutivo.</p>
+          </div>
+          <a id="quickbuy-wa-btn" href="https://wa.me/34633258343?text=Hola%20WSSND%20SKYLINK%2C%20deseo%20realizar%20una%20compra%20r%C3%A1pida." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="Compra rápida" onclick="trackQuickBuyCloud()" class="w-12 h-12 shrink-0 rounded-full bg-[#25D366] text-white shadow-lg flex items-center justify-center hover:scale-105 transition">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.124.554 4.119 1.525 5.853l-1.525 5.567 5.702-1.496c1.691.899 3.619 1.412 5.668 1.412 6.627 0 12-5.373 12-12s-5.373-11.336-11.37-11.336z"/>
+            </svg>
+          </a>
+        </div>
+
         <!-- Clean, Streamlined Form -->
         <form id="rfq-page-form" onsubmit="submitPageRfq(event)" class="p-6 sm:p-8 space-y-6 text-xs sm:text-sm">
           <!-- 1. División y Sede -->
@@ -259,6 +273,8 @@
     function clearPrefill() {
       document.getElementById('prefill-box').classList.add('hidden');
       document.getElementById('req-item-name').value = '';
+      selectedRefPrice = '';
+      updateQuickBuyLink();
     }
 
     async function submitPageRfq(e) {
@@ -349,11 +365,69 @@
       }
 
       const box = document.getElementById('rfq-success-box');
+      const waMsg = `Hola WSSND SKYLINK, envié mi solicitud de compra:%0A• Producto: ${encodeURIComponent(payload.item)}%0A• Cantidad: ${encodeURIComponent(payload.quantity)}%0A• Destino: ${encodeURIComponent(payload.destination)}%0A• Nombre: ${encodeURIComponent(payload.name)} (${encodeURIComponent(phoneE164)})`;
       box.classList.remove('hidden');
       box.innerHTML = `
-        <p class="font-display font-bold text-emerald-950 text-base">✓ Solicitud registrada correctamente</p>
-        <p>Hemos registrado tu requerimiento de <strong>${payload.item}</strong>. Nuestro equipo ejecutivo en Madrid / Dubái te contactará al <strong>${phoneE164}</strong>.</p>
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <p class="font-display font-bold text-emerald-950 text-base">✓ Solicitud registrada correctamente</p>
+            <p>Hemos registrado tu requerimiento de <strong>${payload.item}</strong>. Nuestro equipo ejecutivo en Madrid / Dubái te contactará al <strong>${phoneE164}</strong>.</p>
+          </div>
+          <a href="https://wa.me/34633258343?text=${waMsg}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="w-11 h-11 shrink-0 rounded-full bg-[#25D366] text-white shadow flex items-center justify-center hover:scale-105 transition">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.124.554 4.119 1.525 5.853l-1.525 5.567 5.702-1.496c1.691.899 3.619 1.412 5.668 1.412 6.627 0 12-5.373 12-12s-5.373-11.336-11.37-11.336z"/></svg>
+          </a>
+        </div>
       `;
+    }
+
+    let selectedRefPrice = '';
+
+    function updateQuickBuyLink() {
+      const itemVal = (document.getElementById('req-item-name')?.value || '').trim();
+      const qtyVal = (document.getElementById('req-quantity')?.value || '').trim();
+      const destVal = (document.getElementById('req-destination')?.value || '').trim();
+      const areaVal = document.getElementById('rfq-area')?.value || '';
+      const btn = document.getElementById('quickbuy-wa-btn');
+      const sum = document.getElementById('quickbuy-summary');
+      if (!btn) return;
+
+      const label = itemVal || `Consulta rápida (${areaVal || 'Catálogo WSSND SKYLINK'})`;
+      const parts = [
+        'Hola WSSND SKYLINK, deseo realizar una COMPRA RÁPIDA:',
+        `• Producto: ${label}`,
+        selectedRefPrice ? `• Precio ref.: ${selectedRefPrice}` : '',
+        qtyVal ? `• Cantidad: ${qtyVal}` : '',
+        destVal ? `• Destino: ${destVal}` : ''
+      ].filter(Boolean).join('\n');
+
+      btn.href = `https://wa.me/34633258343?text=${encodeURIComponent(parts)}`;
+      if (sum) {
+        sum.textContent = itemVal
+          ? `Listo para enviar: ${itemVal}${selectedRefPrice ? ' (' + selectedRefPrice + ')' : ''}`
+          : 'Envía automáticamente tu producto seleccionado al equipo ejecutivo.';
+      }
+    }
+
+    function trackQuickBuyCloud() {
+      updateQuickBuyLink();
+      if (window.WSSND && window.WSSND.pushBuyerRfqCloud) {
+        const itemVal = (document.getElementById('req-item-name')?.value || '').trim() || 'Compra Rápida WhatsApp';
+        const qtyVal = (document.getElementById('req-quantity')?.value || '1 unidad').trim();
+        const destVal = (document.getElementById('req-destination')?.value || 'Directo WhatsApp').trim();
+        const sectorVal = document.getElementById('rfq-area')?.value || 'COMMODITIES';
+        window.WSSND.pushBuyerRfqCloud({
+          name: (document.getElementById('client-name')?.value || '').trim() || 'Cliente Compra Rápida',
+          company: (document.getElementById('client-company')?.value || '').trim() || 'Directo WhatsApp',
+          phone: (document.getElementById('client-phone-number')?.value || '').trim() || 'Vía WhatsApp',
+          email: (document.getElementById('client-email')?.value || '').trim(),
+          country: 'Directo',
+          sector: sectorVal,
+          item: `${itemVal}${selectedRefPrice ? ' [' + selectedRefPrice + ']' : ''}`,
+          quantity: qtyVal,
+          destination: destVal,
+          captured_by: window.WSSND.getCapturedBy ? window.WSSND.getCapturedBy() : 'Se registró solo'
+        }).catch(() => {});
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -362,6 +436,7 @@
       const cat = params.get('cat');
       const hub = params.get('hub');
       const price = params.get('price');
+      selectedRefPrice = price || '';
 
       if (cat && document.getElementById('rfq-area')) {
         document.getElementById('rfq-area').value = cat;
@@ -376,6 +451,13 @@
         document.getElementById('prefill-hub').textContent = price ? `Referencia: ${price}` : '';
         document.getElementById('prefill-box').classList.remove('hidden');
       }
+
+      ['req-item-name', 'req-quantity', 'req-destination', 'rfq-area'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateQuickBuyLink);
+        if (el) el.addEventListener('change', updateQuickBuyLink);
+      });
+      updateQuickBuyLink();
 
       // Pre-fill logged-in buyer info if available
       const s = window.WSSND ? window.WSSND.getSession() : null;
